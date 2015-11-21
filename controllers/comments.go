@@ -8,7 +8,6 @@ import (
 	"github.com/denisbakhtin/medical/helpers"
 	"github.com/denisbakhtin/medical/models"
 	"github.com/gorilla/context"
-	"gopkg.in/guregu/null.v3"
 )
 
 //CommentIndex handles GET /admin/comments route
@@ -41,6 +40,7 @@ func CommentIndex(w http.ResponseWriter, r *http.Request) {
 func CommentCreate(w http.ResponseWriter, r *http.Request) {
 	session := helpers.Session(r)
 	tmpl := helpers.Template(r)
+	T := helpers.T(r)
 	if r.Method == "POST" {
 
 		if _, ok := session.Values["oauth_name"]; !ok {
@@ -52,10 +52,11 @@ func CommentCreate(w http.ResponseWriter, r *http.Request) {
 		}
 
 		comment := &models.Comment{
-			PostID:     helpers.Atoi64(r.PostFormValue("post_id")),
-			AuthorName: session.Values["oauth_name"].(string),
-			Content:    r.PostFormValue("content"),
-			Published:  false, //comments are published by admin via dashboard
+			ArticleID:   helpers.Atoi64(r.PostFormValue("article_id")),
+			AuthorName:  r.PostFormValue("author_name"),
+			AuthorEmail: r.PostFormValue("author_email"),
+			Content:     r.PostFormValue("content"),
+			Published:   false, //comments are published by admin via dashboard
 		}
 
 		if err := comment.Insert(); err != nil {
@@ -64,9 +65,9 @@ func CommentCreate(w http.ResponseWriter, r *http.Request) {
 			tmpl.Lookup("errors/400").Execute(w, helpers.ErrorData(err))
 			return
 		}
-		session.AddFlash("Thank you! Your comment will be visible after approval.", "comments")
+		session.AddFlash(T("thank_you_for_posting_question"), "comments")
 		session.Save(r, w)
-		http.Redirect(w, r, fmt.Sprintf("/posts/%d#comments", comment.PostID), 303)
+		http.Redirect(w, r, fmt.Sprintf("/articles/%d#comments", comment.ArticleID), 303)
 
 	} else {
 		err := fmt.Errorf("Method %q not allowed", r.Method)
@@ -105,6 +106,7 @@ func CommentUpdate(w http.ResponseWriter, r *http.Request) {
 		comment := &models.Comment{
 			ID:        helpers.Atoi64(r.PostFormValue("id")),
 			Content:   r.PostFormValue("content"),
+			Answer:    r.PostFormValue("answer"),
 			Published: helpers.Atob(r.PostFormValue("published")),
 		}
 
@@ -124,7 +126,8 @@ func CommentUpdate(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-//CommentReply handles /admin/new_comment route
+//TODO: adopt to update via secure link
+//CommentReply handles ...
 func CommentReply(w http.ResponseWriter, r *http.Request) {
 	tmpl := helpers.Template(r)
 	session := helpers.Session(r)
@@ -133,11 +136,9 @@ func CommentReply(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 
 		user := context.Get(r, "user").(*models.User)
-		parentID := helpers.Atoi64(r.FormValue("parent_id"))
-		parent, _ := models.GetComment(parentID)
+		//TODO: get comment by ID
 		comment := &models.Comment{
-			PostID:     parent.PostID,
-			ParentID:   null.NewInt(parentID, parentID > 0),
+			ArticleID:  0,
 			AuthorName: user.Name,
 		}
 
@@ -150,13 +151,14 @@ func CommentReply(w http.ResponseWriter, r *http.Request) {
 
 	} else if r.Method == "POST" {
 
-		parentID := helpers.Atoi64(r.PostFormValue("parent_id"))
+		//TODO: get comment by ID, then update
 		comment := &models.Comment{
-			PostID:     helpers.Atoi64(r.PostFormValue("post_id")),
-			ParentID:   null.NewInt(parentID, parentID > 0),
-			AuthorName: r.PostFormValue("author_name"),
-			Content:    r.PostFormValue("content"),
-			Published:  helpers.Atob(r.PostFormValue("published")),
+			ArticleID:   helpers.Atoi64(r.PostFormValue("article_id")),
+			AuthorName:  r.PostFormValue("author_name"),
+			AuthorEmail: r.PostFormValue("author_email"),
+			Content:     r.PostFormValue("content"),
+			Answer:      r.PostFormValue("answer"),
+			Published:   helpers.Atob(r.PostFormValue("published")),
 		}
 
 		if err := comment.Insert(); err != nil {

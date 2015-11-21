@@ -5,7 +5,7 @@
 <div id="main-column" class="container-fluid" role="main">
   <div class="panel panel-default">
     <div class="panel-body">
-      <form class="form-horizontal" method="post">
+      <form method="post" data-parsley-validate>
       <fieldset>
         <legend>{{.Title}}</legend>
         {{range .Flash}}
@@ -14,33 +14,30 @@
         {{.csrfField}}
         <input type="hidden" name="id" value="{{.Page.ID}}" >
         <div class="form-group">
-          <label class="col-md-2 control-label" for="name">{{T "title"}}</label>
-          <div class="col-md-10">
-            <input id="name" name="name" value="{{.Page.Name}}" placeholder="{{T "title_placeholder"}}" class="form-control input-md" required="" >
-          </div>
+          <label class="control-label" for="name">{{T "title"}}</label>
+          <input id="name" name="name" value="{{.Page.Name}}" placeholder="{{T "title_placeholder"}}" class="form-control input-md" required=""  data-parsley-required-message="{{T "parsley_title_required"}}">
         </div>
 
         <div class="form-group">
-          <label class="col-md-2 control-label" for="content">{{T "content"}}</label>
-          <div class="col-md-10">
-            <input id="content" type="hidden" name="content">
-            <div id="markdown-editor">{{.Page.Content}}</div>
-          </div>
+          <label class="control-label" for="slug">{{T "slug"}}</label>
+          <input id="slug" name="slug" pattern="[a-z\\-]*" value="{{.Page.Slug}}" placeholder="{{T "slug_placeholder"}}" class="form-control input-md" >
         </div>
 
         <div class="form-group">
-          <label class="col-md-offset-2 col-md-10" for="published">
+          <label class="control-label" for="content">{{T "content"}}</label>
+          <textarea id="ckeditor" name="content">{{.Page.Content}}</textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="published">
             <input id="published" name="published" type="checkbox" value="true" {{if .Page.Published}}checked{{end}} >
             {{T "published"}}
           </label>
         </div>
 
         <div class="form-group">
-          <label class="col-md-2"></label>
-          <div class="col-md-10">
-            <input type="submit" class="btn btn-primary" value="{{T "submit"}}" onclick="$('#content').val($('#markdown-editor').markdownEditor('content'))">
-            <input type="button" class="btn btn-default" formnovalidate onclick="window.history.back();" value="{{T "cancel"}}">
-          </div>
+          <input type="submit" class="btn btn-primary" value="{{T "submit"}}">
+          <input type="button" class="btn btn-default" formnovalidate onclick="window.history.back();" value="{{T "cancel"}}">
         </div>
       </fieldset>
       </form>

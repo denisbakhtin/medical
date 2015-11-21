@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"github.com/russross/blackfriday"
 	"html/template"
 	"time"
@@ -10,6 +11,7 @@ import (
 type Page struct {
 	ID        int64     `json:"id" db:"id"`
 	Name      string    `json:"name"`
+	Slug      string    `json:"slug"`
 	Content   string    `json:"content"`
 	Published bool      `json:"published"`
 	CreatedAt time.Time `json:"created_at" db:"created_at"`
@@ -18,10 +20,14 @@ type Page struct {
 
 //Insert stores Page struct in db
 func (page *Page) Insert() error {
+	if len(page.Slug) == 0 {
+		page.Slug = createSlug(page.Name)
+	}
 	err := db.QueryRow(
-		`INSERT INTO pages(name, content, published, created_at, updated_at) 
-		VALUES($1,$2,$3,$4,$4) RETURNING id`,
+		`INSERT INTO pages(name, slug, content, published, created_at, updated_at) 
+		VALUES($1,$2,$3,$4,$5,$5) RETURNING id`,
 		page.Name,
+		page.Slug,
 		page.Content,
 		page.Published,
 		time.Now(),
@@ -31,10 +37,14 @@ func (page *Page) Insert() error {
 
 //Update updates Page record in db
 func (page *Page) Update() error {
+	if len(page.Slug) == 0 {
+		page.Slug = createSlug(page.Name)
+	}
 	_, err := db.Exec(
-		"UPDATE pages SET name=$2, content=$3, published=$4, updated_at=$5 WHERE id=$1",
+		"UPDATE pages SET name=$2, slug=$3, content=$4, published=$5, updated_at=$6 WHERE id=$1",
 		page.ID,
 		page.Name,
+		page.Slug,
 		page.Content,
 		page.Published,
 		time.Now(),
@@ -51,6 +61,11 @@ func (page *Page) Delete() error {
 //HTMLContent returns parsed html content
 func (page *Page) HTMLContent() template.HTML {
 	return template.HTML(string(blackfriday.MarkdownCommon([]byte(page.Content))))
+}
+
+//Url returns page url
+func (page *Page) Url() string {
+	return fmt.Sprintf("/pages/%d-%s", page.ID, page.Slug)
 }
 
 //GetPage loads page record by its id

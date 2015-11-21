@@ -1,0 +1,62 @@
+{{define "articles/form"}}
+{{template "dashboard/header" .}}
+{{template "dashboard/navbar" .}}
+{{template "dashboard/sidebar" .}}
+<div id="main-column" class="container-fluid" role="main">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <form method="post" data-parsley-validate>
+      <fieldset>
+        <legend>{{.Title}}</legend>
+        {{range .Flash}}
+          <div class="alert alert-danger">{{.}}</div><p>
+        {{end}}
+        {{.csrfField}}
+        <input type="hidden" name="id" value="{{.Article.ID}}" >
+        <div class="form-group">
+          <label class="control-label" for="name">{{T "title"}}</label>
+          <input id="name" name="name" value="{{.Article.Name}}" placeholder="{{T "title_placeholder"}}" class="form-control input-md" required="" data-parsley-required-message="{{T "parsley_title_required"}}">
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="slug">{{T "slug"}}</label>
+          <input id="slug" name="slug" pattern="[a-z\\-]*" value="{{.Article.Slug}}" placeholder="{{T "slug_placeholder"}}" class="form-control input-md" >
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="content">{{T "content"}}</label>
+          <textarea id="ckeditor" name="content">{{.Article.Content}}</textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="published">
+            <input id="published" name="published" type="checkbox" value="true" {{if .Article.Published}}checked{{end}} >
+            {{T "published"}}
+          </label>
+        </div>
+
+        <div class="form-group">
+          <input type="submit" class="btn btn-primary" value="{{T "submit"}}">
+          <input type="button" {{if not .Article.Published}}title="{{T "article_is_unpublished"}}" disabled="disabled"{{end}} class="btn btn-success" value="{{T "post_on_facebook"}}" onclick="postonfacebook();" />
+          <input type="button" class="btn btn-default" formnovalidate onclick="window.history.back();" value="{{T "cancel"}}">
+          <script>
+          </script>
+          <script>
+            function postonfacebook() {
+              $.ajax({
+                method: "POST",
+                url: '/admin/post_on_facebook?id={{.Article.ID}}',
+                data: null, 
+                error: function(jqXHR, status){alert('{{T "error_see_logs"}}');},
+                success: function(data, status){alert('{{T "posted_successfully"}}');},
+              });
+            }
+          </script>
+        </div>
+      </fieldset>
+      </form>
+    </div>
+  </div>
+</div>
+{{template "dashboard/footer" .}}
+{{end}}

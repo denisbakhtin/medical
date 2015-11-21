@@ -25,16 +25,16 @@ func CreateXMLSitemap() {
 		Priority:   1,
 	})
 
-	//Posts
-	posts, err := models.GetPublishedPosts()
+	//Articles
+	articles, err := models.GetPublishedArticles()
 	if err != nil {
 		log.Printf("ERROR: %s\n", err)
 		return
 	}
-	for i := range posts {
+	for i := range articles {
 		items = append(items, sitemap.Item{
-			Loc:        fmt.Sprintf("%s/posts/%d", domain, posts[i].ID),
-			LastMod:    posts[i].UpdatedAt,
+			Loc:        fmt.Sprintf("%s/articles/%d", domain, articles[i].ID),
+			LastMod:    articles[i].UpdatedAt,
 			Changefreq: "weekly",
 			Priority:   0.9,
 		})

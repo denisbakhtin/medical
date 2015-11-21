@@ -22,6 +22,11 @@ func DateTime(t time.Time) string {
 	return fmt.Sprintf("%d-%02d-%02d %02d:%02d:%02d", t.Year(), t.Month(), t.Day(), t.Hour(), t.Minute(), t.Second())
 }
 
+//Date prints date part of timestamp
+func Date(t time.Time) string {
+	return fmt.Sprintf("%d-%02d-%02d", t.Year(), t.Month(), t.Day())
+}
+
 //StringInSlice returns true if value is in list slice
 func StringInSlice(value string, list []string) bool {
 	for i := range list {
@@ -32,20 +37,8 @@ func StringInSlice(value string, list []string) bool {
 	return false
 }
 
-//RecentPosts returns the list of recent blog posts
-func RecentPosts() []models.Post {
-	list, _ := models.GetRecentPosts()
-	return list
-}
-
-//Tags returns the list of blog tags
-func Tags() []models.Tag {
-	list, _ := models.GetNotEmptyTags()
-	return list
-}
-
-//Archives returns the list of blog archives
-func Archives() []models.Post {
-	list, _ := models.GetPostMonths()
+//RecentArticles returns the list of recent articles
+func RecentArticles() []models.Article {
+	list, _ := models.GetRecentArticles()
 	return list
 }

@@ -22,14 +22,11 @@
 
     <h5>{{T "navigation"}}</h5>
     <ul class="nav nav-pills nav-stacked">
-      <li class="{{isActive .Active "posts"}}">
-        <a href="/admin/posts"><i class="glyphicon glyphicon-pencil indent"></i>{{T "posts"}}</a>
+      <li class="{{isActive .Active "articles"}}">
+        <a href="/admin/articles"><i class="glyphicon glyphicon-pencil indent"></i>{{T "articles"}}</a>
       </li>
       <li class="{{isActive .Active "comments"}}">
         <a href="/admin/comments"><i class="glyphicon glyphicon-pencil indent"></i>{{T "comments"}}</a>
-      </li>
-      <li class="{{isActive .Active "tags"}}">
-        <a href="/admin/tags"><i class="glyphicon glyphicon-pencil indent"></i>{{T "tags"}}</a>
       </li>
       <li class="{{isActive .Active "pages"}}">
         <a href="/admin/pages"><i class="glyphicon glyphicon-duplicate indent"></i>{{T "pages"}}</a>

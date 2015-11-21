@@ -41,9 +41,7 @@ func main() {
 	http.Handle("/logout", Default(controllers.Logout))
 
 	http.Handle("/pages/", Default(controllers.PageShow))
-	http.Handle("/posts/", Default(controllers.PostShow))
-	http.Handle("/tags/", Default(controllers.TagShow))
-	http.Handle("/archives/", Default(controllers.ArchiveShow))
+	http.Handle("/articles/", Default(controllers.ArticleShow))
 	http.Handle("/rss", Default(controllers.RssXML))
 	http.Handle("/search", Default(controllers.Search))
 	http.Handle("/new_comment", Default(controllers.CommentCreate))
@@ -71,23 +69,24 @@ func main() {
 		http.Handle("/admin/edit_page/", Restricted(controllers.PageUpdate))
 		http.Handle("/admin/delete_page", Restricted(controllers.PageDelete))
 
-		http.Handle("/admin/posts", Restricted(controllers.PostIndex))
-		http.Handle("/admin/new_post", Restricted(controllers.PostCreate))
-		http.Handle("/admin/edit_post/", Restricted(controllers.PostUpdate))
-		http.Handle("/admin/delete_post", Restricted(controllers.PostDelete))
+		http.Handle("/admin/articles", Restricted(controllers.ArticleIndex))
+		http.Handle("/admin/new_article", Restricted(controllers.ArticleCreate))
+		http.Handle("/admin/edit_article/", Restricted(controllers.ArticleUpdate))
+		http.Handle("/admin/delete_article", Restricted(controllers.ArticleDelete))
 		http.Handle("/admin/post_on_facebook", RestrictedWithoutCSRF(controllers.PostOnFacebook))
-
-		http.Handle("/admin/tags", Restricted(controllers.TagIndex))
-		http.Handle("/admin/new_tag", Restricted(controllers.TagCreate))
-		http.Handle("/admin/delete_tag", Restricted(controllers.TagDelete))
 
 		http.Handle("/admin/comments", Restricted(controllers.CommentIndex))
 		http.Handle("/admin/new_comment", Restricted(controllers.CommentReply))
 		http.Handle("/admin/edit_comment/", Restricted(controllers.CommentUpdate))
 		http.Handle("/admin/delete_comment", Restricted(controllers.CommentDelete))
 
+		http.Handle("/admin/reviews", Restricted(controllers.ReviewIndex))
+		http.Handle("/admin/new_review", Restricted(controllers.ReviewCreate))
+		http.Handle("/admin/edit_review/", Restricted(controllers.ReviewUpdate))
+		http.Handle("/admin/delete_review", Restricted(controllers.ReviewDelete))
+
 		//markdown editor does not support csrf when uploading images, so I have to apply CSRF middleware manually per route, sigh :/
-		http.Handle("/admin/upload", RestrictedWithoutCSRF(controllers.Upload))
+		http.Handle("/admin/ckupload", RestrictedWithoutCSRF(controllers.CkUpload))
 	}
 
 	http.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("public")))) //styles, js, images

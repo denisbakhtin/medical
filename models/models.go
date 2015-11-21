@@ -1,8 +1,11 @@
 package models
 
 import (
+	"github.com/fiam/gounidecode/unidecode"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq" //postgresql driver, don't remove
+	"regexp"
+	"strings"
 )
 
 var db *sqlx.DB
@@ -25,5 +28,13 @@ func truncate(s string, n int) string {
 	if len(runes) > n {
 		return string(runes[:n])
 	}
+	return s
+}
+
+//createSlug makes url slug out of string
+func createSlug(s string) string {
+	s = strings.ToLower(unidecode.Unidecode(s))                     //transliterate if it is not in english
+	s = regexp.MustCompile("[^a-z0-9\\s]+").ReplaceAllString(s, "") //spaces
+	s = regexp.MustCompile("\\s+").ReplaceAllString(s, "-")         //spaces
 	return s
 }

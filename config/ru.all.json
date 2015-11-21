@@ -92,6 +92,10 @@
     "translation": "Действия"
   },
   {
+    "id": "answer",
+    "translation": "Ответ"
+  },
+  {
     "id": "archives_for",
     "translation": "Архивы за"
   },
@@ -100,8 +104,28 @@
     "translation": "Вы уверены"
   },
   {
+    "id": "article_id",
+    "translation": "№ статьи"
+  },
+  {
+    "id": "article_id_placeholder",
+    "translation": "Введите № статьи"
+  },
+  {
+    "id": "article_is_unpublished",
+    "translation": "Статья не опубликована"
+  },
+  {
+    "id": "articles",
+    "translation": "Статьи"
+  },
+  {
     "id": "author",
     "translation": "Автор"
+  },
+  {
+    "id": "author_email_placeholder",
+    "translation": "Эл. почта автора"
   },
   {
     "id": "author_placeholder",
@@ -132,16 +156,16 @@
     "translation": "Админка"
   },
   {
+    "id": "edit_article",
+    "translation": "Редактировать статью"
+  },
+  {
     "id": "edit_comment",
     "translation": "Редактировать комментарий"
   },
   {
     "id": "edit_page",
     "translation": "Редактировать страницу"
-  },
-  {
-    "id": "edit_post",
-    "translation": "Редактировать запись"
   },
   {
     "id": "edit_profile",
@@ -208,12 +232,12 @@
     "translation": "Навигация"
   },
   {
-    "id": "new_page",
-    "translation": "Новая страница"
+    "id": "new_article",
+    "translation": "Новая статья"
   },
   {
-    "id": "new_post",
-    "translation": "Новая запись"
+    "id": "new_page",
+    "translation": "Новая страница"
   },
   {
     "id": "new_tag",
@@ -224,8 +248,8 @@
     "translation": "Новый пользователь"
   },
   {
-    "id": "no_posts_found",
-    "translation": "Записи не найдены"
+    "id": "no_articles_found",
+    "translation": "Статьи не найдены"
   },
   {
     "id": "pages",
@@ -268,24 +292,16 @@
     "translation": "Пожалуйста, повторите ваш пароль"
   },
   {
+    "id": "parsley_title_required",
+    "translation": "Пожалуйста, введите заголовок"
+  },
+  {
     "id": "password",
     "translation": "Пароль"
   },
   {
     "id": "password_placeholder",
     "translation": "Введите пароль"
-  },
-  {
-    "id": "post_id",
-    "translation": "№ записи"
-  },
-  {
-    "id": "post_id_placeholder",
-    "translation": "Введите № записи"
-  },
-  {
-    "id": "post_is_unpublished",
-    "translation": "Запись не опубликована"
   },
   {
     "id": "post_on_facebook",
@@ -296,16 +312,12 @@
     "translation": "Успешно опубликовано"
   },
   {
-    "id": "posts",
-    "translation": "Записи"
-  },
-  {
     "id": "published",
     "translation": "Опубликовано"
   },
   {
-    "id": "recent_posts",
-    "translation": "Свежие записи"
+    "id": "recent_articles",
+    "translation": "Свежие статьи"
   },
   {
     "id": "repeat_password",
@@ -348,12 +360,28 @@
     "translation": "Мой блог"
   },
   {
+    "id": "slug",
+    "translation": "SEO адрес"
+  },
+  {
+    "id": "slug_placeholder",
+    "translation": "Оставьте пустым, если Вы не знаете, что это такое"
+  },
+  {
     "id": "submit",
     "translation": "Сохранить"
   },
   {
     "id": "tags",
     "translation": "Тэги"
+  },
+  {
+    "id": "thank_you_for_posting_question",
+    "translation": ""
+  },
+  {
+    "id": "thank_you_for_posting_review",
+    "translation": ""
   },
   {
     "id": "title",

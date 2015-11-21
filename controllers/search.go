@@ -17,10 +17,10 @@ func Search(w http.ResponseWriter, r *http.Request) {
 
 		query := r.PostFormValue("query")
 		//full text search by name & description. Btw you can extend search to multi-table scenario with rankings, etc
-		//fts index and SearchPosts assume language is english
-		posts, _ := models.SearchPosts(query)
+		//fts index and SearchArticles assume language is english
+		articles, _ := models.SearchArticles(query)
 		data["Title"] = fmt.Sprintf("%s %q", T("search_results_for"), query)
-		data["Posts"] = posts
+		data["Articles"] = articles
 		tmpl.Lookup("search/results").Execute(w, data)
 
 	} else {

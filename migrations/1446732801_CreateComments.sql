@@ -6,7 +6,7 @@ CREATE TABLE comments(
   author_name TEXT NOT NULL,
   author_email TEXT NOT NULL,
   content TEXT NOT NULL,
-  answer TEXT,
+  answer TEXT NOT NULL,
   published BOOLEAN NOT NULL DEFAULT false,
   created_at TIMESTAMP,
   updated_at TIMESTAMP

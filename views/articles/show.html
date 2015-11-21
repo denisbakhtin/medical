@@ -1,0 +1,23 @@
+{{define "articles/show"}}
+{{template "header" .}}
+{{template "navbar" .}}
+<div class="container" role="main">
+  <div id="main-column">
+    <h1>{{.Article.Name}}</h1>
+    <div class="content">{{.Article.HTMLContent}}</div>
+    <div id="comments">
+      {{range .Flash}}
+        <div class="alert alert-info">{{.}}</div><p>
+      {{end}}
+      {{template "comments/post-form" .}}
+      {{range .Article.Comments}}
+        <div id="comment-{{.ID}}" class="well well-sm">
+          <p>{{.AuthorName}}, {{dateTime .CreatedAt}}</p>
+          {{.Content}}
+        </div>
+      {{end}}
+    </div>
+  </div>
+</div>
+{{template "footer" .}}
+{{end}}

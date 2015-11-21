@@ -3,9 +3,9 @@
 CREATE TABLE articles(
   id SERIAL PRIMARY KEY,
   name TEXT NOT NULL,
+  slug TEXT NOT NULL,
   content TEXT NOT NULL,
   published BOOLEAN NOT NULL DEFAULT true,
-  user_id INTEGER REFERENCES users (id) ON DELETE SET NULL,
   created_at TIMESTAMP,
   updated_at TIMESTAMP
 );

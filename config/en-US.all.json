@@ -100,16 +100,16 @@
     "translation": "Navigation"
   },
   {
-    "id": "recent_posts",
-    "translation": "Recent posts"
+    "id": "recent_articles",
+    "translation": "Recent articles"
   },
   {
     "id": "tags",
     "translation": "Tags"
   },
   {
-    "id": "posts",
-    "translation": "Posts"
+    "id": "articles",
+    "translation": "Articles"
   },
   {
     "id": "comments",
@@ -200,12 +200,16 @@
     "translation": "Author name"
   },
   {
-    "id": "post_id",
-    "translation": "Post ID"
+    "id": "author_email_placeholder",
+    "translation": "Author email"
   },
   {
-    "id": "post_id_placeholder",
-    "translation": "Post ID"
+    "id": "article_id",
+    "translation": "Article ID"
+  },
+  {
+    "id": "article_id_placeholder",
+    "translation": "Article ID"
   },
   {
     "id": "parent_id",
@@ -218,6 +222,10 @@
   {
     "id": "content",
     "translation": "Content"
+  },
+  {
+    "id": "answer",
+    "translation": "Answer"
   },
   {
     "id": "published",
@@ -324,6 +332,10 @@
     "translation": "Enter title"
   },
   {
+    "id": "parsley_title_required",
+    "translation": "Please, enter title"
+  },
+  {
     "id": "new_page",
     "translation": "New page"
   },
@@ -332,12 +344,8 @@
     "translation": "Edit page"
   },
   {
-    "id": "post_is_unpublished",
-    "translation": "Post is unpublished"
-  },
-  {
-    "id": "post_is_unpublished",
-    "translation": "Post is unpublished"
+    "id": "article_is_unpublished",
+    "translation": "Article is unpublished"
   },
   {
     "id": "post_on_facebook",
@@ -352,16 +360,16 @@
     "translation": "Posted successfully"
   },
   {
-    "id": "new_post",
-    "translation": "New post"
+    "id": "new_article",
+    "translation": "New article"
   },
   {
-    "id": "edit_post",
-    "translation": "Edit post"
+    "id": "edit_article",
+    "translation": "Edit article"
   },
   {
-    "id": "no_posts_found",
-    "translation": "No blog posts found"
+    "id": "no_articles_found",
+    "translation": "No articles found"
   },
   {
     "id": "search_placeholder",
@@ -394,8 +402,23 @@
   {
     "id": "reply",
     "translation": "Reply"
+  },
+  {
+    "id": "slug",
+    "translation": "Url slug"
+  },
+  {
+    "id": "slug_placeholder",
+    "translation": "Leave empty, if you dont know what it is"
+  },
+  {
+    "id": "thank_you_for_posting_review",
+    "translation": "Thank you! Your review will be visible after approval."
+  },
+  {
+    "id": "thank_you_for_posting_question",
+    "translation": "Thank you! Your question will be visible after approval."
   }
-
 
 
 ]

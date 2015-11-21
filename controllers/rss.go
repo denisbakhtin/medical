@@ -29,20 +29,19 @@ func RssXML(w http.ResponseWriter, r *http.Request) {
 		}
 
 		feed.Items = make([]*feeds.Item, 0)
-		posts, err := models.GetPublishedPosts()
+		articles, err := models.GetPublishedArticles()
 		if err != nil {
 			log.Printf("ERROR: %s\n", err)
 			w.WriteHeader(500)
 			tmpl.Lookup("errors/500").Execute(w, helpers.ErrorData(err))
 			return
 		}
-		for i := range posts {
+		for i := range articles {
 			feed.Items = append(feed.Items, &feeds.Item{
-				Id:          fmt.Sprintf("%s/posts/%d", domain, posts[i].ID),
-				Title:       posts[i].Name,
-				Link:        &feeds.Link{Href: fmt.Sprintf("%s/posts/%d", domain, posts[i].ID)},
-				Description: string(posts[i].Excerpt()),
-				Author:      &feeds.Author{Name: posts[i].Author.Name},
+				Id:          fmt.Sprintf("%s/articles/%d", domain, articles[i].ID),
+				Title:       articles[i].Name,
+				Link:        &feeds.Link{Href: fmt.Sprintf("%s/articles/%d", domain, articles[i].ID)},
+				Description: string(articles[i].Excerpt()),
 				Created:     now,
 			})
 		}

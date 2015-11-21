@@ -17,13 +17,12 @@ var tmpl *template.Template
 func loadTemplates() {
 	box := rice.MustFindBox("../views")
 	tmpl = template.New("").Funcs(template.FuncMap{
-		"isActive":      helpers.IsActive,
-		"stringInSlice": helpers.StringInSlice,
-		"dateTime":      helpers.DateTime,
-		"recentPosts":   helpers.RecentPosts,
-		"tags":          helpers.Tags,
-		"archives":      helpers.Archives,
-		"T":             i18n.MustTfunc(config.Language), //will be replaced by actual TranslationFunc in LocaleMiddleware
+		"isActive":       helpers.IsActive,
+		"stringInSlice":  helpers.StringInSlice,
+		"dateTime":       helpers.DateTime,
+		"date":           helpers.Date,
+		"recentArticles": helpers.RecentArticles,
+		"T":              i18n.MustTfunc(config.Language), //will be replaced by actual TranslationFunc in LocaleMiddleware
 	})
 
 	fn := func(path string, f os.FileInfo, err error) error {

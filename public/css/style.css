@@ -28,6 +28,9 @@ select.parsley-error,
 textarea.parsley-error {		
 	border: 2px solid #ee5f5b;
 }
+textarea.form-control {
+  height: 200px;
+}
 
 .parsley-errors-list {
 	margin: 8px 0 3px 0;

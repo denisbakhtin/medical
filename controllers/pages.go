@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"regexp"
 
 	"github.com/denisbakhtin/medical/helpers"
 	"github.com/denisbakhtin/medical/models"
@@ -15,11 +16,17 @@ func PageShow(w http.ResponseWriter, r *http.Request) {
 	data := helpers.DefaultData(r)
 	if r.Method == "GET" {
 
-		id := r.URL.Path[len("/pages/"):]
+		re := regexp.MustCompile("^[0-9]+")
+		id := re.FindString(r.URL.Path[len("/pages/"):])
 		page, err := models.GetPage(id)
 		if err != nil || !page.Published {
 			w.WriteHeader(404)
 			tmpl.Lookup("errors/404").Execute(w, nil)
+			return
+		}
+		//redirect to canonical url
+		if r.URL.Path != page.Url() {
+			http.Redirect(w, r, page.Url(), http.StatusSeeOther)
 			return
 		}
 		data["Page"] = page
@@ -79,6 +86,7 @@ func PageCreate(w http.ResponseWriter, r *http.Request) {
 
 		page := &models.Page{
 			Name:      r.PostFormValue("name"),
+			Slug:      r.PostFormValue("slug"),
 			Content:   r.PostFormValue("content"),
 			Published: helpers.Atob(r.PostFormValue("published")),
 		}
@@ -127,6 +135,7 @@ func PageUpdate(w http.ResponseWriter, r *http.Request) {
 		page := &models.Page{
 			ID:        helpers.Atoi64(r.PostFormValue("id")),
 			Name:      r.PostFormValue("name"),
+			Slug:      r.PostFormValue("slug"),
 			Content:   r.PostFormValue("content"),
 			Published: helpers.Atob(r.PostFormValue("published")),
 		}

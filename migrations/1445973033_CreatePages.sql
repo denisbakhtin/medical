@@ -3,6 +3,7 @@
 CREATE TABLE pages(
   id SERIAL PRIMARY KEY,
   name TEXT NOT NULL,
+  slug TEXT NOT NULL,
   content TEXT NOT NULL,
   published boolean NOT NULL DEFAULT true,
   created_at TIMESTAMP,

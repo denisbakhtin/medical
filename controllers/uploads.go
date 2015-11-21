@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 	"log"
@@ -14,34 +13,32 @@ import (
 	"github.com/denisbakhtin/medical/system"
 )
 
-//Upload handles POST /upload route
-func Upload(w http.ResponseWriter, r *http.Request) {
+//CkUpload handles POST /admin/ckupload route
+func CkUpload(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 
-		err := r.ParseMultipartForm(32 << 20) // ~32MB
+		err := r.ParseMultipartForm(32 << 20)
 		if err != nil {
 			log.Printf("ERROR: %s\n", err)
 			http.Error(w, err.Error(), 500)
 			return
 		}
-		var uris []string
-		fmap := r.MultipartForm.File
-		for k := range fmap {
-			file, fileHeader, err := r.FormFile(k)
-			if err != nil {
-				log.Printf("ERROR: %s\n", err)
-				http.Error(w, err.Error(), 500)
-				return
-			}
-			uri, err := saveFile(fileHeader, file)
-			if err != nil {
-				log.Printf("ERROR: %s\n", err)
-				http.Error(w, err.Error(), 500)
-				return
-			}
-			uris = append(uris, uri)
+		mpartFile, mpartHeader, err := r.FormFile("upload")
+		if err != nil {
+			log.Println(err.Error())
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
 		}
-		json.NewEncoder(w).Encode(uris)
+		defer mpartFile.Close()
+		uri, err := saveFile(mpartHeader, mpartFile)
+		if err != nil {
+			log.Println(err.Error())
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		CKEdFunc := r.FormValue("CKEditorFuncNum")
+		fmt.Fprintln(w, "<script>window.parent.CKEDITOR.tools.callFunction("+CKEdFunc+", \""+uri+"\");</script>")
 
 	} else {
 		err := fmt.Errorf("Method %q not allowed", r.Method)
