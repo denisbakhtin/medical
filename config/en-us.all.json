@@ -88,6 +88,10 @@
     "translation": "September"
   },
   {
+    "id": "about_doctor",
+    "translation": "About doctor"
+  },
+  {
     "id": "actions",
     "translation": "Actions"
   },
@@ -142,6 +146,10 @@
   {
     "id": "comments",
     "translation": "Comments"
+  },
+  {
+    "id": "contacts",
+    "translation": "Contacts"
   },
   {
     "id": "content",
@@ -300,8 +308,16 @@
     "translation": "Please repeat your password"
   },
   {
+    "id": "parsley_review_required",
+    "translation": "Review can't be blank"
+  },
+  {
     "id": "parsley_title_required",
     "translation": "Please, enter title"
+  },
+  {
+    "id": "parsley_your_name_required",
+    "translation": "Your name is required"
   },
   {
     "id": "password",
@@ -324,12 +340,20 @@
     "translation": "Posted successfully"
   },
   {
+    "id": "prices",
+    "translation": "Prices"
+  },
+  {
     "id": "published",
     "translation": "Published"
   },
   {
     "id": "question",
     "translation": "Question"
+  },
+  {
+    "id": "read_more",
+    "translation": "Read more"
   },
   {
     "id": "recent_articles",
@@ -346,6 +370,10 @@
   {
     "id": "reply",
     "translation": "Reply"
+  },
+  {
+    "id": "review",
+    "translation": "Review"
   },
   {
     "id": "reviews",
@@ -426,5 +454,29 @@
   {
     "id": "website",
     "translation": "Website"
+  },
+  {
+    "id": "what_we_cure",
+    "translation": "What we cure"
+  },
+  {
+    "id": "your_email",
+    "translation": "Your email"
+  },
+  {
+    "id": "your_email_placeholder",
+    "translation": "Please, enter your email. It will be visible only to the site administrator."
+  },
+  {
+    "id": "your_name",
+    "translation": "Your name"
+  },
+  {
+    "id": "your_name_placeholder",
+    "translation": "Please, enter your name"
+  },
+  {
+    "id": "your_photo",
+    "translation": "Your photo"
   }
 ]

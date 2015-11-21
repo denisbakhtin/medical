@@ -41,11 +41,14 @@ func main() {
 	http.Handle("/logout", Default(controllers.Logout))
 
 	http.Handle("/pages/", Default(controllers.PageShow))
+	http.Handle("/articles", Default(controllers.ArticlePublicIndex))
 	http.Handle("/articles/", Default(controllers.ArticleShow))
+	http.Handle("/reviews", Default(controllers.ReviewPublicIndex))
 	http.Handle("/reviews/", Default(controllers.ReviewShow))
 	http.Handle("/rss", Default(controllers.RssXML))
 	http.Handle("/search", Default(controllers.Search))
 	http.Handle("/new_comment", Default(controllers.CommentCreate))
+	http.Handle("/new_review", Default(controllers.ReviewCreate))
 
 	//comment oauth login
 	http.Handle("/facebook_login", Default(oauth.FacebookLogin))

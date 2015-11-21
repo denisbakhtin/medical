@@ -120,6 +120,38 @@
     "translation": "Reviews"
   },
   {
+    "id": "your_photo",
+    "translation": "Your photo"
+  },
+  {
+    "id": "your_email",
+    "translation": "Your email"
+  },
+  {
+    "id": "your_email_placeholder",
+    "translation": "Please, enter your email. It will be visible only to the site administrator."
+  },
+  {
+    "id": "review",
+    "translation": "Review"
+  },
+  {
+    "id": "parsley_review_required",
+    "translation": "Review can't be blank"
+  },
+  {
+    "id": "parsley_your_name_required",
+    "translation": "Your name is required"
+  },
+  {
+    "id": "your_name",
+    "translation": "Your name"
+  },
+  {
+    "id": "your_name_placeholder",
+    "translation": "Please, enter your name"
+  },
+  {
     "id": "question",
     "translation": "Question"
   },
@@ -438,7 +470,26 @@
   {
     "id": "thank_you_for_posting_question",
     "translation": "Thank you! Your question will be visible after approval."
+  },
+  {
+    "id": "about_doctor",
+    "translation": "About doctor"
+  },
+  {
+    "id": "what_we_cure",
+    "translation": "What we cure"
+  },
+  {
+    "id": "prices",
+    "translation": "Prices"
+  },
+  {
+    "id": "contacts",
+    "translation": "Contacts"
+  },
+  {
+    "id": "read_more",
+    "translation": "Read more"
   }
-
 
 ]

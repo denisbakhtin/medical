@@ -35,6 +35,33 @@ func ReviewShow(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+//ReviewPublicIndex handles GET /reviews route
+func ReviewPublicIndex(w http.ResponseWriter, r *http.Request) {
+	tmpl := helpers.Template(r)
+	data := helpers.DefaultData(r)
+	T := helpers.T(r)
+	if r.Method == "GET" {
+
+		list, err := models.GetPublishedReviews()
+		if err != nil {
+			log.Printf("ERROR: %s\n", err)
+			w.WriteHeader(500)
+			tmpl.Lookup("errors/500").Execute(w, helpers.ErrorData(err))
+			return
+		}
+		data["Title"] = T("reviews")
+		data["Active"] = r.RequestURI
+		data["List"] = list
+		tmpl.Lookup("reviews/public-index").Execute(w, data)
+
+	} else {
+		err := fmt.Errorf("Method %q not allowed", r.Method)
+		log.Printf("ERROR: %s\n", err)
+		w.WriteHeader(405)
+		tmpl.Lookup("errors/405").Execute(w, helpers.ErrorData(err))
+	}
+}
+
 //ReviewIndex handles GET /admin/reviews route
 func ReviewIndex(w http.ResponseWriter, r *http.Request) {
 	tmpl := helpers.Template(r)
@@ -73,24 +100,35 @@ func ReviewCreate(w http.ResponseWriter, r *http.Request) {
 		data["Active"] = "reviews"
 		data["Flash"] = session.Flashes("reviews")
 		session.Save(r, w)
-		tmpl.Lookup("reviews/form").Execute(w, data)
+		if data["ActiveUser"] != nil {
+			tmpl.Lookup("reviews/form").Execute(w, data)
+		} else {
+			tmpl.Lookup("reviews/public-form").Execute(w, data)
+		}
 
 	} else if r.Method == "POST" {
 
-		if _, ok := session.Values["oauth_name"]; !ok {
-			err := fmt.Errorf("You are not authorized to post reviews.")
-			log.Printf("ERROR: %s\n", err)
-			w.WriteHeader(405)
-			tmpl.Lookup("errors/405").Execute(w, helpers.ErrorData(err))
-			return
+		//TODO: captcha check
+		r.ParseMultipartForm(32 << 20)
+		review := &models.Review{
+			AuthorName:  r.FormValue("author_name"),
+			AuthorEmail: r.FormValue("author_email"),
+			Content:     r.FormValue("content"),
+			Published:   false, //reviews are published by admin via dashboard
+		}
+		if data["ActiveUser"] != nil {
+			review.Published = helpers.Atob(r.FormValue("published"))
 		}
 
-		review := &models.Review{
-			AuthorName:  r.PostFormValue("author_name"),
-			AuthorEmail: r.PostFormValue("author_email"),
-			Content:     r.PostFormValue("content"),
-			Image:       "",    //TODO: upload image
-			Published:   false, //reviews are published by admin via dashboard
+		if mpartFile, mpartHeader, err := r.FormFile("image"); err == nil {
+			defer mpartFile.Close()
+			review.Image, err = saveFile(mpartHeader, mpartFile)
+			if err != nil {
+				log.Println(err.Error())
+				w.WriteHeader(500)
+				tmpl.Lookup("errors/500").Execute(w, helpers.ErrorData(err))
+				return
+			}
 		}
 
 		if err := review.Insert(); err != nil {
@@ -99,9 +137,13 @@ func ReviewCreate(w http.ResponseWriter, r *http.Request) {
 			tmpl.Lookup("errors/400").Execute(w, helpers.ErrorData(err))
 			return
 		}
-		session.AddFlash(T("thank_you_for_posting_review"), "reviews")
-		session.Save(r, w)
-		http.Redirect(w, r, "/reviews", 303)
+		if data["ActiveUser"] != nil {
+			http.Redirect(w, r, "/admin/reviews", 303)
+		} else {
+			session.AddFlash(T("thank_you_for_posting_review"), "reviews")
+			session.Save(r, w)
+			http.Redirect(w, r, "/reviews", 303)
+		}
 
 	} else {
 		err := fmt.Errorf("Method %q not allowed", r.Method)
@@ -136,14 +178,31 @@ func ReviewUpdate(w http.ResponseWriter, r *http.Request) {
 
 	} else if r.Method == "POST" {
 
-		r.ParseForm()
+		r.ParseMultipartForm(32 << 20)
+		rev, _ := models.GetReview(r.FormValue("id"))
+		if rev.ID == 0 {
+			w.WriteHeader(400)
+			tmpl.Lookup("errors/400").Execute(w, nil)
+			return
+		}
+
 		review := &models.Review{
-			ID:          helpers.Atoi64(r.PostFormValue("id")),
-			AuthorName:  r.PostFormValue("author_name"),
-			AuthorEmail: r.PostFormValue("author_email"),
-			Content:     r.PostFormValue("content"),
-			Image:       "", //TODO: upload image if changed
-			Published:   helpers.Atob(r.PostFormValue("published")),
+			ID:          rev.ID,
+			AuthorName:  r.FormValue("author_name"),
+			AuthorEmail: r.FormValue("author_email"),
+			Content:     r.FormValue("content"),
+			Image:       rev.Image,
+			Published:   helpers.Atob(r.FormValue("published")),
+		}
+		if mpartFile, mpartHeader, err := r.FormFile("image"); err == nil {
+			defer mpartFile.Close()
+			review.Image, err = saveFile(mpartHeader, mpartFile)
+			if err != nil {
+				log.Println(err.Error())
+				w.WriteHeader(500)
+				tmpl.Lookup("errors/500").Execute(w, helpers.ErrorData(err))
+				return
+			}
 		}
 
 		if err := review.Update(); err != nil {

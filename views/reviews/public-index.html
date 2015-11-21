@@ -1,0 +1,19 @@
+{{define "reviews/public-index"}}
+{{template "header" .}}
+{{template "navbar" .}}
+<div id="main-column" class="container-fluid" role="main">
+  <h1>{{.Title}}</h1>
+  <div class="review-previews">
+    {{range .List}}
+    <section class="review-preview">
+      <h2>{{.AuthorName}}</h2>
+      <div class="excerpt">
+        {{.Excerpt}}
+      </div>
+      <a href="{{.Url}}" class="btn btn-lg btn-info">{{T "read_more"}}</a>
+    </section>
+    {{end}}
+  </div>
+</div>
+{{template "footer" .}}
+{{end}}

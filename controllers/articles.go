@@ -58,6 +58,33 @@ func ArticleShow(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+//ArticlePublicIndex handles GET /articles route
+func ArticlePublicIndex(w http.ResponseWriter, r *http.Request) {
+	tmpl := helpers.Template(r)
+	data := helpers.DefaultData(r)
+	T := helpers.T(r)
+	if r.Method == "GET" {
+
+		list, err := models.GetPublishedArticles()
+		if err != nil {
+			log.Printf("ERROR: %s\n", err)
+			w.WriteHeader(500)
+			tmpl.Lookup("errors/500").Execute(w, helpers.ErrorData(err))
+			return
+		}
+		data["Title"] = T("articles")
+		data["Active"] = r.RequestURI
+		data["List"] = list
+		tmpl.Lookup("articles/public-index").Execute(w, data)
+
+	} else {
+		err := fmt.Errorf("Method %q not allowed", r.Method)
+		log.Printf("ERROR: %s\n", err)
+		w.WriteHeader(405)
+		tmpl.Lookup("errors/405").Execute(w, helpers.ErrorData(err))
+	}
+}
+
 //ArticleIndex handles GET /admin/articles route
 func ArticleIndex(w http.ResponseWriter, r *http.Request) {
 	tmpl := helpers.Template(r)

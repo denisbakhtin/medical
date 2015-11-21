@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"regexp"
+	"strings"
 	"time"
 
 	"github.com/denisbakhtin/medical/system"
@@ -49,7 +51,10 @@ func CkUpload(w http.ResponseWriter, r *http.Request) {
 
 //saveFile saves file to disc and returns its relative uri
 func saveFile(fh *multipart.FileHeader, f multipart.File) (string, error) {
-	fileExt := filepath.Ext(fh.Filename)
+	fileExt := strings.ToLower(filepath.Ext(fh.Filename))
+	if !regexp.MustCompile("^\\.(jpe?g|bmp|gif|png)$").MatchString(fileExt) {
+		return "", fmt.Errorf("File is not an image")
+	}
 	newName := fmt.Sprint(time.Now().Unix()) + fileExt //unique file name ;D
 	uri := "/public/uploads/" + newName
 	fullName := filepath.Join(system.UploadsPath(), newName)

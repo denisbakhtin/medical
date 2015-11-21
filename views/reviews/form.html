@@ -5,7 +5,7 @@
 <div id="main-column" class="container-fluid" role="main">
   <div class="panel panel-default">
     <div class="panel-body">
-      <form method="post">
+      <form method="post" enctype="multipart/form-data">
       <fieldset>
         <legend>{{.Title}}</legend>
         {{range .Flash}}
@@ -15,17 +15,17 @@
         <input type="hidden" name="id" value="{{.Review.ID}}" >
         <div class="form-group">
           <label class="control-label" for="author_name">{{T "author"}}</label>
-          <input id="author_name" name="author_name" value="{{.Review.AuthorName}}" placeholder="{{T "author_placeholder"}}" class="form-control input-md" >
+          <input id="author_name" name="author_name" value="{{.Review.AuthorName}}" placeholder="{{T "author_placeholder"}}" class="form-control input-md" required="">
         </div>
 
         <div class="form-group">
           <label class="control-label" for="author_email">{{T "email"}}</label>
-          <input id="author_email" name="author_email" value="{{.Review.AuthorEmail}}" placeholder="{{T "author_email_placeholder"}}" class="form-control input-md" >
+          <input id="author_email" type="email" name="author_email" value="{{.Review.AuthorEmail}}" placeholder="{{T "author_email_placeholder"}}" class="form-control input-md" >
         </div>
 
         <div class="form-group">
           <label class="control-label" for="content">{{T "content"}}</label>
-          <textarea class="form-control" name="content" id="content">{{.Review.Content}}</textarea>
+          <textarea class="form-control" required="" name="content" id="content">{{.Review.Content}}</textarea>
         </div>
 
         <div class="form-group">

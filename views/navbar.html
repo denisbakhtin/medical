@@ -13,7 +13,12 @@
     </div>
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li class="{{isActive .Active "home"}}"><a href="/"><i class="glyphicon glyphicon-home indent"></i>{{T "home"}}</a></li>
+        {{$active := .Active}}
+        {{range mainMenu}}
+        <li class="{{isActive $active .Url}}">
+          <a href="{{.Url}}">{{T .Title}}</a>
+        </li>
+        {{end}}
       </ul>
       {{if .ActiveUser}}
       <ul class="nav navbar-nav navbar-right">

@@ -31,7 +31,7 @@ func PageShow(w http.ResponseWriter, r *http.Request) {
 		}
 		data["Page"] = page
 		data["Title"] = page.Name
-		data["Active"] = fmt.Sprintf("pages/%s", id)
+		data["Active"] = page.Url()
 		tmpl.Lookup("pages/show").Execute(w, data)
 
 	} else {

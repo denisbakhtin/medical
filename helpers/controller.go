@@ -15,7 +15,7 @@ func DefaultData(r *http.Request) map[string]interface{} {
 	return map[string]interface{}{
 		"ActiveUser":     context.Get(r, "user"),           //signed in models.User
 		"Active":         "",                               //active uri shortening for menu item highlight
-		"Title":          "",                               //page title:w
+		"Title":          "",                               //page title
 		"SignupEnabled":  context.Get(r, "signup_enabled"), //signup route is enabled (otherwise everyone can signup ;)
 		csrf.TemplateTag: csrf.TemplateField(r),
 	}

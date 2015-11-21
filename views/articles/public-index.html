@@ -1,0 +1,19 @@
+{{define "articles/public-index"}}
+{{template "header" .}}
+{{template "navbar" .}}
+<div id="main-column" class="container-fluid" role="main">
+  <h1>{{.Title}}</h1>
+  <div class="article-previews">
+    {{range .List}}
+    <section class="article-preview">
+      <h2>{{.Name}}</h2>
+      <div class="excerpt">
+        {{.Excerpt}}
+      </div>
+      <a href="{{.Url}}" class="btn btn-lg btn-info">{{T "read_more"}}</a>
+    </section>
+    {{end}}
+  </div>
+</div>
+{{template "footer" .}}
+{{end}}

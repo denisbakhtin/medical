@@ -22,6 +22,7 @@ func loadTemplates() {
 		"dateTime":       helpers.DateTime,
 		"date":           helpers.Date,
 		"recentArticles": helpers.RecentArticles,
+		"mainMenu":       helpers.MainMenu,
 		"T":              i18n.MustTfunc(config.Language), //will be replaced by actual TranslationFunc in LocaleMiddleware
 	})
 

@@ -88,6 +88,10 @@
     "translation": "Сентябрь"
   },
   {
+    "id": "about_doctor",
+    "translation": "О враче"
+  },
+  {
     "id": "actions",
     "translation": "Действия"
   },
@@ -142,6 +146,10 @@
   {
     "id": "comments",
     "translation": "Комментарии"
+  },
+  {
+    "id": "contacts",
+    "translation": "Контакты"
   },
   {
     "id": "content",
@@ -300,8 +308,16 @@
     "translation": "Пожалуйста, повторите ваш пароль"
   },
   {
+    "id": "parsley_review_required",
+    "translation": "Отзыв не может быть пустым"
+  },
+  {
     "id": "parsley_title_required",
     "translation": "Пожалуйста, введите заголовок"
+  },
+  {
+    "id": "parsley_your_name_required",
+    "translation": "Имя не может быть пустым"
   },
   {
     "id": "password",
@@ -324,12 +340,20 @@
     "translation": "Успешно опубликовано"
   },
   {
+    "id": "prices",
+    "translation": "Цены"
+  },
+  {
     "id": "published",
     "translation": "Опубликовано"
   },
   {
     "id": "question",
     "translation": "Вопрос"
+  },
+  {
+    "id": "read_more",
+    "translation": "Читать далее"
   },
   {
     "id": "recent_articles",
@@ -346,6 +370,10 @@
   {
     "id": "reply",
     "translation": "Ответить"
+  },
+  {
+    "id": "review",
+    "translation": "Отзыв"
   },
   {
     "id": "reviews",
@@ -426,5 +454,29 @@
   {
     "id": "website",
     "translation": "Сайт"
+  },
+  {
+    "id": "what_we_cure",
+    "translation": "Что мы лечим"
+  },
+  {
+    "id": "your_email",
+    "translation": "Ваша эл. почта"
+  },
+  {
+    "id": "your_email_placeholder",
+    "translation": "Она будет видна только администрации сайта."
+  },
+  {
+    "id": "your_name",
+    "translation": "Ваше имя"
+  },
+  {
+    "id": "your_name_placeholder",
+    "translation": "Пожалуйста, представьтесь"
+  },
+  {
+    "id": "your_photo",
+    "translation": "Ваше фото"
   }
 ]
