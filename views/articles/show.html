@@ -12,8 +12,16 @@
       {{template "comments/post-form" .}}
       {{range .Article.Comments}}
         <div id="comment-{{.ID}}" class="well well-sm">
-          <p>{{.AuthorName}}, {{dateTime .CreatedAt}}</p>
-          {{.Content}}
+          <p class="author">{{.AuthorName}}, {{date .CreatedAt}}</p>
+          <div class="content"> 
+            {{.Content}}
+          </div>
+          {{if .Answer}}
+          <div class="answer">
+            <p class="doctor">Отвечает врач-кинезиолог Ростовцев Е.В.</p>
+            {{.Answer}}
+          </div>
+          {{end}}
         </div>
       {{end}}
     </div>

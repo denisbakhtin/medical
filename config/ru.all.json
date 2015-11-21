@@ -172,6 +172,10 @@
     "translation": "Редактировать профиль"
   },
   {
+    "id": "edit_review",
+    "translation": "Редактировать отзыв"
+  },
+  {
     "id": "edit_user",
     "translation": "Редактировать пользователя"
   },
@@ -240,6 +244,10 @@
     "translation": "Новая страница"
   },
   {
+    "id": "new_review",
+    "translation": "Новый отзыв"
+  },
+  {
     "id": "new_tag",
     "translation": "Новый тэг"
   },
@@ -304,6 +312,10 @@
     "translation": "Введите пароль"
   },
   {
+    "id": "photo",
+    "translation": "Фото"
+  },
+  {
     "id": "post_on_facebook",
     "translation": "Опубликовать в Facebook"
   },
@@ -314,6 +326,10 @@
   {
     "id": "published",
     "translation": "Опубликовано"
+  },
+  {
+    "id": "question",
+    "translation": "Вопрос"
   },
   {
     "id": "recent_articles",
@@ -330,6 +346,10 @@
   {
     "id": "reply",
     "translation": "Ответить"
+  },
+  {
+    "id": "reviews",
+    "translation": "Отзывы"
   },
   {
     "id": "search_placeholder",
@@ -377,11 +397,11 @@
   },
   {
     "id": "thank_you_for_posting_question",
-    "translation": ""
+    "translation": "Спасибо! Ваш вопрос будет опубликован после проверки."
   },
   {
     "id": "thank_you_for_posting_review",
-    "translation": ""
+    "translation": "Спасибо! Ваш отзыв будет опубликован после проверки."
   },
   {
     "id": "title",

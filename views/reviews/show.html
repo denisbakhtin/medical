@@ -1,13 +1,16 @@
-{{define "comments/show"}}
+{{define "reviews/show"}}
+{{template "header" .}}
+{{template "navbar" .}}
 <div class="container" role="main">
   <div id="main-column">
-    {{if .Parent}}
-      {{template "comments/show" .Parent}}
-    {{end}}
-    <h5>{{.Comment.AuthorName}}</h5>
-    <div class="content">{{.Comment.Content}}</div>
-    <div class="reply">
+    <h1>{{.Review.AuthorName}}</h1>
+    {{if .Review.Image}}
+    <div class="review-image">
+      <img class="img-responsive" src="{{.Review.Image}}" />
     </div>
+    {{end}}
+    <div class="content">{{.Review.Content}}</div>
   </div>
 </div>
+{{template "footer" .}}
 {{end}}

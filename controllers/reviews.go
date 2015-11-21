@@ -9,6 +9,32 @@ import (
 	"github.com/denisbakhtin/medical/models"
 )
 
+//ReviewShow handles /reviews/:id route
+func ReviewShow(w http.ResponseWriter, r *http.Request) {
+	tmpl := helpers.Template(r)
+	data := helpers.DefaultData(r)
+	if r.Method == "GET" {
+
+		id := r.URL.Path[len("/reviews/"):]
+		review, err := models.GetReview(id)
+		if err != nil || !review.Published {
+			w.WriteHeader(404)
+			tmpl.Lookup("errors/404").Execute(w, nil)
+			return
+		}
+		data["Review"] = review
+		data["Title"] = review.Excerpt()
+		data["Active"] = fmt.Sprintf("reviews/%s", id)
+		tmpl.Lookup("reviews/show").Execute(w, data)
+
+	} else {
+		err := fmt.Errorf("Method %q not allowed", r.Method)
+		log.Printf("ERROR: %s\n", err)
+		w.WriteHeader(405)
+		tmpl.Lookup("errors/405").Execute(w, helpers.ErrorData(err))
+	}
+}
+
 //ReviewIndex handles GET /admin/reviews route
 func ReviewIndex(w http.ResponseWriter, r *http.Request) {
 	tmpl := helpers.Template(r)
@@ -39,8 +65,17 @@ func ReviewIndex(w http.ResponseWriter, r *http.Request) {
 func ReviewCreate(w http.ResponseWriter, r *http.Request) {
 	session := helpers.Session(r)
 	tmpl := helpers.Template(r)
+	data := helpers.DefaultData(r)
 	T := helpers.T(r)
-	if r.Method == "POST" {
+	if r.Method == "GET" {
+
+		data["Title"] = T("new_review")
+		data["Active"] = "reviews"
+		data["Flash"] = session.Flashes("reviews")
+		session.Save(r, w)
+		tmpl.Lookup("reviews/form").Execute(w, data)
+
+	} else if r.Method == "POST" {
 
 		if _, ok := session.Values["oauth_name"]; !ok {
 			err := fmt.Errorf("You are not authorized to post reviews.")

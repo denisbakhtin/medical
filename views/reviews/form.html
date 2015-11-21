@@ -1,4 +1,4 @@
-{{define "comments/form"}}
+{{define "reviews/form"}}
 {{template "dashboard/header" .}}
 {{template "dashboard/navbar" .}}
 {{template "dashboard/sidebar" .}}
@@ -12,30 +12,30 @@
           <div class="alert alert-danger">{{.}}</div><p>
         {{end}}
         {{.csrfField}}
-        <input type="hidden" name="id" value="{{.Comment.ID}}" >
+        <input type="hidden" name="id" value="{{.Review.ID}}" >
         <div class="form-group">
           <label class="control-label" for="author_name">{{T "author"}}</label>
-          <input id="author_name" name="author_name" value="{{.Comment.AuthorName}}" placeholder="{{T "author_placeholder"}}" class="form-control input-md" >
+          <input id="author_name" name="author_name" value="{{.Review.AuthorName}}" placeholder="{{T "author_placeholder"}}" class="form-control input-md" >
         </div>
 
         <div class="form-group">
           <label class="control-label" for="author_email">{{T "email"}}</label>
-          <input id="author_email" name="author_email" value="{{.Comment.AuthorEmail}}" placeholder="{{T "author_email_placeholder"}}" class="form-control input-md" >
+          <input id="author_email" name="author_email" value="{{.Review.AuthorEmail}}" placeholder="{{T "author_email_placeholder"}}" class="form-control input-md" >
         </div>
 
         <div class="form-group">
           <label class="control-label" for="content">{{T "content"}}</label>
-          <textarea class="form-control" name="content" id="content">{{.Comment.Content}}</textarea>
+          <textarea class="form-control" name="content" id="content">{{.Review.Content}}</textarea>
         </div>
 
         <div class="form-group">
-          <label class="control-label" for="answer">{{T "answer"}}</label>
-          <textarea class="form-control" name="answer" id="answer">{{.Comment.Answer}}</textarea>
+          <label class="control-label" for="image">{{T "photo"}}</label>
+          <input type="file" id="image" name="image" accept="image/*">
         </div>
 
         <div class="form-group">
           <label for="published">
-            <input id="published" name="published" type="checkbox" value="true" {{if .Comment.Published}}checked{{end}} >
+            <input id="published" name="published" type="checkbox" value="true" {{if .Review.Published}}checked{{end}} >
             {{T "published"}}
           </label>
         </div>

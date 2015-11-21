@@ -116,6 +116,26 @@
     "translation": "Comments"
   },
   {
+    "id": "reviews",
+    "translation": "Reviews"
+  },
+  {
+    "id": "question",
+    "translation": "Question"
+  },
+  {
+    "id": "new_review",
+    "translation": "New review"
+  },
+  {
+    "id": "edit_review",
+    "translation": "Edit review"
+  },
+  {
+    "id": "photo",
+    "translation": "Photo"
+  },
+  {
     "id": "comment",
     "translation": "Comment"
   },

@@ -31,10 +31,11 @@ func ArticleShow(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, article.Url(), http.StatusSeeOther)
 			return
 		}
+		comments, _ := models.GetCommentsByArticleID(article.ID)
 		data["Article"] = article
 		data["Title"] = article.Name
 		data["Active"] = fmt.Sprintf("articles/%s", id)
-		data["OauthName"] = session.Values["oauth_name"]
+		data["Comments"] = comments
 		//Facebook open graph meta tags
 		data["Ogheadprefix"] = "og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#"
 		data["Ogtitle"] = article.Name

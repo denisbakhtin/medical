@@ -172,6 +172,10 @@
     "translation": "Edit profile"
   },
   {
+    "id": "edit_review",
+    "translation": "Edit review"
+  },
+  {
     "id": "edit_user",
     "translation": "Edit user"
   },
@@ -240,6 +244,10 @@
     "translation": "New page"
   },
   {
+    "id": "new_review",
+    "translation": "New review"
+  },
+  {
     "id": "new_tag",
     "translation": "New tag"
   },
@@ -304,6 +312,10 @@
     "translation": "Password"
   },
   {
+    "id": "photo",
+    "translation": "Photo"
+  },
+  {
     "id": "post_on_facebook",
     "translation": "Post on Facebook"
   },
@@ -314,6 +326,10 @@
   {
     "id": "published",
     "translation": "Published"
+  },
+  {
+    "id": "question",
+    "translation": "Question"
   },
   {
     "id": "recent_articles",
@@ -330,6 +346,10 @@
   {
     "id": "reply",
     "translation": "Reply"
+  },
+  {
+    "id": "reviews",
+    "translation": "Reviews"
   },
   {
     "id": "search_placeholder",

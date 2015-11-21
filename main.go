@@ -42,6 +42,7 @@ func main() {
 
 	http.Handle("/pages/", Default(controllers.PageShow))
 	http.Handle("/articles/", Default(controllers.ArticleShow))
+	http.Handle("/reviews/", Default(controllers.ReviewShow))
 	http.Handle("/rss", Default(controllers.RssXML))
 	http.Handle("/search", Default(controllers.Search))
 	http.Handle("/new_comment", Default(controllers.CommentCreate))
