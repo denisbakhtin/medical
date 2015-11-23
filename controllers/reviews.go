@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	"encoding/base64"
 	"github.com/denisbakhtin/medical/helpers"
 	"github.com/denisbakhtin/medical/models"
 )
@@ -88,8 +89,8 @@ func ReviewIndex(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-//ReviewCreate handles /new_review route
-func ReviewCreate(w http.ResponseWriter, r *http.Request) {
+//ReviewPublicCreate handles /new_review route
+func ReviewPublicCreate(w http.ResponseWriter, r *http.Request) {
 	session := helpers.Session(r)
 	tmpl := helpers.Template(r)
 	data := helpers.DefaultData(r)
@@ -100,24 +101,29 @@ func ReviewCreate(w http.ResponseWriter, r *http.Request) {
 		data["Active"] = "reviews"
 		data["Flash"] = session.Flashes("reviews")
 		session.Save(r, w)
-		if data["ActiveUser"] != nil {
-			tmpl.Lookup("reviews/form").Execute(w, data)
-		} else {
-			tmpl.Lookup("reviews/public-form").Execute(w, data)
-		}
+		tmpl.Lookup("reviews/public-form").Execute(w, data)
 
 	} else if r.Method == "POST" {
 
-		//TODO: captcha check
 		r.ParseMultipartForm(32 << 20)
+		//simple captcha check
+		captcha, err := base64.StdEncoding.DecodeString(r.FormValue("captcha"))
+		if err != nil {
+			w.WriteHeader(500)
+			tmpl.Lookup("errors/500").Execute(w, helpers.ErrorData(err))
+			return
+		}
+		if string(captcha) != "100.00" {
+			w.WriteHeader(400)
+			tmpl.Lookup("errors/400").Execute(w, nil)
+			return
+		}
+
 		review := &models.Review{
 			AuthorName:  r.FormValue("author_name"),
 			AuthorEmail: r.FormValue("author_email"),
 			Content:     r.FormValue("content"),
 			Published:   false, //reviews are published by admin via dashboard
-		}
-		if data["ActiveUser"] != nil {
-			review.Published = helpers.Atob(r.FormValue("published"))
 		}
 
 		if mpartFile, mpartHeader, err := r.FormFile("image"); err == nil {
@@ -137,13 +143,60 @@ func ReviewCreate(w http.ResponseWriter, r *http.Request) {
 			tmpl.Lookup("errors/400").Execute(w, helpers.ErrorData(err))
 			return
 		}
-		if data["ActiveUser"] != nil {
-			http.Redirect(w, r, "/admin/reviews", 303)
-		} else {
-			session.AddFlash(T("thank_you_for_posting_review"), "reviews")
-			session.Save(r, w)
-			http.Redirect(w, r, "/reviews", 303)
+		session.AddFlash(T("thank_you_for_posting_review"), "reviews")
+		session.Save(r, w)
+		http.Redirect(w, r, "/reviews", 303)
+
+	} else {
+		err := fmt.Errorf("Method %q not allowed", r.Method)
+		log.Printf("ERROR: %s\n", err)
+		w.WriteHeader(405)
+		tmpl.Lookup("errors/405").Execute(w, helpers.ErrorData(err))
+	}
+}
+
+//ReviewCreate handles /admin/new_review route
+func ReviewCreate(w http.ResponseWriter, r *http.Request) {
+	session := helpers.Session(r)
+	tmpl := helpers.Template(r)
+	data := helpers.DefaultData(r)
+	T := helpers.T(r)
+	if r.Method == "GET" {
+
+		data["Title"] = T("new_review")
+		data["Active"] = "reviews"
+		data["Flash"] = session.Flashes("reviews")
+		session.Save(r, w)
+		tmpl.Lookup("reviews/form").Execute(w, data)
+
+	} else if r.Method == "POST" {
+
+		r.ParseMultipartForm(32 << 20)
+		review := &models.Review{
+			AuthorName:  r.FormValue("author_name"),
+			AuthorEmail: r.FormValue("author_email"),
+			Content:     r.FormValue("content"),
+			Published:   helpers.Atob(r.FormValue("published")),
 		}
+
+		if mpartFile, mpartHeader, err := r.FormFile("image"); err == nil {
+			defer mpartFile.Close()
+			review.Image, err = saveFile(mpartHeader, mpartFile)
+			if err != nil {
+				log.Println(err.Error())
+				w.WriteHeader(500)
+				tmpl.Lookup("errors/500").Execute(w, helpers.ErrorData(err))
+				return
+			}
+		}
+
+		if err := review.Insert(); err != nil {
+			log.Printf("ERROR: %s\n", err)
+			w.WriteHeader(400)
+			tmpl.Lookup("errors/400").Execute(w, helpers.ErrorData(err))
+			return
+		}
+		http.Redirect(w, r, "/admin/reviews", 303)
 
 	} else {
 		err := fmt.Errorf("Method %q not allowed", r.Method)

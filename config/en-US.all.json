@@ -490,6 +490,14 @@
   {
     "id": "read_more",
     "translation": "Read more"
+  },
+  {
+    "id": "to_prove_you_are_not_a_robot",
+    "translation": "To prove you are not a robot move the slider to the right"
+  },
+  {
+    "id": "ask_a_doctor",
+    "translation": "Ask a doctor"
   }
 
 ]

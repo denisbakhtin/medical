@@ -124,6 +124,10 @@
     "translation": "Articles"
   },
   {
+    "id": "ask_a_doctor",
+    "translation": "Ask a doctor"
+  },
+  {
     "id": "author",
     "translation": "Author"
   },
@@ -442,6 +446,10 @@
   {
     "id": "to_comment_login_with",
     "translation": "To Comment Login With"
+  },
+  {
+    "id": "to_prove_you_are_not_a_robot",
+    "translation": "To prove you are not a robot move the slider to the right"
   },
   {
     "id": "user_profile",

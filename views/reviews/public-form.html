@@ -2,43 +2,52 @@
 {{template "header" .}}
 {{template "navbar" .}}
 <div id="main-column" class="container-fluid" role="main">
-  <div class="panel panel-default">
-    <div class="panel-body">
-      <form method="post" enctype="multipart/form-data" data-parsley-validate>
-      <fieldset>
-        <legend>{{.Title}}</legend>
-        {{range .Flash}}
-          <div class="alert alert-danger">{{.}}</div><p>
-        {{end}}
-        {{.csrfField}}
+  <section id="review-form-wrapper">
+    <form method="post" enctype="multipart/form-data" data-parsley-validate>
+    <fieldset>
+      <legend>{{.Title}}</legend>
+      {{range .Flash}}
+        <div class="alert alert-danger">{{.}}</div><p>
+      {{end}}
+      {{.csrfField}}
+      <div class="form-group">
+        <label class="control-label" for="author_name">{{T "your_name"}}</label>
+        <input id="author_name" name="author_name" placeholder="{{T "your_name_placeholder"}}" required="" class="form-control input-md" data-parsley-required-message="{{T "parsley_your_name_required"}}">
+      </div>
+
+      <div class="form-group">
+        <label class="control-label" for="author_email">{{T "your_email"}}</label>
+        <input type="email" id="author_email" name="author_email" placeholder="{{T "your_email_placeholder"}}" class="form-control input-md" >
+      </div>
+
+      <div class="form-group">
+        <label class="control-label" for="content">{{T "review"}}</label>
+        <textarea class="form-control" name="content" id="content" required="" data-parsley-required-message="{{T "parsley_review_required"}}"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label" for="image">{{T "your_photo"}}</label>
+        <input type="file" id="image" name="image" accept="image/*">
+      </div>
+
+      <div class="well well-sm">
         <div class="form-group">
-          <label class="control-label" for="author_name">{{T "your_name"}}</label>
-          <input id="author_name" name="author_name" placeholder="{{T "your_name_placeholder"}}" required="" class="form-control input-md" data-parsley-required-message="{{T "parsley_your_name_required"}}">
+          <label class="control-label" for="captcha-slider">{{T "to_prove_you_are_not_a_robot"}}</label>
+          <div id="captcha-wrapper">
+            <div id="captcha-slider"></div>
+            <i id="ok-sign" class="glyphicon glyphicon-ok-circle"></i>
+            <input type="hidden" id="captcha" name="captcha" />
+          </div>
         </div>
 
         <div class="form-group">
-          <label class="control-label" for="author_email">{{T "your_email"}}</label>
-          <input type="email" id="author_email" name="author_email" placeholder="{{T "your_email_placeholder"}}" class="form-control input-md" >
-        </div>
-
-        <div class="form-group">
-          <label class="control-label" for="content">{{T "review"}}</label>
-          <textarea class="form-control" name="content" id="content" required="" data-parsley-required-message="{{T "parsley_review_required"}}"></textarea>
-        </div>
-
-        <div class="form-group">
-          <label class="control-label" for="image">{{T "your_photo"}}</label>
-          <input type="file" id="image" name="image" accept="image/*">
-        </div>
-
-        <div class="form-group">
-          <input type="submit" class="btn btn-primary" value="{{T "submit"}}" >
+          <input id="submit-with-captcha-btn" type="submit" class="btn btn-primary" value="{{T "submit"}}" >
           <input type="button" class="btn btn-default" formnovalidate onclick="window.history.back();" value="{{T "cancel"}}">
         </div>
-      </fieldset>
-      </form>
-    </div>
-  </div>
+      </div>
+    </fieldset>
+    </form>
+  </section>
 </div>
 {{template "footer" .}}
 {{end}}

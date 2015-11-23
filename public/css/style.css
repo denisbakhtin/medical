@@ -1,7 +1,6 @@
 html {
   position: relative;
   min-height: 100%;
-  padding-top: 70px;
 }
 
 body {
@@ -19,17 +18,21 @@ body {
 
 input.parsley-success,
 select.parsley-success,
-textarea.parsley-success {    
+textarea.parsley-success {
   border: 2px solid #62c462;
 }
 
 input.parsley-error,
 select.parsley-error,
-textarea.parsley-error {    
+textarea.parsley-error {
   border: 2px solid #ee5f5b;
 }
 textarea.form-control {
-  height: 200px;
+  height: 10em;
+}
+textarea#textarea-comment {
+  height: 5em;
+  transition: height .5s ease;
 }
 
 .parsley-errors-list {
@@ -113,6 +116,19 @@ textarea.form-control {
   color: #333;
 }
 
+@media (min-width: 768px){
+  .navbar-nav{
+    float:none;
+    margin: 0 auto;
+    display: table;
+    table-layout: fixed;
+  }
+}
+
+.navbar-default {
+  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.16);
+}
+
 .navbar-dashboard {
   background-color: #eee;
 }
@@ -172,10 +188,40 @@ textarea.form-control {
   margin-right: 1em;
 }
 #comments {
-  padding-top: 70px;
-  margin-top: -70px;
 }
 #comment-oauth-login img {
   width: 36px;
   height: 36px;
+}
+#captcha-wrapper {
+  position: relative;
+  padding: 5px 50px 5px 15px;
+  max-width: 20em;
+  width: 100%;
+}
+#captcha-wrapper #ok-sign {
+  position: absolute;
+  right: 0;
+  top: 0;
+  font-size: 28px;
+  color: #1abc9c;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+#captcha-wrapper #ok-sign.visible {
+  opacity: 1;
+}
+#captcha-slider .noUi-handle {
+  cursor: pointer;
+  transition: background-color 0.5s ease;
+}
+#captcha-slider .noUi-handle.ok {
+  background: #1abc9c;
+  box-shadow: none;
+}
+#submit {
+  transition: opacity 0.5s ease;
+}
+#comment-hidden {
+  display: none;
 }

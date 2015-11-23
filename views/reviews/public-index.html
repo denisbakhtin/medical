@@ -3,6 +3,7 @@
 {{template "navbar" .}}
 <div id="main-column" class="container-fluid" role="main">
   <h1>{{.Title}}</h1>
+  {{template "reviews/review-btn"}}
   <div class="review-previews">
     {{range .List}}
     <section class="review-preview">
@@ -10,7 +11,7 @@
       <div class="excerpt">
         {{.Excerpt}}
       </div>
-      <a href="{{.Url}}" class="btn btn-lg btn-info">{{T "read_more"}}</a>
+      <a href="{{.URL}}" class="btn btn-lg btn-info">{{T "read_more"}}</a>
     </section>
     {{end}}
   </div>

@@ -7,8 +7,9 @@ import (
 	"github.com/denisbakhtin/medical/models"
 )
 
-type menuItem struct {
-	Url      string
+//MenuItem represents main menu item
+type MenuItem struct {
+	URL      string
 	Title    string //will be passed to T i18n function
 	IsActive bool
 }
@@ -50,34 +51,34 @@ func RecentArticles() []models.Article {
 }
 
 //MainMenu returns the list of main menu items
-func MainMenu() []menuItem {
+func MainMenu() []MenuItem {
 	about, _ := models.GetPage(4)
 	prices, _ := models.GetPage(5)
 	cure, _ := models.GetPage(6)
 	contacts, _ := models.GetPage(7)
-	menu := []menuItem{
-		menuItem{
-			Url:   about.Url(),
+	menu := []MenuItem{
+		MenuItem{
+			URL:   about.URL(),
 			Title: "about_doctor",
 		},
-		menuItem{
-			Url:   cure.Url(),
+		MenuItem{
+			URL:   cure.URL(),
 			Title: "what_we_cure",
 		},
-		menuItem{
-			Url:   "/articles",
+		MenuItem{
+			URL:   "/articles",
 			Title: "articles",
 		},
-		menuItem{
-			Url:   prices.Url(),
+		MenuItem{
+			URL:   prices.URL(),
 			Title: "prices",
 		},
-		menuItem{
-			Url:   "/reviews",
+		MenuItem{
+			URL:   "/reviews",
 			Title: "reviews",
 		},
-		menuItem{
-			Url:   contacts.Url(),
+		MenuItem{
+			URL:   contacts.URL(),
 			Title: "contacts",
 		},
 	}

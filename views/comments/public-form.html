@@ -1,0 +1,40 @@
+{{define "comments/public-form"}}
+  <section id="comment-form-wrapper">
+    <form method="post" action="/new_comment" data-parsley-validate>
+      <fieldset>
+        <legend>{{T "ask_a_doctor"}}</legend>
+        {{.csrfField}}
+        <input type="hidden" name="article_id" value="{{.Article.ID}}" >
+
+        <div class="form-group">
+          <textarea id="textarea-comment" class="form-control" name="content" id="content" required data-parsley-required-message="{{T "parsley_comment_required"}}">{{.Comment.Content}}</textarea>
+        </div>
+
+        <div id="comment-hidden">
+          <div class="form-group">
+            <label class="control-label" for="author_name">{{T "your_name"}}</label>
+            <input id="author_name" name="author_name" placeholder="{{T "your_name_placeholder"}}" required="" class="form-control input-md" data-parsley-required-message="{{T "parsley_your_name_required"}}">
+          </div>
+
+          <div class="form-group">
+            <label class="control-label" for="author_email">{{T "your_email"}}</label>
+            <input type="email" id="author_email" name="author_email" placeholder="{{T "your_email_placeholder"}}" class="form-control input-md" >
+          </div>
+
+          <div id="captcha-form-group" class="form-group">
+            <label class="control-label" for="captcha-slider">{{T "to_prove_you_are_not_a_robot"}}</label>
+            <div id="captcha-wrapper">
+              <div id="captcha-slider"></div>
+              <i id="ok-sign" class="glyphicon glyphicon-ok-circle"></i>
+              <input type="hidden" id="captcha" name="captcha" />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <input id="submit-with-captcha-btn" type="submit" class="btn btn-primary" value="{{T "submit"}}" >
+        </div>
+      </fieldset>
+    </form>
+  </section>
+{{end}}

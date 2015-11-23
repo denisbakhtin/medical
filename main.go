@@ -48,7 +48,7 @@ func main() {
 	http.Handle("/rss", Default(controllers.RssXML))
 	http.Handle("/search", Default(controllers.Search))
 	http.Handle("/new_comment", Default(controllers.CommentCreate))
-	http.Handle("/new_review", Default(controllers.ReviewCreate))
+	http.Handle("/new_review", Default(controllers.ReviewPublicCreate))
 
 	//comment oauth login
 	http.Handle("/facebook_login", Default(oauth.FacebookLogin))
@@ -80,7 +80,6 @@ func main() {
 		http.Handle("/admin/post_on_facebook", RestrictedWithoutCSRF(controllers.PostOnFacebook))
 
 		http.Handle("/admin/comments", Restricted(controllers.CommentIndex))
-		http.Handle("/admin/new_comment", Restricted(controllers.CommentReply))
 		http.Handle("/admin/edit_comment/", Restricted(controllers.CommentUpdate))
 		http.Handle("/admin/delete_comment", Restricted(controllers.CommentDelete))
 

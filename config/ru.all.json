@@ -124,6 +124,10 @@
     "translation": "Статьи"
   },
   {
+    "id": "ask_a_doctor",
+    "translation": ""
+  },
+  {
     "id": "author",
     "translation": "Автор"
   },
@@ -442,6 +446,10 @@
   {
     "id": "to_comment_login_with",
     "translation": "Чтобы оставить комментарий, войдите с помощью"
+  },
+  {
+    "id": "to_prove_you_are_not_a_robot",
+    "translation": ""
   },
   {
     "id": "user_profile",

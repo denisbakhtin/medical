@@ -1,13 +1,13 @@
 package controllers
 
 import (
+	"encoding/base64"
 	"fmt"
 	"log"
 	"net/http"
 
 	"github.com/denisbakhtin/medical/helpers"
 	"github.com/denisbakhtin/medical/models"
-	"github.com/gorilla/context"
 )
 
 //CommentIndex handles GET /admin/comments route
@@ -43,11 +43,17 @@ func CommentCreate(w http.ResponseWriter, r *http.Request) {
 	T := helpers.T(r)
 	if r.Method == "POST" {
 
-		if _, ok := session.Values["oauth_name"]; !ok {
-			err := fmt.Errorf("You are not authorized to post comments.")
-			log.Printf("ERROR: %s\n", err)
-			w.WriteHeader(405)
-			tmpl.Lookup("errors/405").Execute(w, helpers.ErrorData(err))
+		r.ParseForm()
+		//simple captcha check
+		captcha, err := base64.StdEncoding.DecodeString(r.FormValue("captcha"))
+		if err != nil {
+			w.WriteHeader(500)
+			tmpl.Lookup("errors/500").Execute(w, helpers.ErrorData(err))
+			return
+		}
+		if string(captcha) != "100.00" {
+			w.WriteHeader(400)
+			tmpl.Lookup("errors/400").Execute(w, nil)
 			return
 		}
 
@@ -111,57 +117,6 @@ func CommentUpdate(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if err := comment.Update(); err != nil {
-			session.AddFlash(err.Error(), "comments")
-			session.Save(r, w)
-			http.Redirect(w, r, r.RequestURI, 303)
-			return
-		}
-		http.Redirect(w, r, "/admin/comments", 303)
-
-	} else {
-		err := fmt.Errorf("Method %q not allowed", r.Method)
-		log.Printf("ERROR: %s\n", err)
-		w.WriteHeader(405)
-		tmpl.Lookup("errors/405").Execute(w, helpers.ErrorData(err))
-	}
-}
-
-//TODO: adopt to update via secure link
-//CommentReply handles ...
-func CommentReply(w http.ResponseWriter, r *http.Request) {
-	tmpl := helpers.Template(r)
-	session := helpers.Session(r)
-	data := helpers.DefaultData(r)
-	T := helpers.T(r)
-	if r.Method == "GET" {
-
-		user := context.Get(r, "user").(*models.User)
-		//TODO: get comment by ID
-		comment := &models.Comment{
-			ArticleID:  0,
-			AuthorName: user.Name,
-		}
-
-		data["Title"] = T("reply")
-		data["Active"] = "comments"
-		data["Comment"] = comment
-		data["Flash"] = session.Flashes("comments")
-		session.Save(r, w)
-		tmpl.Lookup("comments/form").Execute(w, data)
-
-	} else if r.Method == "POST" {
-
-		//TODO: get comment by ID, then update
-		comment := &models.Comment{
-			ArticleID:   helpers.Atoi64(r.PostFormValue("article_id")),
-			AuthorName:  r.PostFormValue("author_name"),
-			AuthorEmail: r.PostFormValue("author_email"),
-			Content:     r.PostFormValue("content"),
-			Answer:      r.PostFormValue("answer"),
-			Published:   helpers.Atob(r.PostFormValue("published")),
-		}
-
-		if err := comment.Insert(); err != nil {
 			session.AddFlash(err.Error(), "comments")
 			session.Save(r, w)
 			http.Redirect(w, r, r.RequestURI, 303)

@@ -95,8 +95,8 @@ func (article *Article) GetImage() string {
 	return ""
 }
 
-//Url returns article url
-func (article *Article) Url() string {
+//URL returns article url
+func (article *Article) URL() string {
 	return fmt.Sprintf("/articles/%d-%s", article.ID, article.Slug)
 }
 
@@ -107,7 +107,7 @@ func GetArticle(id interface{}) (*Article, error) {
 	if err != nil {
 		return article, err
 	}
-	err = db.Select(&article.Comments, "SELECT * FROM comments WHERE published=$1 AND article_id=$2 ORDER BY id", true, article.ID)
+	article.Comments, err = GetCommentsByArticleID(article.ID)
 	return article, err
 }
 

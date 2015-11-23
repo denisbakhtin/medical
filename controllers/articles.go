@@ -27,15 +27,13 @@ func ArticleShow(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		//redirect to canonical url
-		if r.URL.Path != article.Url() {
-			http.Redirect(w, r, article.Url(), http.StatusSeeOther)
+		if r.URL.Path != article.URL() {
+			http.Redirect(w, r, article.URL(), http.StatusSeeOther)
 			return
 		}
-		comments, _ := models.GetCommentsByArticleID(article.ID)
 		data["Article"] = article
 		data["Title"] = article.Name
 		data["Active"] = fmt.Sprintf("articles/%s", id)
-		data["Comments"] = comments
 		//Facebook open graph meta tags
 		data["Ogheadprefix"] = "og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#"
 		data["Ogtitle"] = article.Name

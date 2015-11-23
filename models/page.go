@@ -63,8 +63,8 @@ func (page *Page) HTMLContent() template.HTML {
 	return template.HTML(string(blackfriday.MarkdownCommon([]byte(page.Content))))
 }
 
-//Url returns page url
-func (page *Page) Url() string {
+//URL returns page url
+func (page *Page) URL() string {
 	return fmt.Sprintf("/pages/%d-%s", page.ID, page.Slug)
 }
 

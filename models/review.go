@@ -60,8 +60,8 @@ func (review *Review) Excerpt() string {
 	return truncate(review.Content, 100)
 }
 
-//Url returns review url
-func (review *Review) Url() string {
+//URL returns review url
+func (review *Review) URL() string {
 	return fmt.Sprintf("/reviews/%d", review.ID)
 }
 

@@ -25,13 +25,13 @@ func PageShow(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		//redirect to canonical url
-		if r.URL.Path != page.Url() {
-			http.Redirect(w, r, page.Url(), http.StatusSeeOther)
+		if r.URL.Path != page.URL() {
+			http.Redirect(w, r, page.URL(), http.StatusSeeOther)
 			return
 		}
 		data["Page"] = page
 		data["Title"] = page.Name
-		data["Active"] = page.Url()
+		data["Active"] = page.URL()
 		tmpl.Lookup("pages/show").Execute(w, data)
 
 	} else {

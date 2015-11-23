@@ -9,7 +9,7 @@
       {{range .Flash}}
         <div class="alert alert-info">{{.}}</div><p>
       {{end}}
-      {{template "comments/post-form" .}}
+      {{template "comments/public-form" .}}
       {{range .Article.Comments}}
         <div id="comment-{{.ID}}" class="well well-sm">
           <p class="author">{{.AuthorName}}, {{date .CreatedAt}}</p>
