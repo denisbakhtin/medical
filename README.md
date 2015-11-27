@@ -1,4 +1,4 @@
 Medical website
 ===============
 
-Based on https://github.com/denisbakhtin/medical
+Based on https://github.com/denisbakhtin/blog

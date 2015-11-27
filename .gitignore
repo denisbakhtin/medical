@@ -1,7 +1,9 @@
 config/config.json
 config/ru.all.json
 public/uploads/*.jpg
+public/uploads/*.png
 public/css/style.css
+public/sitemap/*
 git_save
 blog
 *.rice-box.go

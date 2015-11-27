@@ -4,8 +4,7 @@ User-agent: *
 Disallow: /logout
 Disallow: /signin
 Disallow: /signup
-Disallow: /facebook_login
-Disallow: /google_login
-Disallow: /linkedin_login
-Disallow: /vk_login
+Disallow: /new_review
 
+Sitemap: http://www.miobalans.ru/public/sitemap/sitemap_index.xml
+Host: www.miobalans.ru

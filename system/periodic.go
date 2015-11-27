@@ -13,7 +13,7 @@ import (
 func CreateXMLSitemap() {
 	log.Printf("INFO: Starting XML sitemap generation\n")
 	folder := path.Join(GetConfig().Public, "sitemap")
-	domain := GetConfig().Domain
+	domain := "http://www." + GetConfig().Domain
 	now := time.Now()
 	items := make([]sitemap.Item, 1)
 
@@ -33,7 +33,7 @@ func CreateXMLSitemap() {
 	}
 	for i := range articles {
 		items = append(items, sitemap.Item{
-			Loc:        fmt.Sprintf("%s/articles/%d", domain, articles[i].ID),
+			Loc:        fmt.Sprintf("%s%s", domain, articles[i].URL),
 			LastMod:    articles[i].UpdatedAt,
 			Changefreq: "weekly",
 			Priority:   0.9,
@@ -48,12 +48,43 @@ func CreateXMLSitemap() {
 	}
 	for i := range pages {
 		items = append(items, sitemap.Item{
-			Loc:        fmt.Sprintf("%s/pages/%d", domain, pages[i].ID),
+			Loc:        fmt.Sprintf("%s%s", domain, pages[i].URL),
 			LastMod:    pages[i].UpdatedAt,
 			Changefreq: "monthly",
 			Priority:   0.8,
 		})
 	}
+
+	//Reviews
+	reviews, err := models.GetPublishedReviews()
+	if err != nil {
+		log.Printf("ERROR: %s\n", err)
+		return
+	}
+	for i := range reviews {
+		items = append(items, sitemap.Item{
+			Loc:        fmt.Sprintf("%s%s", domain, reviews[i].URL),
+			LastMod:    reviews[i].UpdatedAt,
+			Changefreq: "monthly",
+			Priority:   0.7,
+		})
+	}
+
+	//Comments
+	comments, err := models.GetPublishedComments()
+	if err != nil {
+		log.Printf("ERROR: %s\n", err)
+		return
+	}
+	for i := range comments {
+		items = append(items, sitemap.Item{
+			Loc:        fmt.Sprintf("%s%s", domain, comments[i].URL),
+			LastMod:    comments[i].UpdatedAt,
+			Changefreq: "monthly",
+			Priority:   0.6,
+		})
+	}
+
 	if err := sitemap.SiteMap(path.Join(folder, "sitemap1.xml.gz"), items); err != nil {
 		log.Printf("ERROR: %s\n", err)
 		return

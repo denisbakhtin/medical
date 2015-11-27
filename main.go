@@ -7,7 +7,6 @@ import (
 
 	"github.com/claudiu/gocron"
 	"github.com/denisbakhtin/medical/controllers"
-	"github.com/denisbakhtin/medical/controllers/oauth"
 	"github.com/denisbakhtin/medical/system"
 	"github.com/gorilla/csrf"
 )
@@ -51,15 +50,17 @@ func main() {
 	http.Handle("/comments/", Default(controllers.CommentShow))
 	http.Handle("/new_review", Default(controllers.ReviewPublicCreate))
 
-	//comment oauth login
-	http.Handle("/facebook_login", Default(oauth.FacebookLogin))
-	http.Handle("/facebook_callback", Default(oauth.FacebookCallback))
-	http.Handle("/google_login", Default(oauth.GoogleLogin))
-	http.Handle("/google_callback", Default(oauth.GoogleCallback))
-	http.Handle("/linkedin_login", Default(oauth.LinkedinLogin))
-	http.Handle("/linkedin_callback", Default(oauth.LinkedinCallback))
-	http.Handle("/vk_login", Default(oauth.VkLogin))
-	http.Handle("/vk_callback", Default(oauth.VkCallback))
+	/*
+		//comment oauth login
+		http.Handle("/facebook_login", Default(oauth.FacebookLogin))
+		http.Handle("/facebook_callback", Default(oauth.FacebookCallback))
+		http.Handle("/google_login", Default(oauth.GoogleLogin))
+		http.Handle("/google_callback", Default(oauth.GoogleCallback))
+		http.Handle("/linkedin_login", Default(oauth.LinkedinLogin))
+		http.Handle("/linkedin_callback", Default(oauth.LinkedinCallback))
+		http.Handle("/vk_login", Default(oauth.VkLogin))
+		http.Handle("/vk_callback", Default(oauth.VkCallback))
+	*/
 
 	{
 		http.Handle("/admin", Restricted(controllers.Dashboard))
