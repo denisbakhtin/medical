@@ -58,4 +58,17 @@ $(document).ready(function(){
     $('#comment-hidden').show('fast');
   });
 
+  $(window).on("scroll", function() {
+    if ($('#navbar-main').length > 0) {
+      var iCurScrollPos = $(this).scrollTop();
+      var navbarBottom = $('#navbar-main').position().top+$('#navbar-main').outerHeight(true)
+      if (iCurScrollPos > navbarBottom) {
+        //show cta-popup
+        $('#navbar-cta').css('display', 'block');
+      } else {
+        //hide cta-popup
+        $('#navbar-cta').css('display', 'none');
+      }
+    }
+  });
 });

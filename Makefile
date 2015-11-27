@@ -3,7 +3,7 @@
 default: build
 
 build: vet
-	@go generate ./... && go build -o go-miobalans
+	@go generate ./... && go build -o miobalans-go
 
 doc:
 	@godoc -http=:6060 -index
@@ -15,7 +15,7 @@ debug:
 	@reflex -c reflex.conf
 
 run: build
-	./ginblog
+	./miobalans-go
 
 test:
 	@go test ./...
@@ -24,5 +24,5 @@ vet:
 	@go vet ./...
 
 clean:
-	@rm -f ./blog
+	@rm -f ./miobalans-go
 	@rm -f ./system/*.rice-box.go

@@ -586,6 +586,10 @@
   {
     "id": "view_all_reviews",
     "translation": "View all reviews"
+  },
+  {
+    "id": "cta_scroll_text",
+    "translation": ""
   }
 
 ]
