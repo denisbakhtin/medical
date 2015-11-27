@@ -3,7 +3,7 @@
 default: build
 
 build: vet
-	@go generate ./... && go build
+	@go generate ./... && go build -o go-miobalans
 
 doc:
 	@godoc -http=:6060 -index

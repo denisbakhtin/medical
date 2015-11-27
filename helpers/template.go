@@ -55,9 +55,8 @@ func OddEvenClass(index int) string {
 	//range indexes start with zero %)
 	if (index+1)%2 == 1 {
 		return "odd"
-	} else {
-		return "even"
 	}
+	return "even"
 }
 
 //MainMenu returns the list of main menu items
