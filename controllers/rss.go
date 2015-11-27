@@ -41,7 +41,7 @@ func RssXML(w http.ResponseWriter, r *http.Request) {
 				Id:          fmt.Sprintf("%s/articles/%d", domain, articles[i].ID),
 				Title:       articles[i].Name,
 				Link:        &feeds.Link{Href: fmt.Sprintf("%s/articles/%d", domain, articles[i].ID)},
-				Description: string(articles[i].Excerpt()),
+				Description: string(articles[i].Excerpt),
 				Created:     now,
 			})
 		}

@@ -14,6 +14,7 @@ import (
 func ReviewShow(w http.ResponseWriter, r *http.Request) {
 	tmpl := helpers.Template(r)
 	data := helpers.DefaultData(r)
+	T := helpers.T(r)
 	if r.Method == "GET" {
 
 		id := r.URL.Path[len("/reviews/"):]
@@ -24,8 +25,8 @@ func ReviewShow(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		data["Review"] = review
-		data["Title"] = review.Excerpt()
-		data["Active"] = fmt.Sprintf("reviews/%s", id)
+		data["Title"] = T("testimonial_title") + ". " + review.AuthorName
+		data["Active"] = "/reviews"
 		tmpl.Lookup("reviews/show").Execute(w, data)
 
 	} else {
@@ -50,7 +51,7 @@ func ReviewPublicIndex(w http.ResponseWriter, r *http.Request) {
 			tmpl.Lookup("errors/500").Execute(w, helpers.ErrorData(err))
 			return
 		}
-		data["Title"] = T("reviews")
+		data["Title"] = T("testimonials_title")
 		data["Active"] = r.RequestURI
 		data["List"] = list
 		tmpl.Lookup("reviews/public-index").Execute(w, data)

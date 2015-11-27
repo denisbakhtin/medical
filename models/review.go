@@ -57,7 +57,7 @@ func (review *Review) Delete() error {
 
 //Excerpt returns review excerpt, 100 char long
 func (review *Review) Excerpt() string {
-	return truncate(review.Content, 100)
+	return truncate(review.Content, 300)
 }
 
 //URL returns review url
@@ -83,5 +83,12 @@ func GetReviews() ([]Review, error) {
 func GetPublishedReviews() ([]Review, error) {
 	var list []Review
 	err := db.Select(&list, "SELECT * FROM reviews WHERE published=$1 ORDER BY id DESC", true)
+	return list, err
+}
+
+//GetRecentReviews returns a slice of last 7 published reviews
+func GetRecentReviews() ([]Review, error) {
+	var list []Review
+	err := db.Select(&list, "SELECT * FROM reviews WHERE published=$1 ORDER BY id DESC LIMIT 7", true)
 	return list, err
 }

@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -57,6 +58,53 @@ func (comment *Comment) Delete() error {
 //Excerpt returns comment excerpt, 100 char long
 func (comment *Comment) Excerpt() string {
 	return truncate(comment.Content, 20)
+}
+
+//URL returns comment url
+func (comment *Comment) URL() string {
+	return fmt.Sprintf(
+		"/comments/%d-%s",
+		comment.ID,
+		createSlug(truncate(comment.Content, 70)),
+	)
+}
+
+//GetSimilar returns a slice of similar (adjacent) comments
+func (comment *Comment) GetSimilar() ([]Comment, error) {
+	var list []Comment
+	err := db.Select(
+		&list,
+		`(SELECT * FROM comments WHERE id < $1 AND article_id=$2 AND published=$3 ORDER BY id DESC LIMIT $4)
+		UNION
+		(SELECT * FROM comments WHERE id > $1 AND article_id=$2 AND published=$3 ORDER BY id ASC LIMIT $4)
+		ORDER BY id ASC`,
+		comment.ID,
+		comment.ArticleID,
+		true,
+		5,
+	)
+	if err != nil {
+		return nil, err
+	}
+	if len(list) < 10 {
+		var list2 []Comment
+		err := db.Select(
+			&list2,
+			`(SELECT * FROM comments WHERE id < $1 AND article_id!=$2 AND published=$3 ORDER BY id DESC LIMIT $4)
+			UNION
+			(SELECT * FROM comments WHERE id > $1 AND article_id!=$2 AND published=$3 ORDER BY id ASC LIMIT $4)
+			ORDER BY id ASC LIMIT $4`,
+			comment.ID,
+			comment.ArticleID,
+			true,
+			5,
+		)
+		if err != nil {
+			return nil, err
+		}
+		list = append(list, list2...)
+	}
+	return list, err
 }
 
 //GetComment returns Comment record by its ID.

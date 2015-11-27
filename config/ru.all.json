@@ -125,7 +125,11 @@
   },
   {
     "id": "ask_a_doctor",
-    "translation": ""
+    "translation": "Задать врачу свой вопрос"
+  },
+  {
+    "id": "asks_kineziologist",
+    "translation": "спрашивает у кинезиолога"
   },
   {
     "id": "author",
@@ -164,6 +168,22 @@
     "translation": "Создано"
   },
   {
+    "id": "cta_bottom_text",
+    "translation": "Многолетняя практика подтверждает чрезвычайно высокую эффективность кинезиологии"
+  },
+  {
+    "id": "cta_top_about",
+    "translation": "Я врач-кинезиолог с богатым опытом. Это позволяет мне с легкостью устранять истинную причину как острых, так и хронических болей."
+  },
+  {
+    "id": "cta_top_greeting",
+    "translation": "Здравствуйте, меня зовут Евгений!"
+  },
+  {
+    "id": "cta_top_text",
+    "translation": "Если у Вас возникнут вопросы, звоните мне по телефону"
+  },
+  {
     "id": "dashboard",
     "translation": "Админка"
   },
@@ -181,7 +201,7 @@
   },
   {
     "id": "edit_profile",
-    "translation": "Редактировать профиль"
+    "translation": "Редактировать"
   },
   {
     "id": "edit_review",
@@ -204,6 +224,14 @@
     "translation": "Ошибка, смотрите логи"
   },
   {
+    "id": "excerpt",
+    "translation": "Выдержка"
+  },
+  {
+    "id": "footer_text",
+    "translation": "8(903)689-20-57, Ростовцев Евгений Владимирович, врач-кинезиолог, г. Москва."
+  },
+  {
     "id": "greeting",
     "translation": "Добро пожаловать"
   },
@@ -214,6 +242,14 @@
   {
     "id": "i_accept_terms",
     "translation": "Я принимаю условия соглашения"
+  },
+  {
+    "id": "kinesiology_in_practice",
+    "translation": "Кинезиология во врачебной практике"
+  },
+  {
+    "id": "kineziologist_replies",
+    "translation": "Отвечает кинезиолог"
   },
   {
     "id": "login_with_facebook",
@@ -340,6 +376,14 @@
     "translation": "Опубликовать в Facebook"
   },
   {
+    "id": "post_your_review",
+    "translation": "Оставьте свой отзыв"
+  },
+  {
+    "id": "post_your_review_btn",
+    "translation": "Оставить отзыв"
+  },
+  {
     "id": "posted_successfully",
     "translation": "Успешно опубликовано"
   },
@@ -356,6 +400,14 @@
     "translation": "Вопрос"
   },
   {
+    "id": "question_about_article",
+    "translation": "Вопрос задан к статье"
+  },
+  {
+    "id": "read_fully",
+    "translation": "Читать полностью"
+  },
+  {
     "id": "read_more",
     "translation": "Читать далее"
   },
@@ -370,6 +422,10 @@
   {
     "id": "repeat_password_placeholder",
     "translation": "Повторите пароль"
+  },
+  {
+    "id": "replies_doctor",
+    "translation": "Отвечает доктор"
   },
   {
     "id": "reply",
@@ -404,12 +460,32 @@
     "translation": "Регистрация"
   },
   {
+    "id": "similar_questions",
+    "translation": "Похожие вопросы"
+  },
+  {
+    "id": "site_address",
+    "translation": "г. Москва, м. Китай-город, Малый Златоустинский пер. 2/9 стр. 6, центр красоты и здоровья 'Лайт' (4 мин. пешком от метро)."
+  },
+  {
+    "id": "site_author_full",
+    "translation": "Ростовцев Евгений Владимирович"
+  },
+  {
     "id": "site_description",
     "translation": "Шаблон блога"
   },
   {
     "id": "site_name",
-    "translation": "Мой блог"
+    "translation": "Миобаланс"
+  },
+  {
+    "id": "site_name_full",
+    "translation": "Кинезиология Миобаланс"
+  },
+  {
+    "id": "site_phone",
+    "translation": "8(903)689-20-57"
   },
   {
     "id": "slug",
@@ -426,6 +502,14 @@
   {
     "id": "tags",
     "translation": "Тэги"
+  },
+  {
+    "id": "testimonial_title",
+    "translation": "Отзыв о работе кинезиолога"
+  },
+  {
+    "id": "testimonials_title",
+    "translation": "Что говорят наши клиенты"
   },
   {
     "id": "thank_you_for_posting_question",
@@ -449,7 +533,7 @@
   },
   {
     "id": "to_prove_you_are_not_a_robot",
-    "translation": ""
+    "translation": "В целях защиты от спама передвиньте ползунок до конца вправо"
   },
   {
     "id": "user_profile",
@@ -458,6 +542,10 @@
   {
     "id": "users",
     "translation": "Пользователи"
+  },
+  {
+    "id": "view_all_reviews",
+    "translation": "Просмотреть все отзывы о работе Миобаланс"
   },
   {
     "id": "website",

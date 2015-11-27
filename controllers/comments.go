@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"regexp"
 
 	"github.com/denisbakhtin/medical/helpers"
 	"github.com/denisbakhtin/medical/models"
@@ -27,6 +28,41 @@ func CommentIndex(w http.ResponseWriter, r *http.Request) {
 		data["Active"] = "comments"
 		data["List"] = list
 		tmpl.Lookup("comments/index").Execute(w, data)
+
+	} else {
+		err := fmt.Errorf("Method %q not allowed", r.Method)
+		log.Printf("ERROR: %s\n", err)
+		w.WriteHeader(405)
+		tmpl.Lookup("errors/405").Execute(w, helpers.ErrorData(err))
+	}
+}
+
+//CommentShow handles GET /comments/:id-slug route
+func CommentShow(w http.ResponseWriter, r *http.Request) {
+	tmpl := helpers.Template(r)
+	data := helpers.DefaultData(r)
+	T := helpers.T(r)
+	if r.Method == "GET" {
+
+		re := regexp.MustCompile("^[0-9]+")
+		id := re.FindString(r.URL.Path[len("/comments/"):])
+		comment, err := models.GetComment(id)
+		if err != nil || !comment.Published {
+			w.WriteHeader(404)
+			tmpl.Lookup("errors/404").Execute(w, nil)
+			return
+		}
+		//redirect to canonical url
+		if r.URL.Path != comment.URL() {
+			http.Redirect(w, r, comment.URL(), http.StatusSeeOther)
+			return
+		}
+		data["Comment"] = comment
+		data["SimilarComments"], _ = comment.GetSimilar()
+		data["Article"], _ = models.GetArticle(comment.ArticleID)
+		data["Title"] = comment.AuthorName + " " + T("asks_kineziologist")
+		data["Active"] = ""
+		tmpl.Lookup("comments/show").Execute(w, data)
 
 	} else {
 		err := fmt.Errorf("Method %q not allowed", r.Method)

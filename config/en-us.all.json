@@ -128,6 +128,10 @@
     "translation": "Ask a doctor"
   },
   {
+    "id": "asks_kineziologist",
+    "translation": "asks kineziologist"
+  },
+  {
     "id": "author",
     "translation": "Author"
   },
@@ -162,6 +166,22 @@
   {
     "id": "created",
     "translation": "Created"
+  },
+  {
+    "id": "cta_bottom_text",
+    "translation": "8(903)689-20-57"
+  },
+  {
+    "id": "cta_top_about",
+    "translation": ""
+  },
+  {
+    "id": "cta_top_greeting",
+    "translation": ""
+  },
+  {
+    "id": "cta_top_text",
+    "translation": ""
   },
   {
     "id": "dashboard",
@@ -204,6 +224,14 @@
     "translation": "Error, see logs"
   },
   {
+    "id": "excerpt",
+    "translation": "Excerpt"
+  },
+  {
+    "id": "footer_text",
+    "translation": "8(903)689-20-57, Rostovtsev Evgeniy Vladimirovich"
+  },
+  {
     "id": "greeting",
     "translation": "Welcome to blog boilerplate"
   },
@@ -214,6 +242,14 @@
   {
     "id": "i_accept_terms",
     "translation": "I accept terms and conditions"
+  },
+  {
+    "id": "kinesiology_in_practice",
+    "translation": "Kinesiology in practice"
+  },
+  {
+    "id": "kineziologist_replies",
+    "translation": "Kineziologis replies"
   },
   {
     "id": "login_with_facebook",
@@ -340,6 +376,14 @@
     "translation": "Post on Facebook"
   },
   {
+    "id": "post_your_review",
+    "translation": "Post your review"
+  },
+  {
+    "id": "post_your_review_btn",
+    "translation": "Post review"
+  },
+  {
     "id": "posted_successfully",
     "translation": "Posted successfully"
   },
@@ -356,6 +400,14 @@
     "translation": "Question"
   },
   {
+    "id": "question_about_article",
+    "translation": "Question is asked about the article"
+  },
+  {
+    "id": "read_fully",
+    "translation": "Read fully"
+  },
+  {
     "id": "read_more",
     "translation": "Read more"
   },
@@ -370,6 +422,10 @@
   {
     "id": "repeat_password_placeholder",
     "translation": "Repeat password"
+  },
+  {
+    "id": "replies_doctor",
+    "translation": "Replies Doctor"
   },
   {
     "id": "reply",
@@ -404,12 +460,32 @@
     "translation": "Sign up"
   },
   {
+    "id": "similar_questions",
+    "translation": "Similar questions"
+  },
+  {
+    "id": "site_address",
+    "translation": ""
+  },
+  {
+    "id": "site_author_full",
+    "translation": "Rostovtsev Evgeniy Vladimirovitch"
+  },
+  {
     "id": "site_description",
     "translation": "Blog boilerplate"
   },
   {
     "id": "site_name",
     "translation": "My blog"
+  },
+  {
+    "id": "site_name_full",
+    "translation": "Kineziology Miobalans"
+  },
+  {
+    "id": "site_phone",
+    "translation": "8(903)689-20-57"
   },
   {
     "id": "slug",
@@ -426,6 +502,14 @@
   {
     "id": "tags",
     "translation": "Tags"
+  },
+  {
+    "id": "testimonial_title",
+    "translation": "Client testimonial"
+  },
+  {
+    "id": "testimonials_title",
+    "translation": "What our clients say"
   },
   {
     "id": "thank_you_for_posting_question",
@@ -458,6 +542,10 @@
   {
     "id": "users",
     "translation": "Users"
+  },
+  {
+    "id": "view_all_reviews",
+    "translation": "View all reviews"
   },
   {
     "id": "website",

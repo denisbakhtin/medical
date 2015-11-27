@@ -48,6 +48,7 @@ func main() {
 	http.Handle("/rss", Default(controllers.RssXML))
 	http.Handle("/search", Default(controllers.Search))
 	http.Handle("/new_comment", Default(controllers.CommentCreate))
+	http.Handle("/comments/", Default(controllers.CommentShow))
 	http.Handle("/new_review", Default(controllers.ReviewPublicCreate))
 
 	//comment oauth login

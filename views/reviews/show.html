@@ -2,16 +2,29 @@
 {{template "header" .}}
 {{template "navbar" .}}
 <div class="container" role="main">
-  <div id="main-column">
-    <h1>{{.Review.AuthorName}}</h1>
+  <div id="review">
+    <h1>
+      {{T "testimonial_title"}}. {{.Review.AuthorName}}
+      {{if .ActiveUser}}
+      <a class="btn btn-primary" href="/admin/edit_review/{{.Review.ID}}">
+        {{T "edit_review"}}
+      </a>
+      {{end}}
+    </h1>
     {{if .Review.Image}}
     <div class="review-image">
-      <img class="img-responsive" src="{{.Review.Image}}" />
+      <img class="thumbnail pull-left" src="{{.Review.Image}}" />
     </div>
     {{end}}
     <div class="content">{{.Review.Content}}</div>
-    {{template "reviews/review-btn"}}
+    <p>
+    <a href="/reviews">{{T "view_all_reviews"}}</a>
+    </p>
   </div>
 </div>
+
+<div class="clearfix"></div>
+{{template "testimonials" .}}
+
 {{template "footer" .}}
 {{end}}

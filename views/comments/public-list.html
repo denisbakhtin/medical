@@ -1,0 +1,17 @@
+{{define "comments/public-list"}}
+{{range .}}
+  <div id="comment-{{.ID}}" class="well well-sm">
+    <div class="content">
+      <span class="author">{{.AuthorName}}, {{date .CreatedAt}}: </span>
+      {{truncate .Content 100}}
+    </div>
+    {{if .Answer}}
+    <div class="answer">
+      <span class="doctor">{{T "kineziologist_replies"}}: </span>
+      {{truncate .Answer 100}}
+      <a href="{{.URL}}" class="">{{T "read_fully"}}</a>
+    </div>
+    {{end}}
+  </div>
+{{end}}
+{{end}}

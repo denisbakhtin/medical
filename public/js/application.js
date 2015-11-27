@@ -1,4 +1,9 @@
 $(document).ready(function(){
+  //wow animation init
+  if (typeof WOW != 'undefined') {
+    new WOW().init();
+  }
+
   //initialize dashboard sidebar slim scroll
   if ($('#sidebar-dashboard .slimscroll').length > 0) {
     $('#sidebar-dashboard .slimscroll').slimScroll({
@@ -42,6 +47,7 @@ $(document).ready(function(){
       }
     });
   }
+
   $('#textarea-comment').on("focusin", function() {
     $('#textarea-comment').css("height", "10em");
   });
@@ -49,7 +55,7 @@ $(document).ready(function(){
     $('#textarea-comment').css("height", "5em");
   });
   $('#textarea-comment').one("keyup", function() {
-    $('#comment-hidden').css("display", "block");
+    $('#comment-hidden').show('fast');
   });
 
 });

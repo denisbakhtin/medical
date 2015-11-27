@@ -5,22 +5,20 @@ import (
 	"html/template"
 	"regexp"
 	"time"
-
-	"github.com/microcosm-cc/bluemonday"
-	"github.com/russross/blackfriday"
 )
 
 //Article type contains article info
 type Article struct {
-	ID        int64     `json:"id" db:"id"`
-	Name      string    `json:"name"`
-	Slug      string    `json:"slug"`
-	Content   string    `json:"content"`
-	Published bool      `json:"published"`
-	CreatedAt time.Time `json:"created_at" db:"created_at"`
-	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
+	ID        int64 `db:"id"`
+	Name      string
+	Slug      string
+	Excerpt   string
+	Content   string
+	Published bool
+	CreatedAt time.Time `db:"created_at"`
+	UpdatedAt time.Time `db:"updated_at"`
 	//calculated fields
-	Comments []Comment `json:"comments" db:"comments"`
+	Comments []Comment `db:"-"`
 }
 
 //Insert stores Article record in db
@@ -29,10 +27,11 @@ func (article *Article) Insert() error {
 		article.Slug = createSlug(article.Name)
 	}
 	err := db.QueryRow(
-		`INSERT INTO articles(name, slug, content, published, created_at, updated_at) 
-		VALUES($1,$2,$3,$4,$5,$5) RETURNING id`,
+		`INSERT INTO articles(name, slug, excerpt, content, published, created_at, updated_at) 
+		VALUES($1,$2,$3,$4,$5,$6,$6) RETURNING id`,
 		article.Name,
 		article.Slug,
+		article.Excerpt,
 		article.Content,
 		article.Published,
 		time.Now(),
@@ -46,10 +45,11 @@ func (article *Article) Update() error {
 		article.Slug = createSlug(article.Name)
 	}
 	_, err := db.Exec(
-		"UPDATE articles SET name=$2, slug=$3, content=$4, published=$5, updated_at=$6 WHERE id=$1",
+		"UPDATE articles SET name=$2, slug=$3, excerpt=$4, content=$5, published=$6, updated_at=$7 WHERE id=$1",
 		article.ID,
 		article.Name,
 		article.Slug,
+		article.Excerpt,
 		article.Content,
 		article.Published,
 		time.Now(),
@@ -63,18 +63,9 @@ func (article *Article) Delete() error {
 	return err
 }
 
-//Excerpt returns article excerpt, 300 char long. Html tags are stripped.
-func (article *Article) Excerpt() template.HTML {
-	//you can sanitize, cut it down, add images, etc
-	policy := bluemonday.StrictPolicy() //remove all html tags
-	sanitized := policy.Sanitize(string(blackfriday.MarkdownCommon([]byte(article.Content))))
-	excerpt := template.HTML(truncate(sanitized, 300) + "...")
-	return excerpt
-}
-
 //HTMLContent returns parsed html content
 func (article *Article) HTMLContent() template.HTML {
-	return template.HTML(string(blackfriday.MarkdownCommon([]byte(article.Content))))
+	return template.HTML(article.Content)
 }
 
 //GetCommentCount returns comment count
@@ -86,9 +77,8 @@ func (article *Article) GetCommentCount() int {
 
 //GetImage returns extracts first image url from article content
 func (article *Article) GetImage() string {
-	content := string(blackfriday.MarkdownCommon([]byte(article.Content)))
 	re := regexp.MustCompile(`<img[^<>]+src="([^"]+)"[^<>]*>`)
-	res := re.FindStringSubmatch(content)
+	res := re.FindStringSubmatch(article.Content)
 	if len(res) == 2 {
 		return res[1]
 	}

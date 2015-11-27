@@ -498,6 +498,94 @@
   {
     "id": "ask_a_doctor",
     "translation": "Ask a doctor"
+  },
+  {
+    "id": "post_your_review",
+    "translation": "Post your review"
+  },
+  {
+    "id": "post_your_review_btn",
+    "translation": "Post review"
+  },
+  {
+    "id": "kinesiology_in_practice",
+    "translation": "Kinesiology in practice"
+  },
+  {
+    "id": "excerpt",
+    "translation": "Excerpt"
+  },
+  {
+    "id": "footer_text",
+    "translation": "8(903)689-20-57, Rostovtsev Evgeniy Vladimirovich"
+  },
+  {
+    "id": "site_phone",
+    "translation": "8(903)689-20-57"
+  },
+  {
+    "id": "site_address",
+    "translation": ""
+  },
+  {
+    "id": "cta_bottom_text",
+    "translation": ""
+  },
+  {
+    "id": "cta_top_greeting",
+    "translation": ""
+  },
+  {
+    "id": "cta_top_about",
+    "translation": ""
+  },
+  {
+    "id": "cta_top_text",
+    "translation": ""
+  },
+  {
+    "id": "testimonials_title",
+    "translation": "What our clients say"
+  },
+  {
+    "id": "testimonial_title",
+    "translation": "Client testimonial"
+  },
+  {
+    "id": "kineziologist_replies",
+    "translation": "Kineziologis replies"
+  },
+  {
+    "id": "replies_doctor",
+    "translation": "Replies Doctor"
+  },
+  {
+    "id": "read_fully",
+    "translation": "Read fully"
+  },
+  {
+    "id": "asks_kineziologist",
+    "translation": "asks kineziologist"
+  },
+  {
+    "id": "site_author_full",
+    "translation": "Rostovtsev Evgeniy Vladimirovitch"
+  },
+  {
+    "id": "question_about_article",
+    "translation": "Question is asked about the article"
+  },
+  {
+    "id": "similar_questions",
+    "translation": "Similar questions"
+  },
+  {
+    "id": "site_name_full",
+    "translation": "Kineziology Miobalans"
+  },
+  {
+    "id": "view_all_reviews",
+    "translation": "View all reviews"
   }
 
 ]

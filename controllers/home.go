@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/denisbakhtin/medical/helpers"
+	"github.com/denisbakhtin/medical/models"
 )
 
 //Home handles GET / route
@@ -15,7 +16,8 @@ func Home(w http.ResponseWriter, r *http.Request) {
 		tmpl.Lookup("errors/404").Execute(w, nil)
 		return
 	}
-	data["Title"] = T("greeting")
-	data["Active"] = "home"
+	data["Title"] = T("site_name_full")
+	data["Page"], _ = models.GetPage(1)
+	data["Active"] = "/"
 	tmpl.Lookup("home/show").Execute(w, data)
 }

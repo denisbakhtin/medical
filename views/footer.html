@@ -1,17 +1,13 @@
 {{define "footer"}}
-  </div><!-- .container -->
-	<div id="footer">
-		<div class="container">
-			<br>
-      <p class="text-muted">&copy; 2014 {{T "site_name"}}
-		</div>
-	</div>
+    {{template "map" .}}
 
-    <script src="/public/js/jquery-2.1.4.min.js"></script>
-    <script src="/public/js/parsley.min.js"></script>
-    <script src="/public/js/bootstrap.min.js"></script>
-    <script src="/public/js/nouislider.min.js"></script>
-    <script src="/public/js/application.js"></script>
+    <div id="footer">
+      <div class="container">
+        <br>
+        <p class="text-muted">&copy; 2014 {{T "site_name"}}. {{T "footer_text"}}
+      </div>
+    </div>
+    <script src="/public/js/lightbox.min.js"></script>
   </body>
 </html>
 {{end}}

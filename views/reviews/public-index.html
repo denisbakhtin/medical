@@ -1,20 +1,25 @@
 {{define "reviews/public-index"}}
 {{template "header" .}}
 {{template "navbar" .}}
-<div id="main-column" class="container-fluid" role="main">
-  <h1>{{.Title}}</h1>
+<div class="container" role="main">
+  <h1 class="text-center">{{.Title}}</h1>
   {{template "reviews/review-btn"}}
-  <div class="review-previews">
-    {{range .List}}
-    <section class="review-preview">
-      <h2>{{.AuthorName}}</h2>
+  <div class="review-previews row">
+    {{$length := len .List}}
+    {{range $i, $a := .List}}
+    <div class="review-preview col-sm-12 col-md-6">
+      <h2 class="review-title"><a href="{{.URL}}">{{.AuthorName}}</a></h2>
       <div class="excerpt">
         {{.Excerpt}}
+        <a href="{{.URL}}">{{T "read_more"}}</a>
       </div>
-      <a href="{{.URL}}" class="btn btn-lg btn-info">{{T "read_more"}}</a>
-    </section>
+    </div>
+    {{if oddEvenClass $i | eq "even"}}
+    <div class="clearfix"></div>
+    {{end}}
     {{end}}
   </div>
 </div>
+{{template "cta_bottom" .}}
 {{template "footer" .}}
 {{end}}

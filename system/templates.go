@@ -23,6 +23,8 @@ func loadTemplates() {
 		"date":           helpers.Date,
 		"recentArticles": helpers.RecentArticles,
 		"mainMenu":       helpers.MainMenu,
+		"oddEvenClass":   helpers.OddEvenClass,
+		"truncate":       helpers.Truncate,
 		"T":              i18n.MustTfunc(config.Language), //will be replaced by actual TranslationFunc in LocaleMiddleware
 	})
 

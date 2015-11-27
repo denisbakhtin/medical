@@ -33,13 +33,13 @@ func ArticleShow(w http.ResponseWriter, r *http.Request) {
 		}
 		data["Article"] = article
 		data["Title"] = article.Name
-		data["Active"] = fmt.Sprintf("articles/%s", id)
+		data["Active"] = "/articles"
 		//Facebook open graph meta tags
 		data["Ogheadprefix"] = "og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#"
 		data["Ogtitle"] = article.Name
 		data["Ogurl"] = fmt.Sprintf("http://%s/articles/%d", r.Host, article.ID)
 		data["Ogtype"] = "article"
-		data["Ogdescription"] = article.Excerpt()
+		data["Ogdescription"] = article.Excerpt
 		if img := article.GetImage(); len(img) > 0 {
 			data["Ogimage"] = fmt.Sprintf("http://%s%s", r.Host, img)
 		}
@@ -70,7 +70,7 @@ func ArticlePublicIndex(w http.ResponseWriter, r *http.Request) {
 			tmpl.Lookup("errors/500").Execute(w, helpers.ErrorData(err))
 			return
 		}
-		data["Title"] = T("articles")
+		data["Title"] = T("kinesiology_in_practice")
 		data["Active"] = r.RequestURI
 		data["List"] = list
 		tmpl.Lookup("articles/public-index").Execute(w, data)
@@ -131,6 +131,7 @@ func ArticleCreate(w http.ResponseWriter, r *http.Request) {
 			Name:      r.PostFormValue("name"),
 			Slug:      r.PostFormValue("slug"),
 			Content:   r.PostFormValue("content"),
+			Excerpt:   r.PostFormValue("excerpt"),
 			Published: helpers.Atob(r.PostFormValue("published")),
 		}
 
@@ -181,6 +182,7 @@ func ArticleUpdate(w http.ResponseWriter, r *http.Request) {
 			Name:      r.PostFormValue("name"),
 			Slug:      r.PostFormValue("slug"),
 			Content:   r.PostFormValue("content"),
+			Excerpt:   r.PostFormValue("excerpt"),
 			Published: helpers.Atob(r.PostFormValue("published")),
 		}
 

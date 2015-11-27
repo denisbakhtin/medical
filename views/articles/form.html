@@ -29,6 +29,11 @@
         </div>
 
         <div class="form-group">
+          <label class="control-label" for="excerpt">{{T "excerpt"}}</label>
+          <textarea id="excerpt" class="form-control" name="excerpt">{{.Article.Excerpt}}</textarea>
+        </div>
+
+        <div class="form-group">
           <label for="published">
             <input id="published" name="published" type="checkbox" value="true" {{if .Article.Published}}checked{{end}} >
             {{T "published"}}

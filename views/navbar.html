@@ -1,5 +1,5 @@
 {{define "navbar"}}
-<!-- Fixed navbar -->
+{{template "cta_top" .}}
 <div class="navbar navbar-default" role="navigation">
   <div class="navbar-header">
     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -11,7 +11,9 @@
   </div>
   <div class="navbar-collapse collapse">
     <ul class="nav navbar-nav">
-      <a class="navbar-brand" href="/">{{T "site_name"}}</a>
+      <li class="{{isActive .Active "/"}}">
+        <a href="/"><i class="glyphicon glyphicon-home indent"></i>{{T "site_name"}}</a>
+      </li>
       {{$active := .Active}}
       {{range mainMenu}}
       <li class="{{isActive $active .URL}}">

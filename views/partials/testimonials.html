@@ -1,0 +1,36 @@
+{{define "testimonials"}}
+<section id="testimonials">
+  <div class="container">
+    <div class="row">
+      <h2 class="text-center">{{T "testimonials_title"}}</h2>
+    </div>
+
+    <div class="row">
+      <div class="container">
+        <div id="carousel-testimonials" class="carousel slide" data-ride="carousel">
+          <!-- Indicators -->
+          <ol class="carousel-indicators">
+            {{range $i, $v := .Testimonials}}
+            <li data-target="#carousel-testimonials" data-slide-to="{{$i}}" {{if eq $i 0}}class="active"{{end}}></li>
+            {{end}}
+          </ol>
+
+          <div class="carousel-inner">
+            {{range $i, $v := .Testimonials}}
+            <div class="item {{if eq $i 0}}active{{end}}" id="carousel-testimonials-{{$i}}">
+              <div class="col-sm-10 col-sm-offset-1 white-font-color">
+                <p>{{.Excerpt}}. <span class="author_name">{{.AuthorName}}.</span></p>
+                <div class="text-center">
+                  <a href="/reviews/{{.ID}}" class="btn btn-info">{{T "read_more"}}</a>
+                </div>
+              </div>
+            </div>
+            {{end}}
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+{{end}}

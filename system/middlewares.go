@@ -44,13 +44,7 @@ func SessionMiddleware(next http.Handler) http.Handler {
 //LocaleMiddleware stores current locale
 func LocaleMiddleware(next http.Handler) http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) {
-		cookieLang := ""
-		if cookieL, _ := r.Cookie("lang"); cookieL != nil {
-			cookieLang = cookieL.Value
-		}
-		acceptLang := r.Header.Get("Accept-Language")
-		defaultLang := config.Language // known valid language
-		T, lang, err := i18n.TfuncAndLanguage(cookieLang, acceptLang, defaultLang)
+		T, lang, err := i18n.TfuncAndLanguage("ru")
 		if err != nil {
 			w.WriteHeader(500)
 			w.Write([]byte(err.Error()))

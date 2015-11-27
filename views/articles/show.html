@@ -1,31 +1,33 @@
 {{define "articles/show"}}
 {{template "header" .}}
 {{template "navbar" .}}
-<div class="container" role="main">
-  <div id="main-column">
-    <h1>{{.Article.Name}}</h1>
-    <div class="content">{{.Article.HTMLContent}}</div>
+<div id="article" role="main">
+  <div class="content container">
+    <h1>
+      {{.Article.Name}} 
+      {{if .ActiveUser}}
+      <a class="btn btn-primary" href="/admin/edit_article/{{.Article.ID}}">
+        {{T "edit_article"}}
+      </a>
+      {{end}}
+    </h1>
+    {{.Article.HTMLContent}}
+  </div>
+
+  {{template "cta_bottom" .}}
+
+  <div class="container">
     <div id="comments">
       {{range .Flash}}
         <div class="alert alert-info">{{.}}</div><p>
       {{end}}
       {{template "comments/public-form" .}}
-      {{range .Article.Comments}}
-        <div id="comment-{{.ID}}" class="well well-sm">
-          <p class="author">{{.AuthorName}}, {{date .CreatedAt}}</p>
-          <div class="content"> 
-            {{.Content}}
-          </div>
-          {{if .Answer}}
-          <div class="answer">
-            <p class="doctor">Отвечает врач-кинезиолог Ростовцев Е.В.</p>
-            {{.Answer}}
-          </div>
-          {{end}}
-        </div>
-      {{end}}
+      {{template "comments/public-list" .Article.Comments}}
     </div>
   </div>
+
+  {{template "testimonials" .}}
+
 </div>
 {{template "footer" .}}
 {{end}}

@@ -1,6 +1,7 @@
 package helpers
 
 import (
+	"github.com/denisbakhtin/medical/models"
 	"github.com/gorilla/context"
 	"github.com/gorilla/csrf"
 	"github.com/gorilla/sessions"
@@ -12,11 +13,13 @@ import (
 
 //DefaultData returns common to all pages template data
 func DefaultData(r *http.Request) map[string]interface{} {
+	testimonials, _ := models.GetRecentReviews()
 	return map[string]interface{}{
 		"ActiveUser":     context.Get(r, "user"),           //signed in models.User
 		"Active":         "",                               //active uri shortening for menu item highlight
 		"Title":          "",                               //page title
 		"SignupEnabled":  context.Get(r, "signup_enabled"), //signup route is enabled (otherwise everyone can signup ;)
+		"Testimonials":   testimonials,
 		csrf.TemplateTag: csrf.TemplateField(r),
 	}
 }

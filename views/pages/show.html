@@ -1,11 +1,21 @@
 {{define "pages/show"}}
 {{template "header" .}}
 {{template "navbar" .}}
-<div class="container" role="main">
-  <div id="main-column">
-    <h1>{{.Page.Name}}</h1>
-    <div class="content">{{.Page.HTMLContent}}</div>
+<div id="page" role="main">
+  <div class="content container">
+    <h1>
+      {{.Page.Name}}
+      {{if .ActiveUser}}
+      <a class="btn btn-primary" href="/admin/edit_page/{{.Page.ID}}">
+        {{T "edit_page"}}
+      </a>
+      {{end}}
+    </h1>
+    {{.Page.HTMLContent}}
   </div>
 </div>
+
+{{template "testimonials" .}}
+
 {{template "footer" .}}
 {{end}}

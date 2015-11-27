@@ -1,0 +1,107 @@
+{{define "map"}}
+<script>
+var map;
+var marker;
+function initialize() {
+
+  // Create an array of styles.
+  var styles = [
+  {
+    stylers: [
+    { hue: "#00ffe6" },
+    { saturation: -40 }
+    ]
+  },{
+    featureType: "road",
+    elementType: "geometry",
+    stylers: [
+    { lightness: 50 },
+    { visibility: "simplified" }
+    ]
+  },{
+    featureType: "road",
+    elementType: "labels",
+    stylers: [
+    { visibility: "off" }
+    ]
+  }
+  ];
+
+  // Create a new StyledMapType object, passing it the array of styles,
+  // as well as the name to be displayed on the map type control.
+  var styledMap = new google.maps.StyledMapType(styles,
+      {name: "Styled Map"});
+
+  // Create a map object, and include the MapTypeId to add
+  // to the map type control.
+  var mapOptions = {
+    zoom: 17,
+    zoomControl: true,
+    mapTypeControl: false,
+    disableDefaultUI: true,
+    scrollwheel: false,
+    center: new google.maps.LatLng(55.7579275,37.6337091),
+    mapTypeControlOptions: {
+      mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'map_style']
+    }
+  };
+  var map = new google.maps.Map(document.getElementById('map-canvas'),
+      mapOptions);
+
+  //Associate the styled map with the MapTypeId and set it to display.
+  map.mapTypes.set('map_style', styledMap);
+  map.setMapTypeId('map_style');
+
+
+  var iconc = {
+    path: google.maps.SymbolPath.CIRCLE,
+    fillOpacity: 0.5,
+    fillColor: '#1ABC9C',
+    strokeOpacity: 1.0,
+    strokeColor: '#1ABC9C',
+    strokeWeight: 2.0, 
+    scale: 10 //pixels
+  }
+
+  marker = new google.maps.Marker({
+    position: map.getCenter(),
+    icon: iconc,
+    title:'aaccca',
+    animation: google.maps.Animation.BOUNCE,
+    map: map
+  });
+  google.maps.event.addListener(marker, 'show', toggleBounce);
+}
+
+function toggleBounce() {
+
+  if (marker.getAnimation() != null) {
+    marker.setAnimation(null);
+  } else {
+    marker.setAnimation(google.maps.Animation.BOUNCE);
+  }
+}
+
+//google.maps.event.addDomListener(window, 'load', initialize);
+function loadScript() {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp&api=AIzaSyB3jiIBifBx5MzvyoY04w41Ifx5NpiJ0iY&callback=initialize&language=ru-Ru';
+  document.body.appendChild(script);
+}
+
+window.onload = loadScript;
+
+</script>
+
+<section id="google-map">
+  <div class="container">
+    <h2 class="text-center">Схема проезда</h2>
+    <p class="text-center well well-sm">
+    <i class="glyphicon glyphicon-road indent"></i>
+    {{T "site_address"}}
+    </p>
+  </div>
+  <div id="map-canvas"></div>
+</section>
+{{end}}
