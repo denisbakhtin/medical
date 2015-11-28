@@ -46,9 +46,11 @@ func main() {
 	http.Handle("/reviews/", Default(controllers.ReviewShow))
 	http.Handle("/rss", Default(controllers.RssXML))
 	http.Handle("/search", Default(controllers.Search))
-	http.Handle("/new_comment", Default(controllers.CommentCreate))
+	http.Handle("/new_comment", Default(controllers.CommentPublicCreate))
+	http.Handle("/edit_comment", Default(controllers.CommentPublicUpdate))
 	http.Handle("/comments/", Default(controllers.CommentShow))
 	http.Handle("/new_review", Default(controllers.ReviewPublicCreate))
+	http.Handle("/edit_review", Default(controllers.ReviewPublicUpdate))
 
 	/*
 		//comment oauth login

@@ -24,7 +24,9 @@ type Config struct {
 	Ssl           bool   `json:"ssl"`
 	SignupEnabled bool   `json:"signup_enabled"` //always set to false in release mode (config.json)
 	Language      string `json:"language"`       //default i18n language RFC 5646 code
+	Salt          string `json:"salt"`           //sha salt for generation of review & comment tokens
 	Database      DatabaseConfig
+	SMTP          SMTPConfig
 	Oauth         OauthConfig
 }
 
@@ -34,6 +36,17 @@ type DatabaseConfig struct {
 	Name     string //database name
 	User     string
 	Password string
+}
+
+//SMTPConfig contains smtp mailer info
+type SMTPConfig struct {
+	From     string //from email
+	To       string //to email
+	Cc       string //cc email
+	SMTP     string //smtp server address
+	Port     string //smtp port
+	User     string //smtp user login
+	Password string //smtp user password
 }
 
 //OauthConfig contains oauth login info

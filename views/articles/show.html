@@ -18,10 +18,10 @@
 
   <div class="container">
     <div id="comments">
+      {{template "comments/public-form" .}}
       {{range .Flash}}
         <div class="alert alert-info">{{.}}</div><p>
       {{end}}
-      {{template "comments/public-form" .}}
       {{template "comments/public-list" .Article.Comments}}
     </div>
   </div>

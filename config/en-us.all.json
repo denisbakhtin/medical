@@ -100,6 +100,10 @@
     "translation": "Answer"
   },
   {
+    "id": "answer_a_patient",
+    "translation": "Answer a patient"
+  },
+  {
     "id": "archives_for",
     "translation": "Archives for"
   },
@@ -150,6 +154,14 @@
   {
     "id": "comment",
     "translation": "Comment"
+  },
+  {
+    "id": "comment_has_been_successfully_updated",
+    "translation": "Comment has been successfully updated"
+  },
+  {
+    "id": "comment_not_found_or_already_published",
+    "translation": "Comment not found or has already been published"
   },
   {
     "id": "comments",
@@ -292,12 +304,28 @@
     "translation": "New article"
   },
   {
+    "id": "new_comment_email_text",
+    "translation": "View/edit comment {{.Link}}."
+  },
+  {
+    "id": "new_comment_has_been_created",
+    "translation": "New comment has been created by {{.Name}}"
+  },
+  {
     "id": "new_page",
     "translation": "New page"
   },
   {
     "id": "new_review",
     "translation": "New review"
+  },
+  {
+    "id": "new_review_email_text",
+    "translation": "View/edit review {{.Link}}."
+  },
+  {
+    "id": "new_review_has_been_created",
+    "translation": "New review has been created by {{.Name}}"
   },
   {
     "id": "new_tag",
@@ -440,6 +468,14 @@
     "translation": "Review"
   },
   {
+    "id": "review_has_been_successfully_updated",
+    "translation": "Review has been successfully updated"
+  },
+  {
+    "id": "review_not_found_or_already_published",
+    "translation": "Review not found or has already been published"
+  },
+  {
     "id": "reviews",
     "translation": "Reviews"
   },
@@ -578,5 +614,9 @@
   {
     "id": "your_photo",
     "translation": "Your photo"
+  },
+  {
+    "id": "your_question_has_been_answered",
+    "translation": "Your question has been answered"
   }
 ]

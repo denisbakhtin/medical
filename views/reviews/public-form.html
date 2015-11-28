@@ -10,19 +10,20 @@
         <div class="alert alert-danger">{{.}}</div><p>
       {{end}}
       {{.csrfField}}
+      <input type="hidden" name="id" value="{{.Review.ID}}" >
       <div class="form-group">
         <label class="control-label" for="author_name">{{T "your_name"}}</label>
-        <input id="author_name" name="author_name" placeholder="{{T "your_name_placeholder"}}" required="" class="form-control input-md" data-parsley-required-message="{{T "parsley_your_name_required"}}">
+        <input id="author_name" name="author_name" placeholder="{{T "your_name_placeholder"}}" value="{{.Review.AuthorName}}" required="" class="form-control input-md" data-parsley-required-message="{{T "parsley_your_name_required"}}">
       </div>
 
       <div class="form-group">
         <label class="control-label" for="author_email">{{T "your_email"}}</label>
-        <input type="email" id="author_email" name="author_email" placeholder="{{T "your_email_placeholder"}}" class="form-control input-md" >
+        <input type="email" id="author_email" name="author_email" placeholder="{{T "your_email_placeholder"}}" value="{{.Review.AuthorEmail}}" class="form-control input-md" >
       </div>
 
       <div class="form-group">
         <label class="control-label" for="content">{{T "review"}}</label>
-        <textarea class="form-control" name="content" id="content" required="" data-parsley-required-message="{{T "parsley_review_required"}}"></textarea>
+        <textarea class="form-control" name="content" id="content" required="" data-parsley-required-message="{{T "parsley_review_required"}}">{{.Review.Content}}</textarea>
       </div>
 
       <div class="form-group">
@@ -30,6 +31,19 @@
         <input type="file" id="image" name="image" accept="image/*">
       </div>
 
+      {{if .SecureEdit}}
+      <div class="form-group">
+        <label for="published">
+          <input id="published" name="published" type="checkbox" value="true" {{if .Review.Published}}checked{{end}} >
+          {{T "published"}}
+        </label>
+      </div>
+
+      <div class="form-group">
+        <input id="submit-with-captcha-btn" type="submit" class="btn btn-primary" value="{{T "submit"}}" >
+        <input type="button" class="btn btn-default" formnovalidate onclick="window.history.back();" value="{{T "cancel"}}">
+      </div>
+      {{else}}
       <div class="well well-sm">
         <div class="form-group">
           <label class="control-label" for="captcha-slider">{{T "to_prove_you_are_not_a_robot"}}</label>
@@ -45,6 +59,7 @@
           <input type="button" class="btn btn-default" formnovalidate onclick="window.history.back();" value="{{T "cancel"}}">
         </div>
       </div>
+      {{end}}
     </fieldset>
     </form>
   </section>

@@ -1,16 +1,11 @@
-{{define "comments/form"}}
-{{template "dashboard/header" .}}
-{{template "dashboard/navbar" .}}
-{{template "dashboard/sidebar" .}}
+{{define "comments/public-edit-form"}}
+{{template "header" .}}
+{{template "navbar" .}}
 <div id="main-column" class="container-fluid" role="main">
-  <div class="panel panel-default">
-    <div class="panel-body">
-      <form method="post">
+  <section id="comment-form-wrapper">
+    <form method="post" data-parsley-validate>
       <fieldset>
-        <legend>{{.Title}}</legend>
-        {{range .Flash}}
-          <div class="alert alert-danger">{{.}}</div><p>
-        {{end}}
+        <legend>{{T "answer_a_patient"}}</legend>
         {{.csrfField}}
         <input type="hidden" name="id" value="{{.Comment.ID}}" >
         <div class="form-group">
@@ -45,9 +40,8 @@
           <input type="button" class="btn btn-default" formnovalidate onclick="window.history.back();" value="{{T "cancel"}}">
         </div>
       </fieldset>
-      </form>
-    </div>
-  </div>
+    </form>
+  </section>
 </div>
-{{template "dashboard/footer" .}}
+{{template "footer" .}}
 {{end}}

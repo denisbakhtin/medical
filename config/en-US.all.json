@@ -280,6 +280,10 @@
     "translation": "Answer"
   },
   {
+    "id": "answer_a_patient",
+    "translation": "Answer a patient"
+  },
+  {
     "id": "published",
     "translation": "Published"
   },
@@ -590,6 +594,42 @@
   {
     "id": "cta_scroll_text",
     "translation": ""
+  },
+  {
+    "id": "new_review_has_been_created",
+    "translation": "New review has been created by {{.Name}}"
+  },
+  {
+    "id": "new_review_email_text",
+    "translation": "View/edit review {{.Link}}."
+  },
+  {
+    "id": "review_not_found_or_already_published",
+    "translation": "Review not found or has already been published"
+  },
+  {
+    "id": "review_has_been_successfully_updated",
+    "translation": "Review has been successfully updated"
+  },
+  {
+    "id": "new_comment_has_been_created",
+    "translation": "New comment has been created by {{.Name}}"
+  },
+  {
+    "id": "new_comment_email_text",
+    "translation": "View/edit comment {{.Link}}."
+  },
+  {
+    "id": "comment_not_found_or_already_published",
+    "translation": "Comment not found or has already been published"
+  },
+  {
+    "id": "comment_has_been_successfully_updated",
+    "translation": "Comment has been successfully updated"
+  },
+  {
+    "id": "your_question_has_been_answered",
+    "translation": "Your question has been answered"
   }
 
 ]

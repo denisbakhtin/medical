@@ -3,6 +3,9 @@
 {{template "navbar" .}}
 <div class="container" role="main">
   <h1 class="text-center">{{.Title}}</h1>
+  {{range .Flash}}
+    <div class="alert alert-danger text-center">{{.}}</div><p>
+  {{end}}
   {{template "reviews/review-btn"}}
   <div class="review-previews row">
     {{$length := len .List}}

@@ -8,7 +8,9 @@
     {{range $i, $a := .List}}
     <div class="article-preview col-sm-12 col-md-6">
       <h2 class="article-title"><a href="{{.URL}}">{{.Name}}</a></h2>
-      <img class="img-responsive thumbnail" alt="{{.Name}}" src="{{.GetImage}}" />
+      <a href="{{.URL}}">
+        <img class="img-responsive thumbnail" alt="{{.Name}}" src="{{.GetImage}}" />
+      </a>
       <div class="excerpt">
         {{.Excerpt}}
         <a href="{{.URL}}">{{T "read_more"}}</a>
