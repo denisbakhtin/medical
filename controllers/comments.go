@@ -263,11 +263,18 @@ func CommentDelete(w http.ResponseWriter, r *http.Request) {
 
 func notifyAdminOfComment(r *http.Request, comment *models.Comment) {
 	//closure is needed here, as r may be released by the time func finishes
+	tmpl := helpers.Template(r)
 	T := helpers.T(r)
-	host := r.Host
 	go func() {
-
-		link := fmt.Sprintf("http://%s/edit_comment?token=%s", host, createTokenFromID(comment.ID))
+		data := map[string]interface{}{
+			"Comment": comment,
+			"Token":   createTokenFromID(comment.ID),
+		}
+		var b bytes.Buffer
+		if err := tmpl.Lookup("emails/question").Execute(&b, data); err != nil {
+			log.Printf("ERROR: %s\n", err)
+			return
+		}
 
 		smtp := system.GetConfig().SMTP
 		msg := gomail.NewMessage()
@@ -279,7 +286,7 @@ func notifyAdminOfComment(r *http.Request, comment *models.Comment) {
 		msg.SetHeader("Subject", T("new_comment_has_been_created", map[string]interface{}{"Name": comment.AuthorName}))
 		msg.SetBody(
 			"text/html",
-			T("new_comment_email_text", map[string]interface{}{"Link": link}),
+			b.String(),
 		)
 
 		port, _ := strconv.Atoi(smtp.Port)

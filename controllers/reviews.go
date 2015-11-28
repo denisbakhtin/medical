@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"bytes"
 	"crypto/sha1"
 	"encoding/base64"
 	"fmt"
@@ -387,11 +388,18 @@ func ReviewDelete(w http.ResponseWriter, r *http.Request) {
 
 func notifyAdminOfReview(r *http.Request, review *models.Review) {
 	//closure is needed here, as r may be released by the time func finishes
+	tmpl := helpers.Template(r)
 	T := helpers.T(r)
-	host := r.Host
 	go func() {
-
-		link := fmt.Sprintf("http://%s/edit_review?token=%s", host, createTokenFromID(review.ID))
+		data := map[string]interface{}{
+			"Review": review,
+			"Token":  createTokenFromID(review.ID),
+		}
+		var b bytes.Buffer
+		if err := tmpl.Lookup("emails/review").Execute(&b, data); err != nil {
+			log.Printf("ERROR: %s\n", err)
+			return
+		}
 
 		smtp := system.GetConfig().SMTP
 		msg := gomail.NewMessage()
@@ -403,7 +411,7 @@ func notifyAdminOfReview(r *http.Request, review *models.Review) {
 		msg.SetHeader("Subject", T("new_review_has_been_created", map[string]interface{}{"Name": review.AuthorName}))
 		msg.SetBody(
 			"text/html",
-			T("new_review_email_text", map[string]interface{}{"Link": link}),
+			b.String(),
 		)
 
 		port, _ := strconv.Atoi(smtp.Port)
