@@ -20,6 +20,7 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	data["Title"] = T("site_name_full")
 	data["Page"], _ = models.GetPage(1)
 	data["Active"] = "/"
+	data["Articles"], _ = models.GetRecentArticles()
 	data["Flash"] = session.Flashes()
 	session.Save(r, w)
 	tmpl.Lookup("home/show").Execute(w, data)

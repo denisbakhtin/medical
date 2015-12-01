@@ -7,6 +7,12 @@
     <div class="alert alert-danger">{{.}}</div><p>
   {{end}}
   <div class="content">{{.Page.HTMLContent}}</div>
+  <h3>Свежие публикации</h3>
+  <div class="recent-articles">
+    {{range .Articles}}
+    <p><a href="{{.URL}}">{{.Name}}</a></p>
+    {{end}}
+  </div>
 </div>
 {{template "cta_bottom" .}}
 {{template "testimonials" .}}
