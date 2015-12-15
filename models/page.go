@@ -2,7 +2,6 @@ package models
 
 import (
 	"fmt"
-	"github.com/russross/blackfriday"
 	"html/template"
 	"time"
 )
@@ -60,7 +59,7 @@ func (page *Page) Delete() error {
 
 //HTMLContent returns parsed html content
 func (page *Page) HTMLContent() template.HTML {
-	return template.HTML(string(blackfriday.MarkdownCommon([]byte(page.Content))))
+	return template.HTML(page.Content)
 }
 
 //URL returns page url
