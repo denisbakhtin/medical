@@ -1,17 +1,23 @@
 {{define "comments/public-list"}}
-{{range .}}
-  <div id="comment-{{.ID}}" class="well well-sm">
-    <div class="content">
-      <span class="author">{{.AuthorName}}, {{date .CreatedAt}}: </span>
-      {{truncate .Content 100}}
+  {{range $i, $v := .}}
+    <div id="comment-{{.ID}}" class="comment {{if gt $i 1}}extra hide{{end}}">
+      <div class="question">
+        <p class="author">{{.AuthorName}}</p>
+        {{.Content}}
+      </div>
+      {{if .Answer}}
+      <div class="answer">
+        <img alt="Ростовцев Е.В." src="/public/images/rostovtsev.jpg" />
+        <p class="author">Ростовцев Евгений Владимирович, кинезиолог, врач мануальный терапевт</p>
+        {{.Answer}}
+      </div>
+      {{end}}
     </div>
-    {{if .Answer}}
-    <div class="answer">
-      <span class="doctor">{{T "kineziologist_replies"}}: </span>
-      {{truncate .Answer 100}}
-      <a href="{{.URL}}" class="">{{T "read_fully"}}</a>
-    </div>
-    {{end}}
+  {{end}}
+  {{if len . | lt 2}}
+  <div class="text-center">
+    <a class="btn btn-primary" id="comments-more-btn"><span class="glyphicon glyphicon-chevron-down"></span> Показать еще</a>
+    <a class="btn btn-default hide" id="comments-less-btn"><span class="glyphicon glyphicon-chevron-up"></span> Скрыть</a>
   </div>
-{{end}}
+  {{end}}
 {{end}}

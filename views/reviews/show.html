@@ -11,10 +11,14 @@
       </a>
       {{end}}
     </h1>
-    {{if .Review.Image}}
-    <div class="review-image">
-      <img class="thumbnail pull-left" src="{{.Review.Image}}" />
-    </div>
+    {{if .Review.Video}}
+      <iframe src="{{.Review.Video}}" frameborder="0" allowfullscreen></iframe>
+    {{else}}
+      {{if .Review.Image}}
+      <div class="review-image">
+        <img class="thumbnail pull-left" src="{{.Review.Image}}" />
+      </div>
+      {{end}}
     {{end}}
     <p class="content">{{.Review.Content}}</p>
     <p class="text-center">
@@ -24,7 +28,12 @@
 </div>
 
 <div class="clearfix"></div>
+
+{{template "withoutpain" .}}
 {{template "testimonials" .}}
+{{template "sellingblock" .}}
+{{template "mapp" .}}
+{{template "optinform" .}}
 
 {{template "footer" .}}
 {{end}}

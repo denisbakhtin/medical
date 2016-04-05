@@ -2,11 +2,12 @@ package system
 
 import (
 	"fmt"
-	"github.com/denisbakhtin/medical/models"
-	"github.com/denisbakhtin/sitemap"
 	"log"
 	"path"
 	"time"
+
+	"github.com/denisbakhtin/medical/models"
+	"github.com/denisbakhtin/sitemap"
 )
 
 //CreateXMLSitemap creates xml sitemap for search engines, and saves in public/sitemap folder
@@ -15,7 +16,7 @@ func CreateXMLSitemap() {
 	folder := path.Join(GetConfig().Public, "sitemap")
 	domain := "http://www." + GetConfig().Domain
 	now := time.Now()
-	items := make([]sitemap.Item, 1)
+	items := make([]sitemap.Item, 0, 500)
 
 	//Home page
 	items = append(items, sitemap.Item{
@@ -33,7 +34,7 @@ func CreateXMLSitemap() {
 	}
 	for i := range articles {
 		items = append(items, sitemap.Item{
-			Loc:        fmt.Sprintf("%s%s", domain, articles[i].URL),
+			Loc:        fmt.Sprintf("%s%s", domain, articles[i].URL()),
 			LastMod:    articles[i].UpdatedAt,
 			Changefreq: "weekly",
 			Priority:   0.9,
@@ -48,7 +49,7 @@ func CreateXMLSitemap() {
 	}
 	for i := range pages {
 		items = append(items, sitemap.Item{
-			Loc:        fmt.Sprintf("%s%s", domain, pages[i].URL),
+			Loc:        fmt.Sprintf("%s%s", domain, pages[i].URL()),
 			LastMod:    pages[i].UpdatedAt,
 			Changefreq: "monthly",
 			Priority:   0.8,
@@ -63,7 +64,7 @@ func CreateXMLSitemap() {
 	}
 	for i := range reviews {
 		items = append(items, sitemap.Item{
-			Loc:        fmt.Sprintf("%s%s", domain, reviews[i].URL),
+			Loc:        fmt.Sprintf("%s%s", domain, reviews[i].URL()),
 			LastMod:    reviews[i].UpdatedAt,
 			Changefreq: "monthly",
 			Priority:   0.7,
@@ -71,19 +72,21 @@ func CreateXMLSitemap() {
 	}
 
 	//Comments
-	comments, err := models.GetPublishedComments()
-	if err != nil {
-		log.Printf("ERROR: %s\n", err)
-		return
-	}
-	for i := range comments {
-		items = append(items, sitemap.Item{
-			Loc:        fmt.Sprintf("%s%s", domain, comments[i].URL),
-			LastMod:    comments[i].UpdatedAt,
-			Changefreq: "monthly",
-			Priority:   0.6,
-		})
-	}
+	/*
+		comments, err := models.GetPublishedComments()
+		if err != nil {
+			log.Printf("ERROR: %s\n", err)
+			return
+		}
+		for i := range comments {
+			items = append(items, sitemap.Item{
+				Loc:        fmt.Sprintf("%s%s", domain, comments[i].URL()),
+				LastMod:    comments[i].UpdatedAt,
+				Changefreq: "monthly",
+				Priority:   0.6,
+			})
+		}
+	*/
 
 	if err := sitemap.SiteMap(path.Join(folder, "sitemap1.xml.gz"), items); err != nil {
 		log.Printf("ERROR: %s\n", err)

@@ -3,13 +3,14 @@ package system
 //go:generate rice embed-go
 
 import (
-	"github.com/GeertJohan/go.rice"
-	"github.com/denisbakhtin/medical/helpers"
-	"github.com/nicksnyder/go-i18n/i18n"
 	"html/template"
 	"log"
 	"os"
 	"strings"
+
+	"github.com/GeertJohan/go.rice"
+	"github.com/denisbakhtin/medical/helpers"
+	"github.com/nicksnyder/go-i18n/i18n"
 )
 
 var tmpl *template.Template
@@ -23,8 +24,13 @@ func loadTemplates() {
 		"date":           helpers.Date,
 		"recentArticles": helpers.RecentArticles,
 		"mainMenu":       helpers.MainMenu,
+		"scrollMenu":     helpers.ScrollMenu,
 		"oddEvenClass":   helpers.OddEvenClass,
 		"truncate":       helpers.Truncate,
+		"sellingPreface": helpers.SellingPreface,
+		"promoTill":      helpers.PromoTill,
+		"cityList":       helpers.CityList,
+		"eqRI":           helpers.EqRI,
 		"T":              i18n.MustTfunc(config.Language), //will be replaced by actual TranslationFunc in LocaleMiddleware
 	})
 

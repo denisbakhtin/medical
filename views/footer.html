@@ -1,14 +1,12 @@
 {{define "footer"}}
-    {{template "map" .}}
-
-    <div id="footer">
-      <div class="container">
-        <br>
-        <p class="text-muted">&copy; 2014 {{T "site_name"}}. {{T "footer_text"}}
+      <div id="footer" class="full-width">
+        <div class="container">
+          <p class="text-muted">&copy; 2014 {{T "site_name"}}. {{T "footer_text"}}
+        </div>
       </div>
-    </div>
-    {{template "counters" .}}
-    <script src="/public/js/lightbox.min.js"></script>
+      {{template "counters" .}}
+      <script src="/public/js/lightbox.min.js"></script>
+    </div> <!-- #main-container -->
   </body>
 </html>
 {{end}}

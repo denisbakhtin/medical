@@ -9,6 +9,7 @@ import (
 type Comment struct {
 	ID          int64     `json:"id" db:"id"`
 	ArticleID   int64     `json:"article_id" db:"article_id"`
+	AuthorCity  string    `json:"author_city" db:"author_city"`
 	AuthorName  string    `json:"author_name" db:"author_name"`
 	AuthorEmail string    `json:"author_email" db:"author_email"`
 	Content     string    `json:"content"`
@@ -21,9 +22,10 @@ type Comment struct {
 //Insert stores Comment  in db
 func (comment *Comment) Insert() error {
 	err := db.QueryRow(
-		`INSERT INTO comments(article_id, author_name, author_email, content, answer, published, created_at, updated_at) 
-		VALUES($1,$2,$3,$4,$5,$6,$7,$7) RETURNING id`,
+		`INSERT INTO comments(article_id, author_city, author_name, author_email, content, answer, published, created_at, updated_at) 
+		VALUES($1,$2,$3,$4,$5,$6,$7,$8,$8) RETURNING id`,
 		comment.ArticleID,
+		comment.AuthorCity,
 		comment.AuthorName,
 		comment.AuthorEmail,
 		comment.Content,
@@ -38,12 +40,13 @@ func (comment *Comment) Insert() error {
 func (comment *Comment) Update() error {
 	_, err := db.Exec(
 		`UPDATE comments 
-		SET content=$2, answer=$3, published=$4, updated_at=$5 
+		SET content=$2, answer=$3, published=$4, author_city=$5, updated_at=$6 
 		WHERE id=$1`,
 		comment.ID,
 		comment.Content,
 		comment.Answer,
 		comment.Published,
+		comment.AuthorCity,
 		time.Now(),
 	)
 	return err
@@ -53,6 +56,11 @@ func (comment *Comment) Update() error {
 func (comment *Comment) Delete() error {
 	_, err := db.Exec("DELETE FROM comments WHERE id=$1", comment.ID)
 	return err
+}
+
+//Title returns comment excerpt, 100 char long
+func (comment *Comment) Title() string {
+	return truncate(comment.Content, 50) + "..."
 }
 
 //Excerpt returns comment excerpt, 100 char long
@@ -128,7 +136,7 @@ func GetPublishedComments() ([]Comment, error) {
 	return list, err
 }
 
-//GetCommentsByArticleID returns a slice of published comments, associated with given article
+//GetCommentsByArticleID returns a slice of published comments, associated with the given article
 func GetCommentsByArticleID(articleID int64) ([]Comment, error) {
 	var list []Comment
 	err := db.Select(
@@ -139,5 +147,39 @@ func GetCommentsByArticleID(articleID int64) ([]Comment, error) {
 		true,
 		articleID,
 	)
+	return list, err
+}
+
+//GetTopCommentsByArticleID returns a slice of top (latest, or rated) published comments, associated with given article
+func GetTopCommentsByArticleID(articleID int64) ([]Comment, error) {
+	var list []Comment
+	var list2 []Comment
+	limit := 50
+	err := db.Select(
+		&list,
+		`SELECT * FROM comments 
+		WHERE published=$1 AND article_id=$2 AND author_city=$3
+		ORDER BY id DESC LIMIT $4`,
+		true,
+		articleID,
+		"Москва",
+		limit,
+	)
+	if err != nil {
+		return list, err
+	}
+	if len(list) < limit {
+		err = db.Select(
+			&list2,
+			`SELECT * FROM comments 
+			WHERE published=$1 AND article_id=$2 AND author_city!=$3
+			ORDER BY id DESC LIMIT $4`,
+			true,
+			articleID,
+			"Москва",
+			limit-len(list),
+		)
+		list = append(list, list2...)
+	}
 	return list, err
 }

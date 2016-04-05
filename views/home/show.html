@@ -1,20 +1,17 @@
 {{define "home/show"}}
 {{template "header" .}}
 {{template "navbar" .}}
-<div id="home" class="container" role="main">
+<div id="home" role="main">
   <h1>{{.Page.Name}}</h1>
   {{range .Flash}}
     <div class="alert alert-danger">{{.}}</div><p>
   {{end}}
   <div class="content">{{.Page.HTMLContent}}</div>
-  <h3>Свежие публикации</h3>
-  <div class="recent-articles">
-    {{range .Articles}}
-    <p><a href="{{.URL}}">{{.Name}}</a></p>
-    {{end}}
-  </div>
 </div>
-{{template "cta_bottom" .}}
+{{template "withoutpain" .}}
 {{template "testimonials" .}}
+{{template "sellingblock" .}}
+{{template "mapp" .}}
+{{template "optinform" .}}
 {{template "footer" .}}
 {{end}}

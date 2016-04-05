@@ -7,23 +7,6 @@ function initialize() {
   // Create an array of styles.
   var styles = [
   {
-    stylers: [
-    { hue: "#00ffe6" },
-    { saturation: -40 }
-    ]
-  },{
-    featureType: "road",
-    elementType: "geometry",
-    stylers: [
-    { lightness: 50 },
-    { visibility: "simplified" }
-    ]
-  },{
-    featureType: "road",
-    elementType: "labels",
-    stylers: [
-    { visibility: "off" }
-    ]
   }
   ];
 
@@ -94,7 +77,7 @@ window.onload = loadScript;
 
 </script>
 
-<section id="google-map">
+<section id="google-map" class="full-width">
   <div class="container">
     <h2 class="text-center">Схема проезда</h2>
     <p class="text-center well well-sm">

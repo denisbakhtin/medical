@@ -12,6 +12,16 @@
 
         <div id="comment-hidden">
           <div class="form-group">
+            <label class="control-label" for="author_city">{{T "your_city"}}</label>
+            <select id="author_city" name="author_city" required="" class="form-control input-md" data-parsley-required-message="{{T "parsley_your_city_required"}}">
+              <option value="">Выберите город</option>
+              {{range cityList}}
+              <option value="{{.}}">{{.}}</option>
+              {{end}}
+            </select>
+          </div>
+
+          <div class="form-group">
             <label class="control-label" for="author_name">{{T "your_name"}}</label>
             <input id="author_name" name="author_name" placeholder="{{T "your_name_placeholder"}}" required="" class="form-control input-md" data-parsley-required-message="{{T "parsley_your_name_required"}}">
           </div>

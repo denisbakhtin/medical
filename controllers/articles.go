@@ -31,9 +31,12 @@ func ArticleShow(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, article.URL(), http.StatusSeeOther)
 			return
 		}
+		testimonials, _ := models.GetRecentReviewsByArticle(article.ID)
 		data["Article"] = article
+		data["Testimonials"] = testimonials
 		data["Title"] = article.Name
 		data["Active"] = "/articles"
+		data["MetaDescription"] = article.Excerpt
 		//Facebook open graph meta tags
 		data["Ogheadprefix"] = "og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#"
 		data["Ogtitle"] = article.Name
@@ -128,11 +131,12 @@ func ArticleCreate(w http.ResponseWriter, r *http.Request) {
 
 		r.ParseForm()
 		article := &models.Article{
-			Name:      r.PostFormValue("name"),
-			Slug:      r.PostFormValue("slug"),
-			Content:   r.PostFormValue("content"),
-			Excerpt:   r.PostFormValue("excerpt"),
-			Published: helpers.Atob(r.PostFormValue("published")),
+			Name:           r.PostFormValue("name"),
+			Slug:           r.PostFormValue("slug"),
+			Content:        r.PostFormValue("content"),
+			Excerpt:        r.PostFormValue("excerpt"),
+			SellingPreface: r.PostFormValue("selling_preface"),
+			Published:      helpers.Atob(r.PostFormValue("published")),
 		}
 
 		if err := article.Insert(); err != nil {
@@ -178,12 +182,13 @@ func ArticleUpdate(w http.ResponseWriter, r *http.Request) {
 
 		r.ParseForm()
 		article := &models.Article{
-			ID:        helpers.Atoi64(r.PostFormValue("id")),
-			Name:      r.PostFormValue("name"),
-			Slug:      r.PostFormValue("slug"),
-			Content:   r.PostFormValue("content"),
-			Excerpt:   r.PostFormValue("excerpt"),
-			Published: helpers.Atob(r.PostFormValue("published")),
+			ID:             helpers.Atoi64(r.PostFormValue("id")),
+			Name:           r.PostFormValue("name"),
+			Slug:           r.PostFormValue("slug"),
+			Content:        r.PostFormValue("content"),
+			Excerpt:        r.PostFormValue("excerpt"),
+			SellingPreface: r.PostFormValue("selling_preface"),
+			Published:      helpers.Atob(r.PostFormValue("published")),
 		}
 
 		if err := article.Update(); err != nil {

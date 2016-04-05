@@ -1,7 +1,22 @@
 {{define "navbar"}}
-{{template "cta_top" .}}
-{{template "cta_scroll" .}}
-<div id="navbar-main" class="navbar navbar-default" role="navigation">
+{{template "navbar_scroll" .}}
+<div id="header-top">
+  <a id="logo" href="/">
+    <img src="/public/images/logo.png" />
+    <p id="name" class="pull-right text-success">миобаланс</p>
+    <p class="text-success">Прикладная кинезиология</p>
+  </a>
+  <div id="header-cta" class="hidden-xs">
+    <a class="btn btn-primary" href="#optin-form"><i class="glyphicon glyphicon-ok"></i>{{T "header_cta"}}</a>
+    <p class="text-warning lowercase">акция действует {{promoTill}}</p>
+  </div>
+  <div id="header-phone">
+    <p class="phone nowrap">{{T "site_phone"}}</p>
+    <p class="hours nowrap">c 9:00 до 21:00</p>
+  </div>
+</div>
+
+<div id="navbar-main" class="full-width navbar navbar-default" role="navigation">
   <div class="navbar-header">
     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
       <span class="sr-only">Toggle navigation</span>
@@ -9,15 +24,15 @@
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
+    <div id="header-cta" class="visible-xs">
+      <a class="btn btn-primary" href="#optin-form"><i class="glyphicon glyphicon-ok"></i>{{T "header_cta"}}</a>
+    </div>
   </div>
   <div class="navbar-collapse collapse">
     <ul class="nav navbar-nav">
-      <li class="{{isActive .Active "/"}}">
-        <a href="/"><i class="glyphicon glyphicon-home indent"></i>{{T "site_name"}}</a>
-      </li>
       {{$active := .Active}}
       {{range mainMenu}}
-      <li class="{{isActive $active .URL}}">
+      <li class="{{.CssClass}} {{isActive $active .URL}}">
         <a href="{{.URL}}">{{T .Title}}</a>
       </li>
       {{end}}
@@ -31,5 +46,23 @@
       {{end}}
     </ul>
   </div><!--/.nav-collapse -->
+</div>
+
+<div id="header-bottom" class="row full-width">
+  <div class="col-sm-4 col-xs-12">
+    <i class="glyphicon glyphicon-plus"></i>
+    <p class="strong">Высокая эффективность</p>
+    <p>Сотни вылеченных пациентов и положительных отзывов</p>
+  </div>
+  <div class="col-sm-4 col-xs-12">
+    <i class="glyphicon glyphicon-leaf"></i>
+    <p class="strong">Мягкое лечение</p>
+    <p>Применяем передовые техники лечения и минимум медикаментов</p>
+  </div>
+  <div class="col-sm-4 col-xs-12">
+    <i class="glyphicon glyphicon-gift"></i>
+    <p class="strong">Акция!</p>
+    <p>Первичный приём <span class="strike-through">1000</span> 0&nbsp;руб. При оплате курса лечения скидка <span class="strong">20%</span></p>
+  </div>
 </div>
 {{end}}

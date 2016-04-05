@@ -1,0 +1,26 @@
+{{define "optinform"}}
+<section id="optin-form">
+  <h2 class="clearfix text-center">Запишитесь на бесплатный первичный приём</h2>
+  <p class="text-center text-warning">Акция действует {{promoTill}}.</p>
+  <form class="panel panel-default" method="post" action="/new_request" data-parsley-validate>
+    {{.csrfField}}
+    <div class="panel-body">
+      <div class="form-group col-xs-12 col-sm-6">
+        <label for="name-input">Ваше имя</label>
+        <input id="name-input" class="form-control" name="name" required="" data-parsley-required-message="Введите ваше имя"/>
+      </div>
+      <div class="form-group col-xs-12 col-sm-6">
+        <label for="phone-input">Контактный телефон</label>
+        <input id="phone-input" class="form-control" name="phone" placeholder="_ (__) ___-____" required="" data-parsley-required-message="Введите ваш контактный телефон"/>
+      </div>
+      <div class="form-group col-xs-12">
+        <label for="comment-textarea">Что Вас беспокоит, когда лучше перезвонить</label>
+        <textarea id="comment-textarea" class="form-control" name="comment" placeholder="Дополнительная информация, которую Вы хотели бы сообщить врачу"></textarea>
+      </div>
+      <div class="actions col-xs-12">
+        <input type="submit" class="btn btn-primary" value="Отправить" />
+      </div>
+    </div>
+  </form>
+</section>
+{{end}}

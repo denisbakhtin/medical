@@ -1,36 +1,35 @@
 {{define "testimonials"}}
-<section id="testimonials">
-  <div class="container">
-    <div class="row">
-      <h2 class="text-center">{{T "testimonials_title"}}</h2>
-    </div>
+  {{if .Testimonials}}
+  <section id="testimonials">
+    <h2 class="text-center">Отзывы пациентов</h2>
+    <p>Эффективность и качество применяемых на практике кинезиологических методик подтверждено многочисленными положительными отзывами наших пациентов.</p>
 
-    <div class="row">
-      <div class="container">
-        <div id="carousel-testimonials" class="carousel slide" data-ride="carousel">
-          <!-- Indicators -->
-          <ol class="carousel-indicators">
-            {{range $i, $v := .Testimonials}}
-            <li data-target="#carousel-testimonials" data-slide-to="{{$i}}" {{if eq $i 0}}class="active"{{end}}></li>
-            {{end}}
-          </ol>
-
-          <div class="carousel-inner">
-            {{range $i, $v := .Testimonials}}
-            <div class="item {{if eq $i 0}}active{{end}}" id="carousel-testimonials-{{$i}}">
-              <div class="col-sm-10 col-sm-offset-1 white-font-color">
-                <p>{{.Excerpt}}. <span class="author_name">{{.AuthorName}}.</span></p>
-                <div class="text-center">
-                  <a href="/reviews/{{.ID}}" class="btn btn-info">{{T "read_more"}}</a>
-                </div>
+    {{$len := len .Testimonials}}
+    <div class="carousel slide" id="testimonials-slide" data-interval="false">
+      <div class="carousel-inner">
+        {{range $i, $v := .Testimonials}}
+          <div class="item {{if eq $i 0}}active{{end}}">
+            <div class="col-xs-12 {{if gt $len 1}}col-sm-6{{end}}">
+              <div class="thumbnail">
+                {{if .Video}}
+                  <iframe src="{{.Video}}" frameborder="0" allowfullscreen></iframe>
+                {{else}}
+                  {{if .Image}}
+                    <img class="img-responsive" src="{{.Image}}" />
+                  {{end}}
+                {{end}}
+                <p class="strong">{{.AuthorName}}</p>
+                <p class="excerpt">{{.Content}}</p>
               </div>
             </div>
-            {{end}}
           </div>
-        </div>
+        {{end}}
       </div>
-
+      {{if gt $len 1}}
+        <a class="left carousel-control" href="#testimonials-slide" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+        <a class="right carousel-control" href="#testimonials-slide" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+      {{end}}
     </div>
-  </div>
-</section>
+  </section>
+  {{end}}
 {{end}}

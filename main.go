@@ -29,7 +29,8 @@ func main() {
 	CSRF = csrf.Protect([]byte(system.GetConfig().CsrfSecret), csrf.Secure(system.GetConfig().Ssl), csrf.Path("/"), csrf.Domain(system.GetConfig().Domain))
 
 	//Periodic tasks
-	gocron.Every(1).Day().Do(system.CreateXMLSitemap)
+	//system.CreateXMLSitemap()                         //refresh sitemap now
+	gocron.Every(1).Day().Do(system.CreateXMLSitemap) //refresh daily
 	gocron.Start()
 
 	http.Handle("/", Default(controllers.Home))
@@ -46,8 +47,10 @@ func main() {
 	http.Handle("/reviews/", Default(controllers.ReviewShow))
 	http.Handle("/rss", Default(controllers.RssXML))
 	http.Handle("/search", Default(controllers.Search))
+	http.Handle("/new_request", Default(controllers.RequestCreate))
 	http.Handle("/new_comment", Default(controllers.CommentPublicCreate))
 	http.Handle("/edit_comment", Default(controllers.CommentPublicUpdate))
+	http.Handle("/comments", Default(controllers.CommentPublicIndex))
 	http.Handle("/comments/", Default(controllers.CommentShow))
 	http.Handle("/new_review", Default(controllers.ReviewPublicCreate))
 	http.Handle("/edit_review", Default(controllers.ReviewPublicUpdate))

@@ -9,14 +9,15 @@ import (
 
 //Article type contains article info
 type Article struct {
-	ID        int64 `db:"id"`
-	Name      string
-	Slug      string
-	Excerpt   string
-	Content   string
-	Published bool
-	CreatedAt time.Time `db:"created_at"`
-	UpdatedAt time.Time `db:"updated_at"`
+	ID             int64 `db:"id"`
+	Name           string
+	Slug           string
+	Excerpt        string
+	Content        string
+	SellingPreface string `db:"selling_preface"`
+	Published      bool
+	CreatedAt      time.Time `db:"created_at"`
+	UpdatedAt      time.Time `db:"updated_at"`
 	//calculated fields
 	Comments []Comment `db:"-"`
 }
@@ -27,13 +28,14 @@ func (article *Article) Insert() error {
 		article.Slug = createSlug(article.Name)
 	}
 	err := db.QueryRow(
-		`INSERT INTO articles(name, slug, excerpt, content, published, created_at, updated_at) 
-		VALUES($1,$2,$3,$4,$5,$6,$6) RETURNING id`,
+		`INSERT INTO articles(name, slug, excerpt, content, published, selling_preface, created_at, updated_at) 
+		VALUES($1,$2,$3,$4,$5,$6,$7,$7) RETURNING id`,
 		article.Name,
 		article.Slug,
 		article.Excerpt,
 		article.Content,
 		article.Published,
+		article.SellingPreface,
 		time.Now(),
 	).Scan(&article.ID)
 	return err
@@ -45,13 +47,14 @@ func (article *Article) Update() error {
 		article.Slug = createSlug(article.Name)
 	}
 	_, err := db.Exec(
-		"UPDATE articles SET name=$2, slug=$3, excerpt=$4, content=$5, published=$6, updated_at=$7 WHERE id=$1",
+		"UPDATE articles SET name=$2, slug=$3, excerpt=$4, content=$5, published=$6, selling_preface=$7, updated_at=$8 WHERE id=$1",
 		article.ID,
 		article.Name,
 		article.Slug,
 		article.Excerpt,
 		article.Content,
 		article.Published,
+		article.SellingPreface,
 		time.Now(),
 	)
 	return err
@@ -97,7 +100,7 @@ func GetArticle(id interface{}) (*Article, error) {
 	if err != nil {
 		return article, err
 	}
-	article.Comments, err = GetCommentsByArticleID(article.ID)
+	article.Comments, err = GetTopCommentsByArticleID(article.ID)
 	return article, err
 }
 
@@ -118,7 +121,7 @@ func GetPublishedArticles() ([]Article, error) {
 //GetRecentArticles returns a slice of last 7 published articles
 func GetRecentArticles() ([]Article, error) {
 	var list []Article
-	err := db.Select(&list, "SELECT id, name FROM articles WHERE published=$1 ORDER BY id DESC LIMIT 7", true)
+	err := db.Select(&list, "SELECT id, name FROM articles WHERE published=$1 ORDER BY id DESC LIMIT 8", true)
 	return list, err
 }
 

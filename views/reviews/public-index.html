@@ -13,6 +13,17 @@
     <div class="review-preview col-sm-12 col-md-6">
       <h2 class="review-title"><a href="{{.URL}}">{{.AuthorName}}</a></h2>
       <div class="excerpt">
+        {{if or .Video .Image}}
+          <div class="thumbnail">
+            {{if .Video}}
+              <iframe src="{{.Video}}" frameborder="0" allowfullscreen></iframe>
+            {{else}}
+              {{if .Image}}
+                <img class="img-responsive" src="{{.Image}}" />
+              {{end}}
+            {{end}}
+          </div>
+        {{end}}
         {{.Excerpt}}
         <a href="{{.URL}}">{{T "read_more"}}</a>
       </div>
@@ -23,6 +34,11 @@
     {{end}}
   </div>
 </div>
-{{template "cta_bottom" .}}
+
+{{template "withoutpain" .}}
+{{template "testimonials" .}}
+{{template "sellingblock" .}}
+{{template "mapp" .}}
+{{template "optinform" .}}
 {{template "footer" .}}
 {{end}}

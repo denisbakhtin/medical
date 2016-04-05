@@ -11,7 +11,7 @@ doc:
 lint:
 	@golint ./...
 
-debug:
+debug: clean
 	@reflex -c reflex.conf
 
 run: build

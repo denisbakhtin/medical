@@ -5,14 +5,15 @@ import (
 	"crypto/sha1"
 	"encoding/base64"
 	"fmt"
-	"github.com/denisbakhtin/medical/helpers"
-	"github.com/denisbakhtin/medical/models"
-	"github.com/denisbakhtin/medical/system"
-	"gopkg.in/gomail.v2"
 	"log"
 	"net/http"
 	"strconv"
 	"strings"
+
+	"github.com/denisbakhtin/medical/helpers"
+	"github.com/denisbakhtin/medical/models"
+	"github.com/denisbakhtin/medical/system"
+	"gopkg.in/gomail.v2"
 )
 
 //ReviewShow handles /reviews/:id route
@@ -173,8 +174,10 @@ func ReviewCreate(w http.ResponseWriter, r *http.Request) {
 	T := helpers.T(r)
 	if r.Method == "GET" {
 
+		articles, _ := models.GetArticles()
 		data["Title"] = T("new_review")
 		data["Active"] = "reviews"
+		data["Articles"] = articles
 		data["Flash"] = session.Flashes("reviews")
 		session.Save(r, w)
 		tmpl.Lookup("reviews/form").Execute(w, data)
@@ -183,10 +186,12 @@ func ReviewCreate(w http.ResponseWriter, r *http.Request) {
 
 		r.ParseMultipartForm(32 << 20)
 		review := &models.Review{
+			ArticleID:   helpers.Atoi64r(r.FormValue("article_id")),
 			AuthorName:  r.FormValue("author_name"),
 			AuthorEmail: r.FormValue("author_email"),
 			Content:     r.FormValue("content"),
 			Published:   helpers.Atob(r.FormValue("published")),
+			Video:       r.FormValue("video"),
 		}
 
 		if mpartFile, mpartHeader, err := r.FormFile("image"); err == nil {
@@ -232,9 +237,11 @@ func ReviewUpdate(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		articles, _ := models.GetArticles()
 		data["Title"] = T("edit_review")
 		data["Active"] = "reviews"
 		data["Review"] = review
+		data["Articles"] = articles
 		data["Flash"] = session.Flashes("reviews")
 		session.Save(r, w)
 		tmpl.Lookup("reviews/form").Execute(w, data)
@@ -251,11 +258,13 @@ func ReviewUpdate(w http.ResponseWriter, r *http.Request) {
 
 		review := &models.Review{
 			ID:          rev.ID,
+			ArticleID:   helpers.Atoi64r(r.FormValue("article_id")),
 			AuthorName:  r.FormValue("author_name"),
 			AuthorEmail: r.FormValue("author_email"),
 			Content:     r.FormValue("content"),
 			Image:       rev.Image,
 			Published:   helpers.Atob(r.FormValue("published")),
+			Video:       r.FormValue("video"),
 		}
 		if mpartFile, mpartHeader, err := r.FormFile("image"); err == nil {
 			defer mpartFile.Close()
@@ -301,8 +310,10 @@ func ReviewPublicUpdate(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		articles, _ := models.GetArticles()
 		review.Published = true //set default to true
 		data["Title"] = T("edit_review")
+		data["Articles"] = articles
 		data["Active"] = "reviews"
 		data["Review"] = review
 		data["SecureEdit"] = true
@@ -322,11 +333,13 @@ func ReviewPublicUpdate(w http.ResponseWriter, r *http.Request) {
 
 		review := &models.Review{
 			ID:          rev.ID,
+			ArticleID:   helpers.Atoi64r(r.FormValue("article_id")),
 			AuthorName:  r.FormValue("author_name"),
 			AuthorEmail: r.FormValue("author_email"),
 			Content:     r.FormValue("content"),
 			Image:       rev.Image,
 			Published:   helpers.Atob(r.FormValue("published")),
+			Video:       rev.Video,
 		}
 		if mpartFile, mpartHeader, err := r.FormFile("image"); err == nil {
 			defer mpartFile.Close()

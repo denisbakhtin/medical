@@ -576,6 +576,10 @@
     "translation": "Rostovtsev Evgeniy Vladimirovitch"
   },
   {
+    "id": "site_author_brief",
+    "translation": "Rostovtsev E. V."
+  },
+  {
     "id": "question_about_article",
     "translation": "Question is asked about the article"
   },
@@ -630,6 +634,18 @@
   {
     "id": "your_question_has_been_answered",
     "translation": "Your question has been answered"
+  },
+  {
+    "id": "title_suffix",
+    "translation": " | Kineziology Miobalans"
+  },
+  {
+    "id": "questions",
+    "translation": "Q & A"
+  },
+  {
+    "id": "questions_and_answers",
+    "translation": "Questions & Answers"
   }
 
 ]

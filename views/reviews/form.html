@@ -24,6 +24,22 @@
         </div>
 
         <div class="form-group">
+          <label class="control-label" for="video">{{T "youtube_video"}}</label>
+          <input id="video" name="video" value="{{.Review.Video}}" placeholder="{{T "youtube_video_placeholder"}}" class="form-control input-md" >
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="article_id">{{T "article"}}</label>
+          {{$aid := .Review.ArticleID}}
+          <select id="article_id" name="article_id" class="form-control">
+            <option value="" {{if eqRI $aid 0}}selected{{end}}>Не выбрана</option>
+            {{range .Articles}}
+            <option value="{{.ID}}" {{if eqRI $aid .ID}}selected{{end}}>{{.Name}}</option>
+            {{end}}
+          </select>
+        </div>
+
+        <div class="form-group">
           <label class="control-label" for="content">{{T "content"}}</label>
           <textarea class="form-control" required="" name="content" id="content">{{.Review.Content}}</textarea>
         </div>

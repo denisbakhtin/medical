@@ -48,14 +48,25 @@ $(document).ready(function(){
     });
   }
 
+  /*
   $('#textarea-comment').on("focusin", function() {
     $('#textarea-comment').css("height", "10em");
   });
   $('#textarea-comment').on("focusout", function() {
     $('#textarea-comment').css("height", "5em");
   });
+  */
   $('#textarea-comment').one("keyup", function() {
     $('#comment-hidden').show('fast');
+  });
+  $('#comments-more-btn').on('click', function() {
+    $('.comment.extra.hide').first().removeClass('hide');
+    $('.comment.extra.hide').first().removeClass('hide');
+    $('#comments-less-btn').removeClass('hide');
+  });
+  $('#comments-less-btn').on('click', function() {
+    $('.comment.extra').addClass('hide');
+    $('#comments-less-btn').addClass('hide');
   });
 
   $(window).on("scroll", function() {
@@ -64,11 +75,63 @@ $(document).ready(function(){
       var navbarBottom = $('#navbar-main').position().top+$('#navbar-main').outerHeight(true)
       if (iCurScrollPos > navbarBottom) {
         //show cta-popup
-        $('#navbar-cta').css('display', 'block');
+        $('#navbar-scroll').css('display', 'block');
       } else {
         //hide cta-popup
-        $('#navbar-cta').css('display', 'none');
+        $('#navbar-scroll').css('display', 'none');
       }
     }
   });
+
+  var withoutpainheight = function() {
+    var maxh = 0;
+    $('#withoutpain-slide .item .thumbnail').each(function(){
+      var item = $(this);
+      if (item.actual('height') > maxh) {
+        maxh = item.actual('height');
+      }
+    });
+    $('#withoutpain-slide .item .thumbnail').each(function(){
+      var item = $(this);
+      item.height(maxh);
+    });
+  }
+  withoutpainheight();
+
+  $('#withoutpain-slide .item').each(function(){
+    var itemToClone = $(this);
+    for (var i=1;i<3;i++) {
+      itemToClone = itemToClone.next();
+
+      if (!itemToClone.length) {
+        break;
+        //itemToClone = $(this).siblings(':first');
+      }
+
+      itemToClone.children(':first-child').clone()
+      .addClass("cloneditem-"+(i))
+      .appendTo($(this));
+    }
+  });
+  $('#testimonials-slide .item').each(function(){
+    var itemToClone = $(this);
+    for (var i=1;i<2;i++) {
+      itemToClone = itemToClone.next();
+
+      if (!itemToClone.length) {
+        itemToClone = $(this).siblings(':first');
+      }
+
+      itemToClone.children(':first-child').clone()
+      .addClass("cloneditem-"+(i))
+      .appendTo($(this));
+    }
+  });
+
+  $('#phone-input').mask("9 (999) 999-9999");
+
+  $(window).resize(function() {
+    withoutpainheight();
+  });
+    
 });

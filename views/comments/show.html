@@ -4,12 +4,13 @@
 <div id="comment" class="container" role="main">
   <h1>{{.Title}}</h1>
   <div class="content">
+    <span class="strong">{{.Comment.AuthorName}}.</span>
     {{.Comment.Content}}
   </div>
-  <h3>{{T "replies_doctor"}} {{T "site_author_full"}}</h3>
-  <div class="reply">
+  <h3>{{T "replies_doctor"}} {{T "site_author_brief"}}</h3>
+  <p class="reply text-success">
     {{.Comment.Answer}}
-  </div>
+  </p>
   <p>
   {{T "question_about_article"}}:
     <a href="{{.Article.URL}}">{{.Article.Name}}</a>

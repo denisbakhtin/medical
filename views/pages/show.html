@@ -2,7 +2,7 @@
 {{template "header" .}}
 {{template "navbar" .}}
 <div id="page" role="main">
-  <div class="content container">
+  <div class="content">
     <h1>
       {{.Page.Name}}
       {{if .ActiveUser}}
@@ -15,7 +15,11 @@
   </div>
 </div>
 
+{{template "withoutpain" .}}
 {{template "testimonials" .}}
+{{template "sellingblock" .}}
+{{template "mapp" .}}
+{{template "optinform" .}}
 
 {{template "footer" .}}
 {{end}}

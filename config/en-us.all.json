@@ -252,6 +252,14 @@
     "translation": "Welcome to blog boilerplate"
   },
   {
+    "id": "header_cta",
+    "translation": "Optin for free consult"
+  },
+  {
+    "id": "header_cta_note",
+    "translation": "Till 28th February"
+  },
+  {
     "id": "home",
     "translation": "Home"
   },
@@ -436,6 +444,14 @@
     "translation": "Question is asked about the article"
   },
   {
+    "id": "questions",
+    "translation": "Q \u0026 A"
+  },
+  {
+    "id": "questions_and_answers",
+    "translation": "Questions \u0026 Answers"
+  },
+  {
     "id": "read_fully",
     "translation": "Read fully"
   },
@@ -508,6 +524,10 @@
     "translation": ""
   },
   {
+    "id": "site_author_brief",
+    "translation": "Rostovtsev E. V."
+  },
+  {
     "id": "site_author_full",
     "translation": "Rostovtsev Evgeniy Vladimirovitch"
   },
@@ -568,12 +588,20 @@
     "translation": "Enter title"
   },
   {
+    "id": "title_suffix",
+    "translation": " | Kineziology Miobalans"
+  },
+  {
     "id": "to_comment_login_with",
     "translation": "To Comment Login With"
   },
   {
     "id": "to_prove_you_are_not_a_robot",
     "translation": "To prove you are not a robot move the slider to the right"
+  },
+  {
+    "id": "treatment_stages",
+    "translation": "Treatment stages"
   },
   {
     "id": "user_profile",

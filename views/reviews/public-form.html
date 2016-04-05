@@ -21,6 +21,19 @@
         <input type="email" id="author_email" name="author_email" placeholder="{{T "your_email_placeholder"}}" value="{{.Review.AuthorEmail}}" class="form-control input-md" >
       </div>
 
+      {{if .Articles}}
+      <div class="form-group">
+        <label class="control-label" for="article_id">{{T "article"}}</label>
+        {{$aid := .Review.ArticleID}}
+        <select id="article_id" name="article_id" class="form-control">
+          <option value="" {{if eqRI $aid 0}}selected{{end}}>Не выбрана</option>
+          {{range .Articles}}
+          <option value="{{.ID}}" {{if eqRI $aid .ID}}selected{{end}}>{{.Name}}</option>
+          {{end}}
+        </select>
+      </div>
+      {{end}}
+
       <div class="form-group">
         <label class="control-label" for="content">{{T "review"}}</label>
         <textarea class="form-control" name="content" id="content" required="" data-parsley-required-message="{{T "parsley_review_required"}}">{{.Review.Content}}</textarea>

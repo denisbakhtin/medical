@@ -2,7 +2,7 @@
 {{template "header" .}}
 {{template "navbar" .}}
 <div id="article" role="main">
-  <div class="content container">
+  <div class="content">
     <h1>
       {{.Article.Name}} 
       {{if .ActiveUser}}
@@ -14,8 +14,6 @@
     {{.Article.HTMLContent}}
   </div>
 
-  {{template "cta_bottom" .}}
-
   <div class="container">
     <div id="comments">
       {{template "comments/public-form" .}}
@@ -25,9 +23,12 @@
       {{template "comments/public-list" .Article.Comments}}
     </div>
   </div>
-
-  {{template "testimonials" .}}
-
 </div>
+
+{{template "withoutpain" .}}
+{{template "testimonials" .}}
+{{template "sellingblock" .}}
+{{template "mapp" .}}
+{{template "optinform" .}}
 {{template "footer" .}}
 {{end}}

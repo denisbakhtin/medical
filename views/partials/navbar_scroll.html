@@ -1,0 +1,18 @@
+{{define "navbar_scroll"}}
+<div id="navbar-scroll" class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+    <ul class="nav navbar-nav">
+      {{range scrollMenu}}
+      <li class="{{.CssClass}}">
+        <a href="{{.URL}}">{{T .Title}}</a>
+      </li>
+      {{end}}
+      <li>
+        <p class="navbar-text">
+        <a class="btn btn-primary hidden-xs" href="#optin-form"><i class="glyphicon glyphicon-ok"></i>{{T "header_cta"}}</a>
+        </p>
+      </li>
+    </ul>
+  </div>
+</div>
+{{end}}

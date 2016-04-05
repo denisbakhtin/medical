@@ -22,6 +22,7 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	data["Active"] = "/"
 	data["Articles"], _ = models.GetRecentArticles()
 	data["Flash"] = session.Flashes()
+	data["TitleSuffix"] = ""
 	session.Save(r, w)
 	tmpl.Lookup("home/show").Execute(w, data)
 }
