@@ -3,6 +3,7 @@ config/ru.all.json
 public/uploads/*.jpg
 public/uploads/*.png
 public/css/style.css
+public/css/style2.css
 public/sitemap/*
 git_save
 go-miobalans
