@@ -1,337 +1,5 @@
 [
   {
-    "id": "greeting",
-    "translation": "Welcome to blog boilerplate"
-  },
-  {
-    "id": "site_name",
-    "translation": "My blog"
-  },
-  {
-    "id": "site_description",
-    "translation": "Blog boilerplate"
-  },
-  {
-    "id": "home",
-    "translation": "Home"
-  },
-  {
-    "id": "dashboard",
-    "translation": "Dashboard"
-  },
-  {
-    "id": "website",
-    "translation": "Website"
-  },
-  {
-    "id": "logout",
-    "translation": "Logout"
-  },
-  {
-    "id": "sign_in",
-    "translation": "Sign in"
-  },
-  {
-    "id": "sign_up",
-    "translation": "Sign up"
-  },
-  {
-    "id": "January",
-    "translation": "January"
-  },
-  {
-    "id": "February",
-    "translation": "February"
-  },
-  {
-    "id": "March",
-    "translation": "March"
-  },
-  {
-    "id": "April",
-    "translation": "April"
-  },
-  {
-    "id": "May",
-    "translation": "May"
-  },
-  {
-    "id": "June",
-    "translation": "June"
-  },
-  {
-    "id": "July",
-    "translation": "July"
-  },
-  {
-    "id": "August",
-    "translation": "August"
-  },
-  {
-    "id": "September",
-    "translation": "September"
-  },
-  {
-    "id": "October",
-    "translation": "October"
-  },
-  {
-    "id": "November",
-    "translation": "November"
-  },
-  {
-    "id": "December",
-    "translation": "December"
-  },
-  {
-    "id": "user_profile",
-    "translation": "User profile"
-  },
-  {
-    "id": "settings",
-    "translation": "settings"
-  },
-  {
-    "id": "edit_profile",
-    "translation": "Edit profile"
-  },
-  {
-    "id": "navigation",
-    "translation": "Navigation"
-  },
-  {
-    "id": "recent_articles",
-    "translation": "Recent articles"
-  },
-  {
-    "id": "tags",
-    "translation": "Tags"
-  },
-  {
-    "id": "articles",
-    "translation": "Articles"
-  },
-  {
-    "id": "comments",
-    "translation": "Comments"
-  },
-  {
-    "id": "reviews",
-    "translation": "Reviews"
-  },
-  {
-    "id": "your_photo",
-    "translation": "Your photo"
-  },
-  {
-    "id": "your_email",
-    "translation": "Your email"
-  },
-  {
-    "id": "your_email_placeholder",
-    "translation": "Please, enter your email. It will be visible only to the site administrator."
-  },
-  {
-    "id": "review",
-    "translation": "Review"
-  },
-  {
-    "id": "parsley_review_required",
-    "translation": "Review can't be blank"
-  },
-  {
-    "id": "parsley_your_name_required",
-    "translation": "Your name is required"
-  },
-  {
-    "id": "your_name",
-    "translation": "Your name"
-  },
-  {
-    "id": "your_name_placeholder",
-    "translation": "Please, enter your name"
-  },
-  {
-    "id": "question",
-    "translation": "Question"
-  },
-  {
-    "id": "new_review",
-    "translation": "New review"
-  },
-  {
-    "id": "edit_review",
-    "translation": "Edit review"
-  },
-  {
-    "id": "photo",
-    "translation": "Photo"
-  },
-  {
-    "id": "comment",
-    "translation": "Comment"
-  },
-  {
-    "id": "pages",
-    "translation": "Pages"
-  },
-  {
-    "id": "users",
-    "translation": "Users"
-  },
-  {
-    "id": "email",
-    "translation": "Email"
-  },
-  {
-    "id": "email_placeholder",
-    "translation": "Email address"
-  },
-  {
-    "id": "parsley_email_required",
-    "translation": "Please enter your email"
-  },
-  {
-    "id": "parsley_comment_required",
-    "translation": "Please enter your comment"
-  },
-  {
-    "id": "password",
-    "translation": "Password"
-  },
-  {
-    "id": "password_placeholder",
-    "translation": "Password"
-  },
-  {
-    "id": "parsley_password_required",
-    "translation": "Please enter your password"
-  },
-  {
-    "id": "password",
-    "translation": "Password"
-  },
-  {
-    "id": "password_placeholder",
-    "translation": "Password"
-  },
-  {
-    "id": "parsley_password_required",
-    "translation": "Please enter your password"
-  },
-  {
-    "id": "repeat_password",
-    "translation": "Repeat password"
-  },
-  {
-    "id": "repeat_password_placeholder",
-    "translation": "Repeat password"
-  },
-  {
-    "id": "parsley_repeat_password_required",
-    "translation": "Please repeat your password"
-  },
-  {
-    "id": "parsley_password_not_equal",
-    "translation": "Passwords do not match"
-  },
-  {
-    "id": "i_accept_terms",
-    "translation": "I accept terms and conditions"
-  },
-  {
-    "id": "parsley_accept_terms_required",
-    "translation": "You can't continue without accepting our Terms and Conditions"
-  },
-  {
-    "id": "author",
-    "translation": "Author"
-  },
-  {
-    "id": "author_placeholder",
-    "translation": "Author name"
-  },
-  {
-    "id": "author_email_placeholder",
-    "translation": "Author email"
-  },
-  {
-    "id": "article_id",
-    "translation": "Article ID"
-  },
-  {
-    "id": "article_id_placeholder",
-    "translation": "Article ID"
-  },
-  {
-    "id": "parent_id",
-    "translation": "Parent ID"
-  },
-  {
-    "id": "parent_id_placeholder",
-    "translation": "Parent ID"
-  },
-  {
-    "id": "content",
-    "translation": "Content"
-  },
-  {
-    "id": "answer",
-    "translation": "Answer"
-  },
-  {
-    "id": "answer_a_patient",
-    "translation": "Answer a patient"
-  },
-  {
-    "id": "published",
-    "translation": "Published"
-  },
-  {
-    "id": "submit",
-    "translation": "Submit"
-  },
-  {
-    "id": "cancel",
-    "translation": "Cancel"
-  },
-  {
-    "id": "ID",
-    "translation": "ID"
-  },
-  {
-    "id": "created",
-    "translation": "Created"
-  },
-  {
-    "id": "actions",
-    "translation": "Actions"
-  },
-  {
-    "id": "are_you_sure",
-    "translation": "Are you sure"
-  },
-  {
-    "id": "to_comment_login_with",
-    "translation": "To Comment Login With"
-  },
-  {
-    "id": "login_with_facebook",
-    "translation": "Login with Facebook"
-  },
-  {
-    "id": "login_with_gplus",
-    "translation": "Login with Google+"
-  },
-  {
-    "id": "login_with_linkedin",
-    "translation": "Login with Linkedin"
-  },
-  {
-    "id": "login_with_vk",
-    "translation": "Login with Vkontakte"
-  },
-  {
     "id": "400_error",
     "translation": "400 Error"
   },
@@ -368,152 +36,208 @@
     "translation": "500 Error"
   },
   {
-    "id": "name",
-    "translation": "Name"
+    "id": "April",
+    "translation": "April"
   },
   {
-    "id": "name_placeholder",
-    "translation": "Enter name"
+    "id": "August",
+    "translation": "August"
   },
   {
-    "id": "parsley_name_required",
-    "translation": "Please enter user name"
+    "id": "December",
+    "translation": "December"
   },
   {
-    "id": "title",
-    "translation": "Title"
+    "id": "February",
+    "translation": "February"
   },
   {
-    "id": "title_placeholder",
-    "translation": "Enter title"
+    "id": "ID",
+    "translation": "ID"
   },
   {
-    "id": "parsley_title_required",
-    "translation": "Please, enter title"
+    "id": "January",
+    "translation": "January"
   },
   {
-    "id": "new_page",
-    "translation": "New page"
+    "id": "July",
+    "translation": "July"
   },
   {
-    "id": "edit_page",
-    "translation": "Edit page"
+    "id": "June",
+    "translation": "June"
   },
   {
-    "id": "article_is_unpublished",
-    "translation": "Article is unpublished"
+    "id": "March",
+    "translation": "March"
   },
   {
-    "id": "post_on_facebook",
-    "translation": "Post on Facebook"
+    "id": "May",
+    "translation": "May"
   },
   {
-    "id": "error_see_logs",
-    "translation": "Error, see logs"
+    "id": "November",
+    "translation": "November"
   },
   {
-    "id": "posted_successfully",
-    "translation": "Posted successfully"
+    "id": "October",
+    "translation": "October"
   },
   {
-    "id": "new_article",
-    "translation": "New article"
-  },
-  {
-    "id": "edit_article",
-    "translation": "Edit article"
-  },
-  {
-    "id": "no_articles_found",
-    "translation": "No articles found"
-  },
-  {
-    "id": "search_placeholder",
-    "translation": "Search"
-  },
-  {
-    "id": "search_results_for",
-    "translation": "Search results for"
-  },
-  {
-    "id": "new_tag",
-    "translation": "New tag"
-  },
-  {
-    "id": "new_user",
-    "translation": "New user"
-  },
-  {
-    "id": "edit_user",
-    "translation": "Edit user"
-  },
-  {
-    "id": "archives_for",
-    "translation": "Archives for"
-  },
-  {
-    "id": "edit_comment",
-    "translation": "Edit comment"
-  },
-  {
-    "id": "reply",
-    "translation": "Reply"
-  },
-  {
-    "id": "slug",
-    "translation": "Url slug"
-  },
-  {
-    "id": "slug_placeholder",
-    "translation": "Leave empty, if you dont know what it is"
-  },
-  {
-    "id": "thank_you_for_posting_review",
-    "translation": "Thank you! Your review will be visible after approval."
-  },
-  {
-    "id": "thank_you_for_posting_question",
-    "translation": "Thank you! Your question will be visible after approval."
+    "id": "September",
+    "translation": "September"
   },
   {
     "id": "about_doctor",
     "translation": "About doctor"
   },
   {
-    "id": "what_we_cure",
-    "translation": "What we cure"
+    "id": "actions",
+    "translation": "Actions"
   },
   {
-    "id": "prices",
-    "translation": "Prices"
+    "id": "answer",
+    "translation": "Answer"
   },
   {
-    "id": "contacts",
-    "translation": "Contacts"
+    "id": "answer_a_patient",
+    "translation": "Answer a patient"
   },
   {
-    "id": "read_more",
-    "translation": "Read more"
+    "id": "archives_for",
+    "translation": "Archives for"
   },
   {
-    "id": "to_prove_you_are_not_a_robot",
-    "translation": "To prove you are not a robot move the slider to the right"
+    "id": "are_you_sure",
+    "translation": "Are you sure"
+  },
+  {
+    "id": "article_id",
+    "translation": "Article ID"
+  },
+  {
+    "id": "article_id_placeholder",
+    "translation": "Article ID"
+  },
+  {
+    "id": "article_is_unpublished",
+    "translation": "Article is unpublished"
+  },
+  {
+    "id": "articles",
+    "translation": "Articles"
   },
   {
     "id": "ask_a_doctor",
     "translation": "Ask a doctor"
   },
   {
-    "id": "post_your_review",
-    "translation": "Post your review"
+    "id": "asks_kineziologist",
+    "translation": "asks kineziologist"
   },
   {
-    "id": "post_your_review_btn",
-    "translation": "Post review"
+    "id": "author",
+    "translation": "Author"
   },
   {
-    "id": "kinesiology_in_practice",
-    "translation": "Kinesiology in practice"
+    "id": "author_email_placeholder",
+    "translation": "Author email"
+  },
+  {
+    "id": "author_placeholder",
+    "translation": "Author name"
+  },
+  {
+    "id": "cancel",
+    "translation": "Cancel"
+  },
+  {
+    "id": "comment",
+    "translation": "Comment"
+  },
+  {
+    "id": "comment_has_been_successfully_updated",
+    "translation": "Comment has been successfully updated"
+  },
+  {
+    "id": "comment_not_found_or_already_published",
+    "translation": "Comment not found or has already been published"
+  },
+  {
+    "id": "comments",
+    "translation": "Comments"
+  },
+  {
+    "id": "contacts",
+    "translation": "Contacts"
+  },
+  {
+    "id": "content",
+    "translation": "Content"
+  },
+  {
+    "id": "created",
+    "translation": "Created"
+  },
+  {
+    "id": "cta_bottom_text",
+    "translation": "8(903)689-20-57"
+  },
+  {
+    "id": "cta_scroll_text",
+    "translation": ""
+  },
+  {
+    "id": "cta_top_about",
+    "translation": ""
+  },
+  {
+    "id": "cta_top_greeting",
+    "translation": ""
+  },
+  {
+    "id": "cta_top_text",
+    "translation": ""
+  },
+  {
+    "id": "dashboard",
+    "translation": "Dashboard"
+  },
+  {
+    "id": "edit_article",
+    "translation": "Edit article"
+  },
+  {
+    "id": "edit_comment",
+    "translation": "Edit comment"
+  },
+  {
+    "id": "edit_page",
+    "translation": "Edit page"
+  },
+  {
+    "id": "edit_profile",
+    "translation": "Edit profile"
+  },
+  {
+    "id": "edit_review",
+    "translation": "Edit review"
+  },
+  {
+    "id": "edit_user",
+    "translation": "Edit user"
+  },
+  {
+    "id": "email",
+    "translation": "Email"
+  },
+  {
+    "id": "email_placeholder",
+    "translation": "Email address"
+  },
+  {
+    "id": "error_see_logs",
+    "translation": "Error, see logs"
   },
   {
     "id": "excerpt",
@@ -524,128 +248,403 @@
     "translation": "8(903)689-20-57, Rostovtsev Evgeniy Vladimirovich"
   },
   {
-    "id": "site_phone",
-    "translation": "8(903)689-20-57"
+    "id": "greeting",
+    "translation": "Welcome to blog boilerplate"
   },
   {
-    "id": "site_address",
-    "translation": ""
+    "id": "header_cta",
+    "translation": "Optin for free consult"
   },
   {
-    "id": "cta_bottom_text",
-    "translation": ""
+    "id": "header_cta_note",
+    "translation": "Till 28th February"
   },
   {
-    "id": "cta_top_greeting",
-    "translation": ""
+    "id": "home",
+    "translation": "Home"
   },
   {
-    "id": "cta_top_about",
-    "translation": ""
+    "id": "i_accept_terms",
+    "translation": "I accept terms and conditions"
   },
   {
-    "id": "cta_top_text",
-    "translation": ""
-  },
-  {
-    "id": "testimonials_title",
-    "translation": "What our clients say"
-  },
-  {
-    "id": "testimonial_title",
-    "translation": "Client testimonial"
+    "id": "kinesiology_in_practice",
+    "translation": "Kinesiology in practice"
   },
   {
     "id": "kineziologist_replies",
     "translation": "Kineziologis replies"
   },
   {
-    "id": "replies_doctor",
-    "translation": "Replies Doctor"
+    "id": "login_with_facebook",
+    "translation": "Login with Facebook"
   },
   {
-    "id": "read_fully",
-    "translation": "Read fully"
+    "id": "login_with_gplus",
+    "translation": "Login with Google+"
   },
   {
-    "id": "asks_kineziologist",
-    "translation": "asks kineziologist"
+    "id": "login_with_linkedin",
+    "translation": "Login with Linkedin"
   },
   {
-    "id": "site_author_full",
-    "translation": "Rostovtsev Evgeniy Vladimirovitch"
+    "id": "login_with_vk",
+    "translation": "Login with Vkontakte"
   },
   {
-    "id": "site_author_brief",
-    "translation": "Rostovtsev E. V."
+    "id": "logout",
+    "translation": "Logout"
   },
   {
-    "id": "question_about_article",
-    "translation": "Question is asked about the article"
+    "id": "name",
+    "translation": "Name"
   },
   {
-    "id": "similar_questions",
-    "translation": "Similar questions"
+    "id": "name_placeholder",
+    "translation": "Enter name"
   },
   {
-    "id": "site_name_full",
-    "translation": "Kineziology Miobalans"
+    "id": "navigation",
+    "translation": "Navigation"
   },
   {
-    "id": "view_all_reviews",
-    "translation": "View all reviews"
-  },
-  {
-    "id": "cta_scroll_text",
-    "translation": ""
-  },
-  {
-    "id": "new_review_has_been_created",
-    "translation": "New review has been created by {{.Name}}"
-  },
-  {
-    "id": "new_review_email_text",
-    "translation": "View/edit review {{.Link}}."
-  },
-  {
-    "id": "review_not_found_or_already_published",
-    "translation": "Review not found or has already been published"
-  },
-  {
-    "id": "review_has_been_successfully_updated",
-    "translation": "Review has been successfully updated"
-  },
-  {
-    "id": "new_comment_has_been_created",
-    "translation": "New comment has been created by {{.Name}}"
+    "id": "new_article",
+    "translation": "New article"
   },
   {
     "id": "new_comment_email_text",
     "translation": "View/edit comment {{.Link}}."
   },
   {
-    "id": "comment_not_found_or_already_published",
-    "translation": "Comment not found or has already been published"
+    "id": "new_comment_has_been_created",
+    "translation": "New comment has been created by {{.Name}}"
   },
   {
-    "id": "comment_has_been_successfully_updated",
-    "translation": "Comment has been successfully updated"
+    "id": "new_page",
+    "translation": "New page"
   },
   {
-    "id": "your_question_has_been_answered",
-    "translation": "Your question has been answered"
+    "id": "new_review",
+    "translation": "New review"
+  },
+  {
+    "id": "new_review_email_text",
+    "translation": "View/edit review {{.Link}}."
+  },
+  {
+    "id": "new_review_has_been_created",
+    "translation": "New review has been created by {{.Name}}"
+  },
+  {
+    "id": "new_tag",
+    "translation": "New tag"
+  },
+  {
+    "id": "new_user",
+    "translation": "New user"
+  },
+  {
+    "id": "no_articles_found",
+    "translation": "No articles found"
+  },
+  {
+    "id": "pages",
+    "translation": "Pages"
+  },
+  {
+    "id": "parent_id",
+    "translation": "Parent ID"
+  },
+  {
+    "id": "parent_id_placeholder",
+    "translation": "Parent ID"
+  },
+  {
+    "id": "parsley_accept_terms_required",
+    "translation": "You can't continue without accepting our Terms and Conditions"
+  },
+  {
+    "id": "parsley_comment_required",
+    "translation": "Please enter your comment"
+  },
+  {
+    "id": "parsley_email_required",
+    "translation": "Please enter your email"
+  },
+  {
+    "id": "parsley_name_required",
+    "translation": "Please enter user name"
+  },
+  {
+    "id": "parsley_password_not_equal",
+    "translation": "Passwords do not match"
+  },
+  {
+    "id": "parsley_password_required",
+    "translation": "Please enter your password"
+  },
+  {
+    "id": "parsley_repeat_password_required",
+    "translation": "Please repeat your password"
+  },
+  {
+    "id": "parsley_review_required",
+    "translation": "Review can't be blank"
+  },
+  {
+    "id": "parsley_title_required",
+    "translation": "Please, enter title"
+  },
+  {
+    "id": "parsley_your_name_required",
+    "translation": "Your name is required"
+  },
+  {
+    "id": "password",
+    "translation": "Password"
+  },
+  {
+    "id": "password_placeholder",
+    "translation": "Password"
+  },
+  {
+    "id": "photo",
+    "translation": "Photo"
+  },
+  {
+    "id": "post_on_facebook",
+    "translation": "Post on Facebook"
+  },
+  {
+    "id": "post_your_review",
+    "translation": "Post your review"
+  },
+  {
+    "id": "post_your_review_btn",
+    "translation": "Post review"
+  },
+  {
+    "id": "posted_successfully",
+    "translation": "Posted successfully"
+  },
+  {
+    "id": "prices",
+    "translation": "Prices"
+  },
+  {
+    "id": "published",
+    "translation": "Published"
+  },
+  {
+    "id": "question",
+    "translation": "Question"
+  },
+  {
+    "id": "question_about_article",
+    "translation": "Question is asked about the article"
+  },
+  {
+    "id": "questions",
+    "translation": "Q \u0026 A"
+  },
+  {
+    "id": "questions_and_answers",
+    "translation": "Questions \u0026 Answers"
+  },
+  {
+    "id": "read_fully",
+    "translation": "Read fully"
+  },
+  {
+    "id": "read_more",
+    "translation": "Read more"
+  },
+  {
+    "id": "recent_articles",
+    "translation": "Recent articles"
+  },
+  {
+    "id": "repeat_password",
+    "translation": "Repeat password"
+  },
+  {
+    "id": "repeat_password_placeholder",
+    "translation": "Repeat password"
+  },
+  {
+    "id": "replies_doctor",
+    "translation": "Replies Doctor"
+  },
+  {
+    "id": "reply",
+    "translation": "Reply"
+  },
+  {
+    "id": "review",
+    "translation": "Review"
+  },
+  {
+    "id": "review_has_been_successfully_updated",
+    "translation": "Review has been successfully updated"
+  },
+  {
+    "id": "review_not_found_or_already_published",
+    "translation": "Review not found or has already been published"
+  },
+  {
+    "id": "reviews",
+    "translation": "Reviews"
+  },
+  {
+    "id": "search_placeholder",
+    "translation": "Search"
+  },
+  {
+    "id": "search_results_for",
+    "translation": "Search results for"
+  },
+  {
+    "id": "settings",
+    "translation": "settings"
+  },
+  {
+    "id": "sign_in",
+    "translation": "Sign in"
+  },
+  {
+    "id": "sign_up",
+    "translation": "Sign up"
+  },
+  {
+    "id": "similar_questions",
+    "translation": "Similar questions"
+  },
+  {
+    "id": "site_address",
+    "translation": ""
+  },
+  {
+    "id": "site_author_brief",
+    "translation": "Rostovtsev E. V."
+  },
+  {
+    "id": "site_author_full",
+    "translation": "Rostovtsev Evgeniy Vladimirovitch"
+  },
+  {
+    "id": "site_description",
+    "translation": "Blog boilerplate"
+  },
+  {
+    "id": "site_name",
+    "translation": "My blog"
+  },
+  {
+    "id": "site_name_full",
+    "translation": "Kineziology Miobalans"
+  },
+  {
+    "id": "site_phone",
+    "translation": "8(903)689-20-57"
+  },
+  {
+    "id": "slug",
+    "translation": "Url slug"
+  },
+  {
+    "id": "slug_placeholder",
+    "translation": "Leave empty, if you dont know what it is"
+  },
+  {
+    "id": "submit",
+    "translation": "Submit"
+  },
+  {
+    "id": "tags",
+    "translation": "Tags"
+  },
+  {
+    "id": "testimonial_title",
+    "translation": "Client testimonial"
+  },
+  {
+    "id": "testimonials_title",
+    "translation": "What our clients say"
+  },
+  {
+    "id": "thank_you_for_posting_question",
+    "translation": "Thank you! Your question will be visible after approval."
+  },
+  {
+    "id": "thank_you_for_posting_review",
+    "translation": "Thank you! Your review will be visible after approval."
+  },
+  {
+    "id": "title",
+    "translation": "Title"
+  },
+  {
+    "id": "title_placeholder",
+    "translation": "Enter title"
   },
   {
     "id": "title_suffix",
     "translation": " | Kineziology Miobalans"
   },
   {
-    "id": "questions",
-    "translation": "Q & A"
+    "id": "to_comment_login_with",
+    "translation": "To Comment Login With"
   },
   {
-    "id": "questions_and_answers",
-    "translation": "Questions & Answers"
+    "id": "to_prove_you_are_not_a_robot",
+    "translation": "To prove you are not a robot move the slider to the right"
+  },
+  {
+    "id": "treatment_stages",
+    "translation": "Treatment stages"
+  },
+  {
+    "id": "user_profile",
+    "translation": "User profile"
+  },
+  {
+    "id": "users",
+    "translation": "Users"
+  },
+  {
+    "id": "view_all_reviews",
+    "translation": "View all reviews"
+  },
+  {
+    "id": "website",
+    "translation": "Website"
+  },
+  {
+    "id": "what_we_cure",
+    "translation": "What we cure"
+  },
+  {
+    "id": "your_email",
+    "translation": "Your email"
+  },
+  {
+    "id": "your_email_placeholder",
+    "translation": "Please, enter your email. It will be visible only to the site administrator."
+  },
+  {
+    "id": "your_name",
+    "translation": "Your name"
+  },
+  {
+    "id": "your_name_placeholder",
+    "translation": "Please, enter your name"
+  },
+  {
+    "id": "your_photo",
+    "translation": "Your photo"
+  },
+  {
+    "id": "your_question_has_been_answered",
+    "translation": "Your question has been answered"
   }
-
 ]

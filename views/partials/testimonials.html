@@ -11,11 +11,13 @@
           <div class="item {{if eq $i 0}}active{{end}}">
             <div class="col-xs-12 {{if gt $len 1}}col-sm-6{{end}}">
               <div class="thumbnail">
-                {{if .Video}}
-                  <iframe src="{{.Video}}" frameborder="0" allowfullscreen></iframe>
-                {{else}}
-                  {{if .Image}}
+                {{if .Image}}
+                  <a href="{{.URL}}">
                     <img class="img-responsive" src="{{.Image}}" />
+                  </a>
+                {{else}}
+                  {{if .Video}}
+                    <iframe src="{{.Video}}" frameborder="0" allowfullscreen></iframe>
                   {{end}}
                 {{end}}
                 <p class="strong">{{.AuthorName}}</p>

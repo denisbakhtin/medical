@@ -27,6 +27,13 @@ func CreateXMLSitemap() {
 	})
 
 	//Articles
+	items = append(items, sitemap.Item{
+		Loc:        fmt.Sprintf("%s%s", domain, "/articles"),
+		LastMod:    now,
+		Changefreq: "monthly",
+		Priority:   0.9,
+	})
+
 	articles, err := models.GetPublishedArticles()
 	if err != nil {
 		log.Printf("ERROR: %s\n", err)
@@ -57,6 +64,13 @@ func CreateXMLSitemap() {
 	}
 
 	//Reviews
+	items = append(items, sitemap.Item{
+		Loc:         fmt.Sprintf("%s%s", domain, "/reviews"),
+		LastMod:    now,
+		Changefreq: "monthly",
+		Priority:   0.7,
+	})
+
 	reviews, err := models.GetPublishedReviews()
 	if err != nil {
 		log.Printf("ERROR: %s\n", err)

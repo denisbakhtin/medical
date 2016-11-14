@@ -23,7 +23,11 @@ func ArticleShow(w http.ResponseWriter, r *http.Request) {
 		article, err := models.GetArticle(id)
 		if err != nil || !article.Published {
 			w.WriteHeader(404)
-			tmpl.Lookup("errors/404").Execute(w, nil)
+			if err != nil {
+				tmpl.Lookup("errors/404").Execute(w, helpers.ErrorData(err))
+			} else {
+				tmpl.Lookup("errors/404").Execute(w, nil)
+			}
 			return
 		}
 		//redirect to canonical url
@@ -32,6 +36,7 @@ func ArticleShow(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		testimonials, _ := models.GetRecentReviewsByArticle(article.ID)
+		article.Comments = append(article.TopComments, article.Comments...)
 		data["Article"] = article
 		data["Testimonials"] = testimonials
 		data["Title"] = article.Name

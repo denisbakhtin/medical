@@ -139,22 +139,37 @@ func GetPublishedComments() ([]Comment, error) {
 //GetCommentsByArticleID returns a slice of published comments, associated with the given article
 func GetCommentsByArticleID(articleID int64) ([]Comment, error) {
 	var list []Comment
+	var list2 []Comment
 	err := db.Select(
 		&list,
 		`SELECT * FROM comments 
-		WHERE published=$1 AND article_id=$2 
+		WHERE published=false AND answer!='' AND article_id=$1 AND author_city=$2
 		ORDER BY id DESC`,
-		true,
 		articleID,
+		"Москва",
 	)
+	if err != nil {
+		return nil, err
+	}
+	err = db.Select(
+		&list2,
+		`SELECT * FROM comments 
+		WHERE published=false AND answer!='' AND article_id=$1 AND author_city!=$2
+		ORDER BY id DESC`,
+		articleID,
+		"Москва",
+	)
+	if err != nil {
+		return nil, err
+	}
+	list = append(list, list2...)
 	return list, err
 }
 
 //GetTopCommentsByArticleID returns a slice of top (latest, or rated) published comments, associated with given article
 func GetTopCommentsByArticleID(articleID int64) ([]Comment, error) {
 	var list []Comment
-	var list2 []Comment
-	limit := 50
+	limit := 10
 	err := db.Select(
 		&list,
 		`SELECT * FROM comments 
@@ -165,21 +180,5 @@ func GetTopCommentsByArticleID(articleID int64) ([]Comment, error) {
 		"Москва",
 		limit,
 	)
-	if err != nil {
-		return list, err
-	}
-	if len(list) < limit {
-		err = db.Select(
-			&list2,
-			`SELECT * FROM comments 
-			WHERE published=$1 AND article_id=$2 AND author_city!=$3
-			ORDER BY id DESC LIMIT $4`,
-			true,
-			articleID,
-			"Москва",
-			limit-len(list),
-		)
-		list = append(list, list2...)
-	}
 	return list, err
 }

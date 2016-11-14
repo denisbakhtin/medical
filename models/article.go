@@ -19,7 +19,8 @@ type Article struct {
 	CreatedAt      time.Time `db:"created_at"`
 	UpdatedAt      time.Time `db:"updated_at"`
 	//calculated fields
-	Comments []Comment `db:"-"`
+	TopComments []Comment `db:"-"`
+	Comments    []Comment `db:"-"`
 }
 
 //Insert stores Article record in db
@@ -100,7 +101,11 @@ func GetArticle(id interface{}) (*Article, error) {
 	if err != nil {
 		return article, err
 	}
-	article.Comments, err = GetTopCommentsByArticleID(article.ID)
+	article.TopComments, err = GetTopCommentsByArticleID(article.ID)
+	if err != nil {
+		return article, err
+	}
+	article.Comments, err = GetCommentsByArticleID(article.ID)
 	return article, err
 }
 

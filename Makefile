@@ -2,7 +2,7 @@
 
 default: build
 
-build: vet
+build: clean vet
 	@go generate ./... && go build -o miobalans-go
 
 doc:

@@ -2,7 +2,7 @@
   <section id="comment-form-wrapper">
     <form method="post" action="/new_comment" data-parsley-validate>
       <fieldset>
-        <legend>{{T "ask_a_doctor"}}</legend>
+        <legend class="text-center">{{T "ask_a_doctor"}}</legend>
         {{.csrfField}}
         <input type="hidden" name="article_id" value="{{.Article.ID}}" >
 

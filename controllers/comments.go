@@ -309,6 +309,9 @@ func notifyAdminOfComment(r *http.Request, comment *models.Comment) {
 		msg := gomail.NewMessage()
 		msg.SetHeader("From", smtp.From)
 		msg.SetHeader("To", smtp.To)
+		if len(comment.AuthorEmail) > 0 {
+			msg.SetHeader("Reply-To", comment.AuthorEmail)
+		}
 		if len(smtp.Cc) > 0 {
 			msg.SetHeader("Cc", smtp.Cc)
 		}

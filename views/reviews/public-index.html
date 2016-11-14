@@ -15,11 +15,13 @@
       <div class="excerpt">
         {{if or .Video .Image}}
           <div class="thumbnail">
-            {{if .Video}}
-              <iframe src="{{.Video}}" frameborder="0" allowfullscreen></iframe>
-            {{else}}
-              {{if .Image}}
+            {{if .Image}}
+              <a href="{{.URL}}">
                 <img class="img-responsive" src="{{.Image}}" />
+              </a>
+            {{else}}
+              {{if .Video}}
+                <iframe src="{{.Video}}" frameborder="0" allowfullscreen></iframe>
               {{end}}
             {{end}}
           </div>

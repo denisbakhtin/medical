@@ -1,7 +1,7 @@
 {{define "articles/public-index"}}
 {{template "header" .}}
 {{template "navbar" .}}
-<div id="main-column" class="container" role="main">
+<div id="main-column" role="main">
   <h1>{{.Title}}</h1>
   <div class="article-previews row">
     {{$length := len .List}}

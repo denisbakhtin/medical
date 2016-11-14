@@ -1,30 +1,31 @@
 {{define "reviews/show"}}
 {{template "header" .}}
 {{template "navbar" .}}
-<div class="container" role="main">
-  <div id="review">
-    <h1>
-      {{T "testimonial_title"}}. {{.Review.AuthorName}}
-      {{if .ActiveUser}}
-      <a class="btn btn-primary" href="/admin/edit_review/{{.Review.ID}}">
-        {{T "edit_review"}}
-      </a>
-      {{end}}
-    </h1>
-    {{if .Review.Video}}
+<div id="review">
+  <h1>
+    {{T "testimonial_title"}}. {{.Review.AuthorName}}
+    {{if .ActiveUser}}
+    <a class="btn btn-primary" href="/admin/edit_review/{{.Review.ID}}">
+      {{T "edit_review"}}
+    </a>
+    {{end}}
+  </h1>
+  {{if .Review.Video}}
+    <div id="review-content" class="text-center">
       <iframe src="{{.Review.Video}}" frameborder="0" allowfullscreen></iframe>
-    {{else}}
-      {{if .Review.Image}}
-      <div class="review-image">
-        <img class="thumbnail pull-left" src="{{.Review.Image}}" />
-      </div>
-      {{end}}
+      <p class="content">{{.Review.Content}}</p>
+    </div>
+  {{else}}
+    {{if .Review.Image}}
+    <div class="review-image">
+      <img class="thumbnail pull-left" src="{{.Review.Image}}" />
+    </div>
     {{end}}
     <p class="content">{{.Review.Content}}</p>
-    <p class="text-center">
-      <a class="btn btn-lg btn-success" href="/reviews">{{T "view_all_reviews"}}</a>
-    </p>
-  </div>
+  {{end}}
+  <p class="text-center">
+    <a class="btn btn-lg btn-success" href="/reviews">{{T "view_all_reviews"}}</a>
+  </p>
 </div>
 
 <div class="clearfix"></div>

@@ -50,8 +50,8 @@ func main() {
 	http.Handle("/new_request", Default(controllers.RequestCreate))
 	http.Handle("/new_comment", Default(controllers.CommentPublicCreate))
 	http.Handle("/edit_comment", Default(controllers.CommentPublicUpdate))
-	http.Handle("/comments", Default(controllers.CommentPublicIndex))
-	http.Handle("/comments/", Default(controllers.CommentShow))
+	//http.Handle("/comments", Default(controllers.CommentPublicIndex))
+	//http.Handle("/comments/", Default(controllers.CommentShow))
 	http.Handle("/new_review", Default(controllers.ReviewPublicCreate))
 	http.Handle("/edit_review", Default(controllers.ReviewPublicUpdate))
 
