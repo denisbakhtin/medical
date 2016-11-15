@@ -101,11 +101,7 @@ func main() {
 
 	http.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("public")))) //styles, js, images
 
-	if *mode == "debug" {
-		log.Fatal(http.ListenAndServe(":8080", http.DefaultServeMux))
-	} else {
-		log.Fatal(http.ListenAndServe(":8010", http.DefaultServeMux))
-	}
+	log.Fatal(http.ListenAndServe(":8010", http.DefaultServeMux))
 }
 
 //Default executes default middleware chain for a HandlerFunc
