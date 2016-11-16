@@ -3,7 +3,11 @@
 {{template "navbar" .}}
 <div id="review">
   <h1>
-    {{T "testimonial_title"}}. {{.Review.AuthorName}}
+    {{if .Review.Video}}
+      {{T "testimonial_video_title"}}: {{.Review.AuthorName}}
+    {{else}}
+      {{T "testimonial_title"}}: {{.Review.AuthorName}}
+    {{end}}
     {{if .ActiveUser}}
     <a class="btn btn-primary" href="/admin/edit_review/{{.Review.ID}}">
       {{T "edit_review"}}
@@ -12,8 +16,11 @@
   </h1>
   {{if .Review.Video}}
     <div id="review-content" class="text-center">
-      <iframe src="{{.Review.Video}}" frameborder="0" allowfullscreen></iframe>
-      <p class="content">{{.Review.Content}}</p>
+      <div id="video-wrapper">
+        <iframe src="{{.Review.Video}}?rel=0&autoplay=1" frameborder="0" allowfullscreen></iframe>
+      </div>
+      <h3>Содержание отзыва</h3>
+      <p class="content text-left">{{.Review.Content}}</p>
     </div>
   {{else}}
     {{if .Review.Image}}
@@ -24,7 +31,7 @@
     <p class="content">{{.Review.Content}}</p>
   {{end}}
   <p class="text-center">
-    <a class="btn btn-lg btn-success" href="/reviews">{{T "view_all_reviews"}}</a>
+    <a class="btn btn-lg btn-success btn-outline" href="/reviews">{{T "view_all_reviews"}}</a>
   </p>
 </div>
 
