@@ -1,5 +1,4 @@
 config/config.json
-config/ru.all.json
 public/uploads/*.jpg
 public/uploads/*.png
 public/css/*

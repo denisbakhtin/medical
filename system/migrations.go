@@ -71,6 +71,9 @@ func migrateNew(box *rice.Box) {
 //migrateUp applies {{max}} pending db migrations. If max == 0, it applies all
 func migrateUp(db *sqlx.DB, box *rice.Box, max int) {
 	migrations := getRiceMigrations(box)
+	for _, mig := range migrations.Migrations {
+		log.Printf("%+v\n", mig)
+	}
 	n, err := migrate.ExecMax(db.DB, "postgres", migrations, migrate.Up, max)
 	if err != nil {
 		log.Printf("ERROR: %s\n", err)

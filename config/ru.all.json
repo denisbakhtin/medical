@@ -1,0 +1,678 @@
+[
+  {
+    "id": "400_error",
+    "translation": "400 ошибка"
+  },
+  {
+    "id": "400_error_description",
+    "translation": "Похоже, запрос не верный"
+  },
+  {
+    "id": "403_error",
+    "translation": "403 ошибка"
+  },
+  {
+    "id": "403_error_description",
+    "translation": "Похоже, доступ запрещен"
+  },
+  {
+    "id": "404_error",
+    "translation": "404 ошибка"
+  },
+  {
+    "id": "404_error_description",
+    "translation": "К сожалению, страница не найдена"
+  },
+  {
+    "id": "405_error",
+    "translation": "405 ошибка"
+  },
+  {
+    "id": "405_error_description",
+    "translation": "Метод запроса не допустим"
+  },
+  {
+    "id": "500_error",
+    "translation": "500 ошибка"
+  },
+  {
+    "id": "April",
+    "translation": "Апрель"
+  },
+  {
+    "id": "August",
+    "translation": "Август"
+  },
+  {
+    "id": "December",
+    "translation": "Декабрь"
+  },
+  {
+    "id": "February",
+    "translation": "Февраль"
+  },
+  {
+    "id": "ID",
+    "translation": "№"
+  },
+  {
+    "id": "January",
+    "translation": "Январь"
+  },
+  {
+    "id": "July",
+    "translation": "Июль"
+  },
+  {
+    "id": "June",
+    "translation": "Июнь"
+  },
+  {
+    "id": "March",
+    "translation": "Март"
+  },
+  {
+    "id": "May",
+    "translation": "Май"
+  },
+  {
+    "id": "November",
+    "translation": "Ноябрь"
+  },
+  {
+    "id": "October",
+    "translation": "Октябрь"
+  },
+  {
+    "id": "September",
+    "translation": "Сентябрь"
+  },
+  {
+    "id": "about_doctor",
+    "translation": "О враче"
+  },
+  {
+    "id": "actions",
+    "translation": "Действия"
+  },
+  {
+    "id": "answer",
+    "translation": "Ответ"
+  },
+  {
+    "id": "answer_a_patient",
+    "translation": "Ответить пациенту"
+  },
+  {
+    "id": "archives_for",
+    "translation": "Архивы за"
+  },
+  {
+    "id": "are_you_sure",
+    "translation": "Вы уверены"
+  },
+  {
+    "id": "article",
+    "translation": "Статья"
+  },
+  {
+    "id": "article_id",
+    "translation": "№ статьи"
+  },
+  {
+    "id": "article_id_placeholder",
+    "translation": "Введите № статьи"
+  },
+  {
+    "id": "article_is_unpublished",
+    "translation": "Статья не опубликована"
+  },
+  {
+    "id": "articles",
+    "translation": "Статьи"
+  },
+  {
+    "id": "ask_a_doctor",
+    "translation": "Задать врачу свой вопрос"
+  },
+  {
+    "id": "asks_kineziologist",
+    "translation": "спрашивает у кинезиолога"
+  },
+  {
+    "id": "author",
+    "translation": "Автор"
+  },
+  {
+    "id": "author_email_placeholder",
+    "translation": "Эл. почта автора"
+  },
+  {
+    "id": "author_placeholder",
+    "translation": "Имя автора"
+  },
+  {
+    "id": "cancel",
+    "translation": "Отмена"
+  },
+  {
+    "id": "comment",
+    "translation": "Комментарий"
+  },
+  {
+    "id": "comment_has_been_successfully_updated",
+    "translation": "Вопрос был успешно сохранен"
+  },
+  {
+    "id": "comment_not_found_or_already_published",
+    "translation": "Вопрос не существует или уже был опубликован ранее"
+  },
+  {
+    "id": "comments",
+    "translation": "Комментарии"
+  },
+  {
+    "id": "contacts",
+    "translation": "Контакты"
+  },
+  {
+    "id": "content",
+    "translation": "Содержание"
+  },
+  {
+    "id": "created",
+    "translation": "Создано"
+  },
+  {
+    "id": "cta_bottom_text",
+    "translation": "Многолетняя практика подтверждает чрезвычайно высокую эффективность кинезиологии"
+  },
+  {
+    "id": "cta_scroll_text",
+    "translation": "У большинства пациентов уже после первого сеанса существенно снижаются болевые ощущения"
+  },
+  {
+    "id": "cta_top_about",
+    "translation": "Я кинезиолог, врач мануальный терапевт. Медицинский стаж 12 лет. Применение прикладной кинезиологии на практике позволяет с большой эффективностью находить и устранять причины как острых, так и хронических проблем и предупреждать их появление вновь в будущем."
+  },
+  {
+    "id": "cta_top_greeting",
+    "translation": "Здравствуйте, меня зовут Ростовцев Евгений Владимирович!"
+  },
+  {
+    "id": "cta_top_text",
+    "translation": "Если у Вас возникнут вопросы, звоните мне по телефону"
+  },
+  {
+    "id": "dashboard",
+    "translation": "Админка"
+  },
+  {
+    "id": "edit_article",
+    "translation": "Редактировать статью"
+  },
+  {
+    "id": "edit_comment",
+    "translation": "Редактировать комментарий"
+  },
+  {
+    "id": "edit_page",
+    "translation": "Редактировать страницу"
+  },
+  {
+    "id": "edit_profile",
+    "translation": "Редактировать"
+  },
+  {
+    "id": "edit_review",
+    "translation": "Редактировать отзыв"
+  },
+  {
+    "id": "edit_user",
+    "translation": "Редактировать пользователя"
+  },
+  {
+    "id": "email",
+    "translation": "Эл. почта"
+  },
+  {
+    "id": "email_placeholder",
+    "translation": "Адрес электронной почты"
+  },
+  {
+    "id": "error_see_logs",
+    "translation": "Ошибка, смотрите логи"
+  },
+  {
+    "id": "excerpt",
+    "translation": "Выдержка"
+  },
+  {
+    "id": "footer_text",
+    "translation": "8(903)689-20-57, Ростовцев Евгений Владимирович, врач-кинезиолог, г. Москва."
+  },
+  {
+    "id": "greeting",
+    "translation": "Добро пожаловать"
+  },
+  {
+    "id": "header_cta",
+    "translation": "Записаться на бесплатный приём"
+  },
+  {
+    "id": "header_cta_note",
+    "translation": "бесплатно до 28 февраля"
+  },
+  {
+    "id": "home",
+    "translation": "Главная"
+  },
+  {
+    "id": "i_accept_terms",
+    "translation": "Я принимаю условия соглашения"
+  },
+  {
+    "id": "kinesiology_in_practice",
+    "translation": "Кинезиология во врачебной практике"
+  },
+  {
+    "id": "kineziologist_replies",
+    "translation": "Отвечает кинезиолог"
+  },
+  {
+    "id": "login_with_facebook",
+    "translation": "Войти с помощью Facebook"
+  },
+  {
+    "id": "login_with_gplus",
+    "translation": "Войти с помощью Google+"
+  },
+  {
+    "id": "login_with_linkedin",
+    "translation": "Войти с помощью Linkedin"
+  },
+  {
+    "id": "login_with_vk",
+    "translation": "Войти с помощью Vkontakte"
+  },
+  {
+    "id": "logout",
+    "translation": "Выйти"
+  },
+  {
+    "id": "name",
+    "translation": "Имя"
+  },
+  {
+    "id": "name_placeholder",
+    "translation": "Введите имя"
+  },
+  {
+    "id": "navigation",
+    "translation": "Навигация"
+  },
+  {
+    "id": "new_article",
+    "translation": "Новая статья"
+  },
+  {
+    "id": "new_comment_email_text",
+    "translation": "\u003cp\u003eЕвгений Владимирович, на сайте www.miobalans.ru был задан новый вопрос. Чтобы ответить на него, перейдите по данной ссылке: \u003ca href='{{.Link}}'\u003eОтветить на вопрос\u003c/a\u003e.\u003c/p\u003e"
+  },
+  {
+    "id": "new_comment_has_been_created",
+    "translation": "Новый вопрос на сайте www.miobalans.ru: {{.Name}}"
+  },
+  {
+    "id": "new_page",
+    "translation": "Новая страница"
+  },
+  {
+    "id": "new_review",
+    "translation": "Новый отзыв"
+  },
+  {
+    "id": "new_review_email_text",
+    "translation": "\u003cp\u003eЕвгений Владимирович, на сайте www.miobalans.ru был оставлен новый отзыв. Чтобы отредактировать или опубликовать его, перейдите по данной ссылке: \u003ca href='{{.Link}}'\u003eРедактировать/опубликовать отзыв\u003c/a\u003e.\u003c/p\u003e"
+  },
+  {
+    "id": "new_review_has_been_created",
+    "translation": "Новый отзыв на сайте www.miobalans.ru: {{.Name}}"
+  },
+  {
+    "id": "new_tag",
+    "translation": "Новый тэг"
+  },
+  {
+    "id": "new_user",
+    "translation": "Новый пользователь"
+  },
+  {
+    "id": "no_articles_found",
+    "translation": "Статьи не найдены"
+  },
+  {
+    "id": "pages",
+    "translation": "Страницы"
+  },
+  {
+    "id": "parent_id",
+    "translation": "№ родителя"
+  },
+  {
+    "id": "parent_id_placeholder",
+    "translation": "№ родителя"
+  },
+  {
+    "id": "parsley_accept_terms_required",
+    "translation": "Вы не сможете продолжить, пока не примете условия соглашения"
+  },
+  {
+    "id": "parsley_comment_required",
+    "translation": "Пожалуйста, введите комментарий"
+  },
+  {
+    "id": "parsley_email_required",
+    "translation": "Пожалуйста, введите ваш адрес эл. почты"
+  },
+  {
+    "id": "parsley_name_required",
+    "translation": "Пожалуйста, введите ваше имя"
+  },
+  {
+    "id": "parsley_password_not_equal",
+    "translation": "Пароли не совпадают"
+  },
+  {
+    "id": "parsley_password_required",
+    "translation": "Пожалуйста, введите ваш пароль"
+  },
+  {
+    "id": "parsley_repeat_password_required",
+    "translation": "Пожалуйста, повторите ваш пароль"
+  },
+  {
+    "id": "parsley_review_required",
+    "translation": "Отзыв не может быть пустым"
+  },
+  {
+    "id": "parsley_title_required",
+    "translation": "Пожалуйста, введите заголовок"
+  },
+  {
+    "id": "parsley_your_city_required",
+    "translation": "Необходимо указать город Вашего проживания"
+  },
+  {
+    "id": "parsley_your_name_required",
+    "translation": "Имя не может быть пустым"
+  },
+  {
+    "id": "password",
+    "translation": "Пароль"
+  },
+  {
+    "id": "password_placeholder",
+    "translation": "Введите пароль"
+  },
+  {
+    "id": "photo",
+    "translation": "Фото"
+  },
+  {
+    "id": "post_on_facebook",
+    "translation": "Опубликовать в Facebook"
+  },
+  {
+    "id": "post_your_review",
+    "translation": "Оставить свой отзыв"
+  },
+  {
+    "id": "post_your_review_btn",
+    "translation": "Оставить отзыв"
+  },
+  {
+    "id": "posted_successfully",
+    "translation": "Успешно опубликовано"
+  },
+  {
+    "id": "prices",
+    "translation": "Цены"
+  },
+  {
+    "id": "published",
+    "translation": "Опубликовано"
+  },
+  {
+    "id": "question",
+    "translation": "Вопрос"
+  },
+  {
+    "id": "question_about_article",
+    "translation": "Вопрос задан к статье"
+  },
+  {
+    "id": "questions",
+    "translation": "Вопросы"
+  },
+  {
+    "id": "questions_and_answers",
+    "translation": "Вопросы и Ответы"
+  },
+  {
+    "id": "read_fully",
+    "translation": "Читать полностью"
+  },
+  {
+    "id": "read_more",
+    "translation": "Читать полностью"
+  },
+  {
+    "id": "recent_articles",
+    "translation": "Свежие статьи"
+  },
+  {
+    "id": "repeat_password",
+    "translation": "Повторите пароль"
+  },
+  {
+    "id": "repeat_password_placeholder",
+    "translation": "Повторите пароль"
+  },
+  {
+    "id": "replies_doctor",
+    "translation": "Отвечает доктор"
+  },
+  {
+    "id": "reply",
+    "translation": "Ответить"
+  },
+  {
+    "id": "review",
+    "translation": "Отзыв"
+  },
+  {
+    "id": "review_has_been_successfully_updated",
+    "translation": "Отзыв был успешно сохранен"
+  },
+  {
+    "id": "review_not_found_or_already_published",
+    "translation": "Отзыв не найден или уже был опубликован и не подлежит редактированию"
+  },
+  {
+    "id": "reviews",
+    "translation": "Отзывы"
+  },
+  {
+    "id": "search_placeholder",
+    "translation": "Поиск"
+  },
+  {
+    "id": "search_results_for",
+    "translation": "Результаты поиска по запросу"
+  },
+  {
+    "id": "selling_preface",
+    "translation": "Начало продающего блока"
+  },
+  {
+    "id": "settings",
+    "translation": "настройки"
+  },
+  {
+    "id": "sign_in",
+    "translation": "Войти"
+  },
+  {
+    "id": "sign_up",
+    "translation": "Регистрация"
+  },
+  {
+    "id": "similar_questions",
+    "translation": "Похожие вопросы"
+  },
+  {
+    "id": "site_address",
+    "translation": "г. Москва, м. Китай-город, Малый Златоустинский пер. 2/9 стр. 6, центр красоты и здоровья 'Лайт' (4 мин. пешком от метро)."
+  },
+  {
+    "id": "site_author_brief",
+    "translation": "Ростовцев Е.В."
+  },
+  {
+    "id": "site_author_full",
+    "translation": "Ростовцев Евгений Владимирович"
+  },
+  {
+    "id": "site_description",
+    "translation": "Шаблон блога"
+  },
+  {
+    "id": "site_name",
+    "translation": "Миобаланс"
+  },
+  {
+    "id": "site_name_full",
+    "translation": "Кинезиология Миобаланс"
+  },
+  {
+    "id": "site_phone",
+    "translation": "8 (903) 689-20-57"
+  },
+  {
+    "id": "slug",
+    "translation": "SEO адрес"
+  },
+  {
+    "id": "slug_placeholder",
+    "translation": "Оставьте пустым, если Вы не знаете, что это такое"
+  },
+  {
+    "id": "submit",
+    "translation": "Сохранить"
+  },
+  {
+    "id": "tags",
+    "translation": "Тэги"
+  },
+  {
+    "id": "testimonial_title",
+    "translation": "Отзыв о работе кинезиолога"
+  },
+  {
+    "id": "testimonial_video_title",
+    "translation": "Видео отзыв о работе кинезиолога"
+  },
+  {
+    "id": "testimonials_title",
+    "translation": "Кинезиология - отзывы пациентов"
+  },
+  {
+    "id": "thank_you_for_posting_question",
+    "translation": "Спасибо! Ваш вопрос будет опубликован после проверки."
+  },
+  {
+    "id": "thank_you_for_posting_review",
+    "translation": "Спасибо! Ваш отзыв будет опубликован после проверки."
+  },
+  {
+    "id": "title",
+    "translation": "Заголовок"
+  },
+  {
+    "id": "title_placeholder",
+    "translation": "Введите заголовок"
+  },
+  {
+    "id": "title_suffix",
+    "translation": " | Кинезиология Миобаланс г. Москва"
+  },
+  {
+    "id": "to_comment_login_with",
+    "translation": "Чтобы оставить комментарий, войдите с помощью"
+  },
+  {
+    "id": "to_prove_you_are_not_a_robot",
+    "translation": "В целях защиты от спама передвиньте ползунок до конца вправо"
+  },
+  {
+    "id": "treatment_stages",
+    "translation": "Этапы лечения"
+  },
+  {
+    "id": "user_profile",
+    "translation": "Профиль пользователя"
+  },
+  {
+    "id": "users",
+    "translation": "Пользователи"
+  },
+  {
+    "id": "view_all_reviews",
+    "translation": "Просмотреть все отзывы"
+  },
+  {
+    "id": "website",
+    "translation": "Сайт"
+  },
+  {
+    "id": "what_we_cure",
+    "translation": "Что мы лечим"
+  },
+  {
+    "id": "your_city",
+    "translation": "Ваш город"
+  },
+  {
+    "id": "your_email",
+    "translation": "Ваша эл. почта"
+  },
+  {
+    "id": "your_email_placeholder",
+    "translation": "Она будет видна только администрации сайта."
+  },
+  {
+    "id": "your_name",
+    "translation": "Ваше имя"
+  },
+  {
+    "id": "your_name_placeholder",
+    "translation": "Пожалуйста, представьтесь"
+  },
+  {
+    "id": "your_photo",
+    "translation": "Ваше фото"
+  },
+  {
+    "id": "your_question_has_been_answered",
+    "translation": "Врач ответил на ваш вопрос на сайте www.miobalans.ru"
+  },
+  {
+    "id": "youtube_video",
+    "translation": "Видео Youtube"
+  },
+  {
+    "id": "youtube_video_placeholder",
+    "translation": "Ссылка на видео Youtube из раздела Поделиться - HTML-код"
+  }
+]
