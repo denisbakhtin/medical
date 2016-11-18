@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"regexp"
 
-	"github.com/denisbakhtin/medical/controllers/oauth"
 	"github.com/denisbakhtin/medical/helpers"
 	"github.com/denisbakhtin/medical/models"
 )
@@ -16,18 +15,16 @@ func ArticleShow(w http.ResponseWriter, r *http.Request) {
 	tmpl := helpers.Template(r)
 	session := helpers.Session(r)
 	data := helpers.DefaultData(r)
+	db := models.GetDB()
 	if r.Method == "GET" {
 
 		re := regexp.MustCompile("^[0-9]+")
 		id := re.FindString(r.URL.Path[len("/articles/"):])
-		article, err := models.GetArticle(id)
-		if err != nil || !article.Published {
+		article := &models.Article{}
+		db.First(article, id)
+		if article.ID == 0 || !article.Published {
 			w.WriteHeader(404)
-			if err != nil {
-				tmpl.Lookup("errors/404").Execute(w, helpers.ErrorData(err))
-			} else {
-				tmpl.Lookup("errors/404").Execute(w, nil)
-			}
+			tmpl.Lookup("errors/404").Execute(w, nil)
 			return
 		}
 		//redirect to canonical url
@@ -35,13 +32,17 @@ func ArticleShow(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, article.URL(), http.StatusSeeOther)
 			return
 		}
-		testimonials, _ := models.GetRecentReviewsByArticle(article.ID)
-		article.Comments = append(article.TopComments, article.Comments...)
+		var testimonials []models.Review
+		db.Where("published = ? and article_id = ?", true, article.ID).Order("created_at desc").Find(&testimonials)
+		topComments := models.GetTopComments(article.ID)
+		comments := models.GetComments(article.ID)
+		article.Comments = append(topComments, comments...)
 		data["Article"] = article
 		data["Testimonials"] = testimonials
 		data["Title"] = article.Name
 		data["Active"] = "/articles"
-		data["MetaDescription"] = article.Excerpt
+		data["MetaDescription"] = article.MetaDescription
+		data["MetaKeywords"] = article.MetaKeywords
 		//Facebook open graph meta tags
 		data["Ogheadprefix"] = "og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#"
 		data["Ogtitle"] = article.Name
@@ -69,10 +70,11 @@ func ArticlePublicIndex(w http.ResponseWriter, r *http.Request) {
 	tmpl := helpers.Template(r)
 	data := helpers.DefaultData(r)
 	T := helpers.T(r)
+	db := models.GetDB()
 	if r.Method == "GET" {
 
-		list, err := models.GetPublishedArticles()
-		if err != nil {
+		var list []models.Article
+		if err := db.Where("published = ?", true).Order("id desc").Find(&list).Error; err != nil {
 			log.Printf("ERROR: %s\n", err)
 			w.WriteHeader(500)
 			tmpl.Lookup("errors/500").Execute(w, helpers.ErrorData(err))
@@ -96,10 +98,11 @@ func ArticleIndex(w http.ResponseWriter, r *http.Request) {
 	tmpl := helpers.Template(r)
 	data := helpers.DefaultData(r)
 	T := helpers.T(r)
+	db := models.GetDB()
 	if r.Method == "GET" {
 
-		list, err := models.GetArticles()
-		if err != nil {
+		var list []models.Article
+		if err := db.Order("published desc, id desc").Find(&list).Error; err != nil {
 			log.Printf("ERROR: %s\n", err)
 			w.WriteHeader(500)
 			tmpl.Lookup("errors/500").Execute(w, helpers.ErrorData(err))
@@ -124,6 +127,7 @@ func ArticleCreate(w http.ResponseWriter, r *http.Request) {
 	session := helpers.Session(r)
 	data := helpers.DefaultData(r)
 	T := helpers.T(r)
+	db := models.GetDB()
 	if r.Method == "GET" {
 
 		data["Title"] = T("new_article")
@@ -136,15 +140,17 @@ func ArticleCreate(w http.ResponseWriter, r *http.Request) {
 
 		r.ParseForm()
 		article := &models.Article{
-			Name:           r.PostFormValue("name"),
-			Slug:           r.PostFormValue("slug"),
-			Content:        r.PostFormValue("content"),
-			Excerpt:        r.PostFormValue("excerpt"),
-			SellingPreface: r.PostFormValue("selling_preface"),
-			Published:      helpers.Atob(r.PostFormValue("published")),
+			Name:            r.PostFormValue("name"),
+			Slug:            r.PostFormValue("slug"),
+			Content:         r.PostFormValue("content"),
+			Excerpt:         r.PostFormValue("excerpt"),
+			SellingPreface:  r.PostFormValue("selling_preface"),
+			MetaDescription: r.PostFormValue("meta_description"),
+			MetaKeywords:    r.PostFormValue("meta_keywords"),
+			Published:       helpers.Atob(r.PostFormValue("published")),
 		}
 
-		if err := article.Insert(); err != nil {
+		if err := db.Create(article).Error; err != nil {
 			session.AddFlash(err.Error())
 			session.Save(r, w)
 			http.Redirect(w, r, "/admin/new_article", 303)
@@ -166,13 +172,15 @@ func ArticleUpdate(w http.ResponseWriter, r *http.Request) {
 	session := helpers.Session(r)
 	data := helpers.DefaultData(r)
 	T := helpers.T(r)
+	db := models.GetDB()
 	if r.Method == "GET" {
 
 		id := r.URL.Path[len("/admin/edit_article/"):]
-		article, err := models.GetArticle(id)
-		if err != nil {
+		article := &models.Article{}
+		db.First(article, id)
+		if article.ID == 0 {
 			w.WriteHeader(404)
-			tmpl.Lookup("errors/404").Execute(w, helpers.ErrorData(err))
+			tmpl.Lookup("errors/404").Execute(w, nil)
 			return
 		}
 
@@ -187,16 +195,18 @@ func ArticleUpdate(w http.ResponseWriter, r *http.Request) {
 
 		r.ParseForm()
 		article := &models.Article{
-			ID:             helpers.Atoi64(r.PostFormValue("id")),
-			Name:           r.PostFormValue("name"),
-			Slug:           r.PostFormValue("slug"),
-			Content:        r.PostFormValue("content"),
-			Excerpt:        r.PostFormValue("excerpt"),
-			SellingPreface: r.PostFormValue("selling_preface"),
-			Published:      helpers.Atob(r.PostFormValue("published")),
+			ID:              helpers.Atouint(r.PostFormValue("id")),
+			Name:            r.PostFormValue("name"),
+			Slug:            r.PostFormValue("slug"),
+			Content:         r.PostFormValue("content"),
+			Excerpt:         r.PostFormValue("excerpt"),
+			SellingPreface:  r.PostFormValue("selling_preface"),
+			MetaDescription: r.PostFormValue("meta_description"),
+			MetaKeywords:    r.PostFormValue("meta_keywords"),
+			Published:       helpers.Atob(r.PostFormValue("published")),
 		}
 
-		if err := article.Update(); err != nil {
+		if err := db.Save(article).Error; err != nil {
 			session.AddFlash(err.Error())
 			session.Save(r, w)
 			http.Redirect(w, r, r.RequestURI, 303)
@@ -215,18 +225,19 @@ func ArticleUpdate(w http.ResponseWriter, r *http.Request) {
 //ArticleDelete handles /admin/delete_article route
 func ArticleDelete(w http.ResponseWriter, r *http.Request) {
 	tmpl := helpers.Template(r)
+	db := models.GetDB()
 
 	if r.Method == "POST" {
 
-		article, err := models.GetArticle(r.PostFormValue("id"))
-		if err != nil {
-			log.Printf("ERROR: %s\n", err)
+		article := &models.Article{}
+		db.First(article, r.PostFormValue("id"))
+		if article.ID == 0 {
 			w.WriteHeader(404)
-			tmpl.Lookup("errors/404").Execute(w, helpers.ErrorData(err))
+			tmpl.Lookup("errors/404").Execute(w, nil)
 			return
 		}
 
-		if err := article.Delete(); err != nil {
+		if err := db.Delete(article).Error; err != nil {
 			log.Printf("ERROR: %s\n", err)
 			w.WriteHeader(500)
 			tmpl.Lookup("errors/500").Execute(w, helpers.ErrorData(err))
@@ -239,34 +250,5 @@ func ArticleDelete(w http.ResponseWriter, r *http.Request) {
 		log.Printf("ERROR: %s\n", err)
 		w.WriteHeader(405)
 		tmpl.Lookup("errors/405").Execute(w, helpers.ErrorData(err))
-	}
-}
-
-//PostOnFacebook publishes article preview on facebook page wall
-func PostOnFacebook(w http.ResponseWriter, r *http.Request) {
-
-	if r.Method == "POST" {
-
-		article, err := models.GetArticle(r.FormValue("id"))
-		if err != nil {
-			log.Printf("ERROR: %s\n", err)
-			w.WriteHeader(404)
-			return
-		}
-		err = oauth.PostOnFacebook(
-			fmt.Sprintf("http://%s/articles/%d", r.Host, article.ID),
-			article.Name,
-		)
-		if err != nil {
-			log.Printf("ERROR: %s\n", err)
-			w.WriteHeader(500)
-			return
-		}
-		w.WriteHeader(200)
-
-	} else {
-		err := fmt.Errorf("Method %q not allowed", r.Method)
-		log.Printf("ERROR: %s\n", err)
-		w.WriteHeader(405)
 	}
 }

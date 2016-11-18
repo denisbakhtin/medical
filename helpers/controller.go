@@ -14,7 +14,8 @@ import (
 
 //DefaultData returns common to all pages template data
 func DefaultData(r *http.Request) map[string]interface{} {
-	testimonials, _ := models.GetRecentReviews()
+	var testimonials []models.Review
+	models.GetDB().Where("published = ?", true).Order("id desc").Limit(7).Find(&testimonials)
 	t := T(r)
 	return map[string]interface{}{
 		"ActiveUser":      context.Get(r, "user"), //signed in models.User
@@ -57,6 +58,12 @@ func Atoi64(s string) int64 {
 	return i
 }
 
+//Atouint converts string to uint, returns 0 if error
+func Atouint(s string) uint {
+	i, _ := strconv.ParseUint(s, 10, 32)
+	return uint(i)
+}
+
 //Atoi64r converts string to int64 reference
 func Atoi64r(s string) *int64 {
 	i, err := strconv.ParseInt(s, 10, 64)
@@ -64,6 +71,16 @@ func Atoi64r(s string) *int64 {
 		return nil
 	}
 	return &i
+}
+
+//Atouintr converts string to uint reference
+func Atouintr(s string) *uint {
+	i, err := strconv.ParseUint(s, 10, 32)
+	if err != nil {
+		return nil
+	}
+	ui := uint(i)
+	return &ui
 }
 
 //Atob converts string to bool

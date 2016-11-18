@@ -1,14 +1,12 @@
 package system
 
-//go:generate rice embed-go
-
 import (
 	"html/template"
 	"log"
 	"os"
+	"path/filepath"
 	"strings"
 
-	"github.com/GeertJohan/go.rice"
 	"github.com/denisbakhtin/medical/helpers"
 	"github.com/nicksnyder/go-i18n/i18n"
 )
@@ -16,13 +14,11 @@ import (
 var tmpl *template.Template
 
 func loadTemplates() {
-	box := rice.MustFindBox("../views")
 	tmpl = template.New("").Funcs(template.FuncMap{
 		"isActive":       helpers.IsActive,
 		"stringInSlice":  helpers.StringInSlice,
 		"dateTime":       helpers.DateTime,
 		"date":           helpers.Date,
-		"recentArticles": helpers.RecentArticles,
 		"mainMenu":       helpers.MainMenu,
 		"scrollMenu":     helpers.ScrollMenu,
 		"oddEvenClass":   helpers.OddEvenClass,
@@ -30,14 +26,14 @@ func loadTemplates() {
 		"sellingPreface": helpers.SellingPreface,
 		"promoTill":      helpers.PromoTill,
 		"cityList":       helpers.CityList,
-		"eqRI":           helpers.EqRI,
+		"eqRU":           helpers.EqRU,
 		"T":              i18n.MustTfunc(config.Language), //will be replaced by actual TranslationFunc in LocaleMiddleware
 	})
 
 	fn := func(path string, f os.FileInfo, err error) error {
 		if f.IsDir() != true && strings.HasSuffix(f.Name(), ".html") {
 			var err error
-			tmpl, err = tmpl.Parse(box.MustString(path))
+			tmpl, err = tmpl.ParseFiles(path)
 			if err != nil {
 				return err
 			}
@@ -45,7 +41,7 @@ func loadTemplates() {
 		return nil
 	}
 
-	err := box.Walk("", fn)
+	err := filepath.Walk("views", fn)
 	if err != nil {
 		log.Panic(err)
 	}

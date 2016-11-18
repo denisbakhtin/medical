@@ -1,7 +1,5 @@
 package system
 
-//go:generate rice embed-go
-
 import (
 	"github.com/GeertJohan/go.rice"
 	"github.com/nicksnyder/go-i18n/i18n"

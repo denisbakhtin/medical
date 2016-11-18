@@ -2,19 +2,21 @@ package controllers
 
 import (
 	"fmt"
+	"log"
+	"net/http"
+	"time"
+
 	"github.com/denisbakhtin/medical/helpers"
 	"github.com/denisbakhtin/medical/models"
 	"github.com/denisbakhtin/medical/system"
 	"github.com/gorilla/feeds"
-	"log"
-	"net/http"
-	"time"
 )
 
 //RssXML handles GET /rss route
 func RssXML(w http.ResponseWriter, r *http.Request) {
 	tmpl := helpers.Template(r)
 	T := helpers.T(r)
+	db := models.GetDB()
 	if r.Method == "GET" {
 
 		now := time.Now()
@@ -29,13 +31,8 @@ func RssXML(w http.ResponseWriter, r *http.Request) {
 		}
 
 		feed.Items = make([]*feeds.Item, 0)
-		articles, err := models.GetPublishedArticles()
-		if err != nil {
-			log.Printf("ERROR: %s\n", err)
-			w.WriteHeader(500)
-			tmpl.Lookup("errors/500").Execute(w, helpers.ErrorData(err))
-			return
-		}
+		var articles []models.Article
+		db.Where("published = ?", true).Order("id desc").Find(&articles)
 		for i := range articles {
 			feed.Items = append(feed.Items, &feeds.Item{
 				Id:          fmt.Sprintf("%s/articles/%d", domain, articles[i].ID),

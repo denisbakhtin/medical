@@ -10,7 +10,6 @@
         <th class="id">{{T "ID"}}</th>
         <th class="name">{{T "title"}}</th>
         <th class="published">{{T "published"}}</th>
-        <th class="timestamp">{{T "created"}}</th>
         <th class="actions">{{T "actions"}}</th>
       </tr>
     </thead>
@@ -27,7 +26,6 @@
             <span class="glyphicon glyphicon-remove"></span>
             {{end}}
           </td>
-          <td class="timestamp">{{dateTime .CreatedAt}}</td>
           <td class="actions">
             <a href="{{.URL}}" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-eye-open"></span></a>
             <a href="/admin/edit_article/{{.ID}}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-pencil"></span></a>

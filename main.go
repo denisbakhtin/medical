@@ -19,13 +19,11 @@ func init() {
 }
 
 func main() {
-	migrate := flag.String("migrate", "skip", "Run DB migrations: up, down, redo, new [MIGRATION_NAME] and then os.Exit(0)")
 	mode := flag.String("mode", "debug", "Application mode: debug, release, test")
 	flag.Parse()
 
 	system.SetMode(mode)
 	system.Init()
-	system.RunMigrations(migrate)
 	CSRF = csrf.Protect([]byte(system.GetConfig().CsrfSecret), csrf.Secure(system.GetConfig().Ssl), csrf.Path("/"), csrf.Domain(system.GetConfig().Domain))
 
 	//Periodic tasks
@@ -46,12 +44,10 @@ func main() {
 	http.Handle("/reviews", Default(controllers.ReviewPublicIndex))
 	http.Handle("/reviews/", Default(controllers.ReviewShow))
 	http.Handle("/rss", Default(controllers.RssXML))
-	http.Handle("/search", Default(controllers.Search))
+	//http.Handle("/search", Default(controllers.Search))
 	http.Handle("/new_request", Default(controllers.RequestCreate))
 	http.Handle("/new_comment", Default(controllers.CommentPublicCreate))
 	http.Handle("/edit_comment", Default(controllers.CommentPublicUpdate))
-	//http.Handle("/comments", Default(controllers.CommentPublicIndex))
-	//http.Handle("/comments/", Default(controllers.CommentShow))
 	http.Handle("/new_review", Default(controllers.ReviewPublicCreate))
 	http.Handle("/edit_review", Default(controllers.ReviewPublicUpdate))
 
@@ -84,7 +80,6 @@ func main() {
 		http.Handle("/admin/new_article", Restricted(controllers.ArticleCreate))
 		http.Handle("/admin/edit_article/", Restricted(controllers.ArticleUpdate))
 		http.Handle("/admin/delete_article", Restricted(controllers.ArticleDelete))
-		http.Handle("/admin/post_on_facebook", RestrictedWithoutCSRF(controllers.PostOnFacebook))
 
 		http.Handle("/admin/comments", Restricted(controllers.CommentIndex))
 		http.Handle("/admin/edit_comment/", Restricted(controllers.CommentUpdate))
@@ -119,14 +114,14 @@ func Default(fn func(http.ResponseWriter, *http.Request)) http.Handler {
 	)
 }
 
-//Restricted executes default + restriced middleware chain for a HandlerFunc
+//Restricted executes default + restricted middleware chain for a HandlerFunc
 func Restricted(fn func(http.ResponseWriter, *http.Request)) http.Handler {
 	return CSRF(
 		RestrictedWithoutCSRF(fn),
 	)
 }
 
-//RestrictedWithoutCSRF executes default + restriced middleware chain without CSRF middleware
+//RestrictedWithoutCSRF executes default + restricted middleware chain without CSRF middleware
 func RestrictedWithoutCSRF(fn func(http.ResponseWriter, *http.Request)) http.Handler {
 	return system.SessionMiddleware(
 		system.LocaleMiddleware(

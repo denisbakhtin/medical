@@ -1,13 +1,14 @@
 package system
 
 import (
+	"html/template"
+	"log"
+	"net/http"
+
 	"github.com/denisbakhtin/medical/models"
 	"github.com/gorilla/context"
 	"github.com/gorilla/sessions"
 	"github.com/nicksnyder/go-i18n/i18n"
-	"html/template"
-	"log"
-	"net/http"
 )
 
 var (
@@ -76,7 +77,9 @@ func DataMiddleware(next http.Handler) http.Handler {
 		//set active user
 		session := context.Get(r, "session").(*sessions.Session)
 		if uID, ok := session.Values["user_id"]; ok {
-			user, _ := models.GetUser(uID)
+
+			user := &models.User{}
+			models.GetDB().First(user, uID)
 			if user.ID != 0 {
 				context.Set(r, "user", user)
 			}

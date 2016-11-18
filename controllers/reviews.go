@@ -21,11 +21,13 @@ func ReviewShow(w http.ResponseWriter, r *http.Request) {
 	tmpl := helpers.Template(r)
 	data := helpers.DefaultData(r)
 	T := helpers.T(r)
+	db := models.GetDB()
 	if r.Method == "GET" {
 
 		id := r.URL.Path[len("/reviews/"):]
-		review, err := models.GetReview(id)
-		if err != nil || !review.Published {
+		review := &models.Review{}
+		db.First(review, id)
+		if review.ID == 0 || !review.Published {
 			w.WriteHeader(404)
 			tmpl.Lookup("errors/404").Execute(w, nil)
 			return
@@ -33,6 +35,8 @@ func ReviewShow(w http.ResponseWriter, r *http.Request) {
 		data["Review"] = review
 		data["Title"] = T("testimonial_title") + ". " + review.AuthorName
 		data["Active"] = "/reviews"
+		data["MetaDescription"] = review.MetaDescription
+		data["MetaKeywords"] = review.MetaKeywords
 		tmpl.Lookup("reviews/show").Execute(w, data)
 
 	} else {
@@ -49,15 +53,11 @@ func ReviewPublicIndex(w http.ResponseWriter, r *http.Request) {
 	data := helpers.DefaultData(r)
 	session := helpers.Session(r)
 	T := helpers.T(r)
+	db := models.GetDB()
 	if r.Method == "GET" {
 
-		list, err := models.GetPublishedReviews()
-		if err != nil {
-			log.Printf("ERROR: %s\n", err)
-			w.WriteHeader(500)
-			tmpl.Lookup("errors/500").Execute(w, helpers.ErrorData(err))
-			return
-		}
+		var list []models.Review
+		db.Where("published = ?", true).Order("id desc").Find(&list)
 		data["Title"] = T("testimonials_title")
 		data["Active"] = r.RequestURI
 		data["List"] = list
@@ -78,14 +78,11 @@ func ReviewIndex(w http.ResponseWriter, r *http.Request) {
 	tmpl := helpers.Template(r)
 	data := helpers.DefaultData(r)
 	T := helpers.T(r)
+	db := models.GetDB()
 	if r.Method == "GET" {
 
-		list, err := models.GetReviews()
-		if err != nil {
-			w.WriteHeader(500)
-			tmpl.Lookup("errors/500").Execute(w, helpers.ErrorData(err))
-			return
-		}
+		var list []models.Review
+		db.Order("id desc").Find(&list)
 		data["Title"] = T("reviews")
 		data["Active"] = "reviews"
 		data["List"] = list
@@ -105,6 +102,7 @@ func ReviewPublicCreate(w http.ResponseWriter, r *http.Request) {
 	tmpl := helpers.Template(r)
 	data := helpers.DefaultData(r)
 	T := helpers.T(r)
+	db := models.GetDB()
 	if r.Method == "GET" {
 
 		data["Title"] = T("new_review")
@@ -147,7 +145,7 @@ func ReviewPublicCreate(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 
-		if err := review.Insert(); err != nil {
+		if err := db.Create(review).Error; err != nil {
 			log.Printf("ERROR: %s\n", err)
 			w.WriteHeader(400)
 			tmpl.Lookup("errors/400").Execute(w, helpers.ErrorData(err))
@@ -172,9 +170,11 @@ func ReviewCreate(w http.ResponseWriter, r *http.Request) {
 	tmpl := helpers.Template(r)
 	data := helpers.DefaultData(r)
 	T := helpers.T(r)
+	db := models.GetDB()
 	if r.Method == "GET" {
 
-		articles, _ := models.GetArticles()
+		var articles []models.Article
+		db.Where("published = ?", true).Find(&articles)
 		data["Title"] = T("new_review")
 		data["Active"] = "reviews"
 		data["Articles"] = articles
@@ -186,12 +186,14 @@ func ReviewCreate(w http.ResponseWriter, r *http.Request) {
 
 		r.ParseMultipartForm(32 << 20)
 		review := &models.Review{
-			ArticleID:   helpers.Atoi64r(r.FormValue("article_id")),
-			AuthorName:  r.FormValue("author_name"),
-			AuthorEmail: r.FormValue("author_email"),
-			Content:     r.FormValue("content"),
-			Published:   helpers.Atob(r.FormValue("published")),
-			Video:       r.FormValue("video"),
+			ArticleID:       helpers.Atouintr(r.FormValue("article_id")),
+			AuthorName:      r.FormValue("author_name"),
+			AuthorEmail:     r.FormValue("author_email"),
+			Content:         r.FormValue("content"),
+			Published:       helpers.Atob(r.FormValue("published")),
+			Video:           r.FormValue("video"),
+			MetaDescription: r.FormValue("meta_description"),
+			MetaKeywords:    r.FormValue("meta_keywords"),
 		}
 
 		if mpartFile, mpartHeader, err := r.FormFile("image"); err == nil {
@@ -205,7 +207,7 @@ func ReviewCreate(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 
-		if err := review.Insert(); err != nil {
+		if err := db.Create(review).Error; err != nil {
 			log.Printf("ERROR: %s\n", err)
 			w.WriteHeader(400)
 			tmpl.Lookup("errors/400").Execute(w, helpers.ErrorData(err))
@@ -227,17 +229,20 @@ func ReviewUpdate(w http.ResponseWriter, r *http.Request) {
 	session := helpers.Session(r)
 	data := helpers.DefaultData(r)
 	T := helpers.T(r)
+	db := models.GetDB()
 	if r.Method == "GET" {
 
 		id := r.URL.Path[len("/admin/edit_review/"):]
-		review, err := models.GetReview(id)
-		if err != nil {
+		review := &models.Review{}
+		db.First(review, id)
+		if review.ID == 0 {
 			w.WriteHeader(404)
-			tmpl.Lookup("errors/404").Execute(w, helpers.ErrorData(err))
+			tmpl.Lookup("errors/404").Execute(w, nil)
 			return
 		}
 
-		articles, _ := models.GetArticles()
+		var articles []models.Article
+		db.Where("published = ?", true).Find(&articles)
 		data["Title"] = T("edit_review")
 		data["Active"] = "reviews"
 		data["Review"] = review
@@ -249,7 +254,8 @@ func ReviewUpdate(w http.ResponseWriter, r *http.Request) {
 	} else if r.Method == "POST" {
 
 		r.ParseMultipartForm(32 << 20)
-		rev, _ := models.GetReview(r.FormValue("id"))
+		rev := &models.Review{}
+		db.First(rev, r.FormValue("id"))
 		if rev.ID == 0 {
 			w.WriteHeader(400)
 			tmpl.Lookup("errors/400").Execute(w, nil)
@@ -257,14 +263,16 @@ func ReviewUpdate(w http.ResponseWriter, r *http.Request) {
 		}
 
 		review := &models.Review{
-			ID:          rev.ID,
-			ArticleID:   helpers.Atoi64r(r.FormValue("article_id")),
-			AuthorName:  r.FormValue("author_name"),
-			AuthorEmail: r.FormValue("author_email"),
-			Content:     r.FormValue("content"),
-			Image:       rev.Image,
-			Published:   helpers.Atob(r.FormValue("published")),
-			Video:       r.FormValue("video"),
+			ID:              rev.ID,
+			ArticleID:       helpers.Atouintr(r.FormValue("article_id")),
+			AuthorName:      r.FormValue("author_name"),
+			AuthorEmail:     r.FormValue("author_email"),
+			Content:         r.FormValue("content"),
+			Image:           rev.Image,
+			Published:       helpers.Atob(r.FormValue("published")),
+			Video:           r.FormValue("video"),
+			MetaDescription: r.FormValue("meta_description"),
+			MetaKeywords:    r.FormValue("meta_keywords"),
 		}
 		if mpartFile, mpartHeader, err := r.FormFile("image"); err == nil {
 			defer mpartFile.Close()
@@ -277,7 +285,7 @@ func ReviewUpdate(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 
-		if err := review.Update(); err != nil {
+		if err := db.Save(review).Error; err != nil {
 			session.AddFlash(err.Error(), "reviews")
 			session.Save(r, w)
 			http.Redirect(w, r, r.RequestURI, 303)
@@ -299,18 +307,21 @@ func ReviewPublicUpdate(w http.ResponseWriter, r *http.Request) {
 	session := helpers.Session(r)
 	data := helpers.DefaultData(r)
 	T := helpers.T(r)
+	db := models.GetDB()
 	if r.Method == "GET" {
 
 		id := getIDFromToken(r.FormValue("token"))
-		review, err := models.GetReview(id)
-		if err != nil || review.Published {
+		review := &models.Review{}
+		db.First(review, id)
+		if review.ID == 0 || review.Published {
 			err := fmt.Errorf(T("review_not_found_or_already_published"))
 			w.WriteHeader(404)
 			tmpl.Lookup("errors/404").Execute(w, helpers.ErrorData(err))
 			return
 		}
 
-		articles, _ := models.GetArticles()
+		var articles []models.Article
+		db.Where("published = ?", true).Find(&articles)
 		review.Published = true //set default to true
 		data["Title"] = T("edit_review")
 		data["Articles"] = articles
@@ -324,7 +335,8 @@ func ReviewPublicUpdate(w http.ResponseWriter, r *http.Request) {
 	} else if r.Method == "POST" {
 
 		r.ParseMultipartForm(32 << 20)
-		rev, _ := models.GetReview(r.FormValue("id"))
+		rev := &models.Review{}
+		db.First(rev, r.FormValue("id"))
 		if rev.ID == 0 {
 			w.WriteHeader(400)
 			tmpl.Lookup("errors/400").Execute(w, nil)
@@ -333,7 +345,7 @@ func ReviewPublicUpdate(w http.ResponseWriter, r *http.Request) {
 
 		review := &models.Review{
 			ID:          rev.ID,
-			ArticleID:   helpers.Atoi64r(r.FormValue("article_id")),
+			ArticleID:   helpers.Atouintr(r.FormValue("article_id")),
 			AuthorName:  r.FormValue("author_name"),
 			AuthorEmail: r.FormValue("author_email"),
 			Content:     r.FormValue("content"),
@@ -352,7 +364,7 @@ func ReviewPublicUpdate(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 
-		if err := review.Update(); err != nil {
+		if err := db.Save(review).Error; err != nil {
 			session.AddFlash(err.Error(), "reviews")
 			session.Save(r, w)
 			http.Redirect(w, r, r.RequestURI, 303)
@@ -373,17 +385,18 @@ func ReviewPublicUpdate(w http.ResponseWriter, r *http.Request) {
 //ReviewDelete handles /admin/delete_review route
 func ReviewDelete(w http.ResponseWriter, r *http.Request) {
 	tmpl := helpers.Template(r)
+	db := models.GetDB()
 
 	if r.Method == "POST" {
 
-		review, err := models.GetReview(r.PostFormValue("id"))
-		if err != nil {
-			log.Printf("ERROR: %s\n", err)
+		review := &models.Review{}
+		db.First(review, r.PostFormValue("id"))
+		if review.ID == 0 {
 			w.WriteHeader(404)
-			tmpl.Lookup("errors/404").Execute(w, helpers.ErrorData(err))
+			tmpl.Lookup("errors/404").Execute(w, nil)
 		}
 
-		if err := review.Delete(); err != nil {
+		if err := db.Delete(review).Error; err != nil {
 			log.Printf("ERROR: %s\n", err)
 			w.WriteHeader(500)
 			tmpl.Lookup("errors/500").Execute(w, helpers.ErrorData(err))
@@ -442,7 +455,7 @@ func notifyAdminOfReview(r *http.Request, review *models.Review) {
 }
 
 //createTokenFromId creates secure token for id
-func createTokenFromID(ID int64) string {
+func createTokenFromID(ID uint) string {
 	digest := sha1.New().Sum([]byte(fmt.Sprintf("%d-%s", ID, system.GetConfig().Salt)))
 	return base64.URLEncoding.EncodeToString(
 		[]byte(fmt.Sprintf("%d-%x", ID, digest)),

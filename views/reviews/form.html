@@ -32,9 +32,9 @@
           <label class="control-label" for="article_id">{{T "article"}}</label>
           {{$aid := .Review.ArticleID}}
           <select id="article_id" name="article_id" class="form-control">
-            <option value="" {{if eqRI $aid 0}}selected{{end}}>Не выбрана</option>
+            <option value="" {{if eqRU $aid 0}}selected{{end}}>Не выбрана</option>
             {{range .Articles}}
-            <option value="{{.ID}}" {{if eqRI $aid .ID}}selected{{end}}>{{.Name}}</option>
+            <option value="{{.ID}}" {{if eqRU $aid .ID}}selected{{end}}>{{.Name}}</option>
             {{end}}
           </select>
         </div>
@@ -54,6 +54,16 @@
             <input id="published" name="published" type="checkbox" value="true" {{if .Review.Published}}checked{{end}} >
             {{T "published"}}
           </label>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="meta_keywords">Мета ключевики</label>
+          <input class="form-control" name="meta_keywords" value="{{.Review.MetaKeywords}}"/>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="meta_description">Мета описание</label>
+          <input class="form-control" name="meta_description" value="{{.Review.MetaDescription}}" />
         </div>
 
         <div class="form-group">

@@ -10,7 +10,6 @@
         <th class="id">{{T "ID"}}</th>
         <th class="name">{{T "name"}}</th>
         <th class="email">{{T "email"}}</th>
-        <th class="timestamp">{{T "created"}}</th>
         <th class="actions">{{T "actions"}}</th>
       </tr>
     </thead>
@@ -21,7 +20,6 @@
           <td class="id">{{.ID}}</td>
           <td class="name">{{.Name}}</td>
           <td class="email">{{.Email}}</td>
-          <td class="timestamp">{{dateTime .Timestamp}}</td>
           <td class="actions">
             <a href="/admin/edit_user/{{.ID}}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-pencil"></span></a>
             <form class="inline-block" action="/admin/delete_user" method="post">

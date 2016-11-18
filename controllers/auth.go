@@ -15,6 +15,7 @@ func SignIn(w http.ResponseWriter, r *http.Request) {
 	session := helpers.Session(r)
 	data := helpers.DefaultData(r)
 	T := helpers.T(r)
+	db := models.GetDB()
 
 	if r.Method == "GET" {
 
@@ -26,29 +27,28 @@ func SignIn(w http.ResponseWriter, r *http.Request) {
 
 	} else if r.Method == "POST" {
 
-		user := &models.User{
-			Email:    r.PostFormValue("email"),
-			Password: r.PostFormValue("password"),
-		}
 		//check existence
-		userDB, _ := models.GetUserByEmail(user.Email)
-		if userDB.ID == 0 {
-			log.Printf("ERROR: Login failed, IP: %s, Email: %s\n", r.RemoteAddr, user.Email)
+		email := r.PostFormValue("email")
+		password := r.PostFormValue("password")
+		user := &models.User{}
+		db.Where("lower(email) = lower(?)", email).First(user)
+		if user.ID == 0 {
+			log.Printf("ERROR: Login failed, IP: %s, Email: %s\n", r.RemoteAddr, email)
 			session.AddFlash("Email or password incorrect")
 			session.Save(r, w)
 			http.Redirect(w, r, "/signin", 303)
 			return
 		}
 		//create user
-		if err := userDB.ComparePassword(user.Password); err != nil {
-			log.Printf("ERROR: Login failed, IP: %s, Email: %s\n", r.RemoteAddr, user.Email)
+		if err := user.ComparePassword(password); err != nil {
+			log.Printf("ERROR: Login failed, IP: %s, Email: %s\n", r.RemoteAddr, email)
 			session.AddFlash("Email or password incorrect")
 			session.Save(r, w)
 			http.Redirect(w, r, "/signin", 303)
 			return
 		}
 
-		session.Values["user_id"] = userDB.ID
+		session.Values["user_id"] = user.ID
 		session.Save(r, w)
 		http.Redirect(w, r, "/", 303)
 
@@ -65,6 +65,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 	session := helpers.Session(r)
 	data := helpers.DefaultData(r)
 	T := helpers.T(r)
+	db := models.GetDB()
 
 	if r.Method == "GET" {
 
@@ -76,28 +77,21 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 
 	} else if r.Method == "POST" {
 
-		user := &models.User{
-			Email:    r.PostFormValue("email"),
-			Password: r.PostFormValue("password"),
-		}
+		email := r.PostFormValue("email")
+		password := r.PostFormValue("password")
 		//check existence
-		userDB, _ := models.GetUserByEmail(user.Email)
-		if userDB.ID != 0 {
+		user := &models.User{}
+		db.Where("lower(email) = lower(?)", email).First(user)
+		if user.ID != 0 {
 			session.AddFlash("User exists")
 			session.Save(r, w)
 			http.Redirect(w, r, "/signup", 303)
 			return
 		}
 		//create user
-		err := user.HashPassword()
-		if err != nil {
-			session.AddFlash("Error whilst registering user.")
-			session.Save(r, w)
-			log.Printf("ERROR: can't register user: %v", err)
-			http.Redirect(w, r, "/signup", 303)
-			return
-		}
-		if err := user.Insert(); err != nil {
+		user.Email = email
+		user.Password = password
+		if err := db.Create(user).Error; err != nil {
 			session.AddFlash("Error whilst registering user.")
 			session.Save(r, w)
 			log.Printf("ERROR: can't register user: %v", err)

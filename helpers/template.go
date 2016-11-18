@@ -45,12 +45,6 @@ func StringInSlice(value string, list []string) bool {
 	return false
 }
 
-//RecentArticles returns the list of recent articles
-func RecentArticles() []models.Article {
-	list, _ := models.GetRecentArticles()
-	return list
-}
-
 //OddEvenClass returns odd or even class depending on the index
 func OddEvenClass(index int) string {
 	//range indexes start with zero %)
@@ -62,9 +56,11 @@ func OddEvenClass(index int) string {
 
 //MainMenu returns the list of main menu items
 func MainMenu() []MenuItem {
-	about, _ := models.GetPage(4)
-	//cure, _ := models.GetPage(6)
-	contacts, _ := models.GetPage(7)
+	db := models.GetDB()
+	about := &models.Page{}
+	db.First(about, 4)
+	contacts := &models.Page{}
+	db.First(contacts, 7)
 	menu := []MenuItem{
 		MenuItem{
 			URL:   "/reviews",
@@ -90,8 +86,9 @@ func MainMenu() []MenuItem {
 
 //ScrollMenu returns the list of scroll menu items
 func ScrollMenu() []MenuItem {
-	about, _ := models.GetPage(4)
-	//cure, _ := models.GetPage(6)
+	db := models.GetDB()
+	about := &models.Page{}
+	db.First(about, 4)
 	menu := []MenuItem{
 		MenuItem{
 			URL:   about.URL(),
@@ -150,8 +147,8 @@ func CityList() []string {
 	}
 }
 
-//EqRI compares *int64 to int64
-func EqRI(r *int64, i int64) bool {
+//EqRU compares *uint to uint
+func EqRU(r *uint, i uint) bool {
 	if r == nil {
 		if i == 0 {
 			return true

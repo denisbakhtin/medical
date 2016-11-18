@@ -20,7 +20,6 @@ func RequestCreate(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 
 		r.ParseForm()
-
 		request := &models.Request{
 			Name:    r.PostFormValue("name"),
 			Phone:   r.PostFormValue("phone"),

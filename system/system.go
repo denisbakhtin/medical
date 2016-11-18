@@ -2,9 +2,9 @@ package system
 
 import (
 	"fmt"
-	"github.com/GeertJohan/go.rice"
-	"github.com/denisbakhtin/medical/models"
 	"log"
+
+	"github.com/denisbakhtin/medical/models"
 )
 
 //Application mode
@@ -18,7 +18,7 @@ var mode string //application mode: debug, release, test
 
 //Init initializes core system elements (DB, sessions, templates, et al)
 func Init() {
-	loadConfig(rice.MustFindBox("../config").MustBytes("config.json"))
+	loadConfig()
 	loadI18n()
 	createSession()
 	loadTemplates()

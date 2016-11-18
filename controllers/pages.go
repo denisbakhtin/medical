@@ -14,12 +14,14 @@ import (
 func PageShow(w http.ResponseWriter, r *http.Request) {
 	tmpl := helpers.Template(r)
 	data := helpers.DefaultData(r)
+	db := models.GetDB()
 	if r.Method == "GET" {
 
 		re := regexp.MustCompile("^[0-9]+")
 		id := re.FindString(r.URL.Path[len("/pages/"):])
-		page, err := models.GetPage(id)
-		if err != nil || !page.Published {
+		page := &models.Page{}
+		db.First(page, id)
+		if page.ID == 0 || !page.Published {
 			w.WriteHeader(404)
 			tmpl.Lookup("errors/404").Execute(w, nil)
 			return
@@ -32,6 +34,8 @@ func PageShow(w http.ResponseWriter, r *http.Request) {
 		data["Page"] = page
 		data["Title"] = page.Name
 		data["Active"] = page.URL()
+		data["MetaDescription"] = page.MetaDescription
+		data["MetaKeywords"] = page.MetaKeywords
 		tmpl.Lookup("pages/show").Execute(w, data)
 
 	} else {
@@ -47,14 +51,11 @@ func PageIndex(w http.ResponseWriter, r *http.Request) {
 	tmpl := helpers.Template(r)
 	data := helpers.DefaultData(r)
 	T := helpers.T(r)
+	db := models.GetDB()
 	if r.Method == "GET" {
 
-		list, err := models.GetPages()
-		if err != nil {
-			w.WriteHeader(500)
-			tmpl.Lookup("errors/500").Execute(w, helpers.ErrorData(err))
-			return
-		}
+		var list []models.Page
+		db.Order("published desc, id desc").Find(&list)
 		data["Title"] = T("pages")
 		data["Active"] = "pages"
 		data["List"] = list
@@ -74,6 +75,7 @@ func PageCreate(w http.ResponseWriter, r *http.Request) {
 	session := helpers.Session(r)
 	data := helpers.DefaultData(r)
 	T := helpers.T(r)
+	db := models.GetDB()
 	if r.Method == "GET" {
 
 		data["Title"] = T("new_page")
@@ -85,13 +87,15 @@ func PageCreate(w http.ResponseWriter, r *http.Request) {
 	} else if r.Method == "POST" {
 
 		page := &models.Page{
-			Name:      r.PostFormValue("name"),
-			Slug:      r.PostFormValue("slug"),
-			Content:   r.PostFormValue("content"),
-			Published: helpers.Atob(r.PostFormValue("published")),
+			Name:            r.PostFormValue("name"),
+			Slug:            r.PostFormValue("slug"),
+			Content:         r.PostFormValue("content"),
+			MetaDescription: r.PostFormValue("meta_description"),
+			MetaKeywords:    r.PostFormValue("meta_keywords"),
+			Published:       helpers.Atob(r.PostFormValue("published")),
 		}
 
-		if err := page.Insert(); err != nil {
+		if err := db.Create(page).Error; err != nil {
 			session.AddFlash(err.Error())
 			session.Save(r, w)
 			http.Redirect(w, r, "/admin/new_page", 303)
@@ -113,13 +117,15 @@ func PageUpdate(w http.ResponseWriter, r *http.Request) {
 	session := helpers.Session(r)
 	data := helpers.DefaultData(r)
 	T := helpers.T(r)
+	db := models.GetDB()
 	if r.Method == "GET" {
 
 		id := r.URL.Path[len("/admin/edit_page/"):]
-		page, err := models.GetPage(id)
-		if err != nil {
+		page := &models.Page{}
+		db.First(page, id)
+		if page.ID == 0 {
 			w.WriteHeader(400)
-			tmpl.Lookup("errors/400").Execute(w, helpers.ErrorData(err))
+			tmpl.Lookup("errors/400").Execute(w, nil)
 			return
 		}
 
@@ -133,14 +139,16 @@ func PageUpdate(w http.ResponseWriter, r *http.Request) {
 	} else if r.Method == "POST" {
 
 		page := &models.Page{
-			ID:        helpers.Atoi64(r.PostFormValue("id")),
-			Name:      r.PostFormValue("name"),
-			Slug:      r.PostFormValue("slug"),
-			Content:   r.PostFormValue("content"),
-			Published: helpers.Atob(r.PostFormValue("published")),
+			ID:              helpers.Atouint(r.PostFormValue("id")),
+			Name:            r.PostFormValue("name"),
+			Slug:            r.PostFormValue("slug"),
+			Content:         r.PostFormValue("content"),
+			MetaDescription: r.PostFormValue("meta_description"),
+			MetaKeywords:    r.PostFormValue("meta_keywords"),
+			Published:       helpers.Atob(r.PostFormValue("published")),
 		}
 
-		if err := page.Update(); err != nil {
+		if err := db.Save(page).Error; err != nil {
 			session.AddFlash(err.Error())
 			session.Save(r, w)
 			http.Redirect(w, r, r.RequestURI, 303)
@@ -159,17 +167,18 @@ func PageUpdate(w http.ResponseWriter, r *http.Request) {
 //PageDelete handles /admin/delete_page route
 func PageDelete(w http.ResponseWriter, r *http.Request) {
 	tmpl := helpers.Template(r)
+	db := models.GetDB()
 
 	if r.Method == "POST" {
 
-		page, err := models.GetPage(r.PostFormValue("id"))
-		if err != nil {
-			log.Printf("ERROR: %s\n", err)
+		page := &models.Page{}
+		db.First(page, r.PostFormValue("id"))
+		if page.ID == 0 {
 			w.WriteHeader(404)
-			tmpl.Lookup("errors/404").Execute(w, helpers.ErrorData(err))
+			tmpl.Lookup("errors/404").Execute(w, nil)
 		}
 
-		if err := page.Delete(); err != nil {
+		if err := db.Delete(page).Error; err != nil {
 			log.Printf("ERROR: %s\n", err)
 			w.WriteHeader(500)
 			tmpl.Lookup("errors/500").Execute(w, helpers.ErrorData(err))

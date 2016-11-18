@@ -13,6 +13,7 @@ import (
 //CreateXMLSitemap creates xml sitemap for search engines, and saves in public/sitemap folder
 func CreateXMLSitemap() {
 	log.Printf("INFO: Starting XML sitemap generation\n")
+	db := models.GetDB()
 	folder := path.Join(GetConfig().Public, "sitemap")
 	domain := "http://www." + GetConfig().Domain
 	now := time.Now()
@@ -34,11 +35,8 @@ func CreateXMLSitemap() {
 		Priority:   0.9,
 	})
 
-	articles, err := models.GetPublishedArticles()
-	if err != nil {
-		log.Printf("ERROR: %s\n", err)
-		return
-	}
+	var articles []models.Article
+	db.Where("published = ?", true).Order("id desc").Find(&articles)
 	for i := range articles {
 		items = append(items, sitemap.Item{
 			Loc:        fmt.Sprintf("%s%s", domain, articles[i].URL()),
@@ -49,11 +47,8 @@ func CreateXMLSitemap() {
 	}
 
 	//Static pages
-	pages, err := models.GetPublishedPages()
-	if err != nil {
-		log.Printf("ERROR: %s\n", err)
-		return
-	}
+	var pages []models.Page
+	db.Where("published = ?", true).Order("id desc").Find(&pages)
 	for i := range pages {
 		items = append(items, sitemap.Item{
 			Loc:        fmt.Sprintf("%s%s", domain, pages[i].URL()),
@@ -65,17 +60,14 @@ func CreateXMLSitemap() {
 
 	//Reviews
 	items = append(items, sitemap.Item{
-		Loc:         fmt.Sprintf("%s%s", domain, "/reviews"),
+		Loc:        fmt.Sprintf("%s%s", domain, "/reviews"),
 		LastMod:    now,
 		Changefreq: "monthly",
 		Priority:   0.7,
 	})
 
-	reviews, err := models.GetPublishedReviews()
-	if err != nil {
-		log.Printf("ERROR: %s\n", err)
-		return
-	}
+	var reviews []models.Review
+	db.Where("published = ?", true).Order("id desc").Find(&reviews)
 	for i := range reviews {
 		items = append(items, sitemap.Item{
 			Loc:        fmt.Sprintf("%s%s", domain, reviews[i].URL()),
@@ -84,23 +76,6 @@ func CreateXMLSitemap() {
 			Priority:   0.7,
 		})
 	}
-
-	//Comments
-	/*
-		comments, err := models.GetPublishedComments()
-		if err != nil {
-			log.Printf("ERROR: %s\n", err)
-			return
-		}
-		for i := range comments {
-			items = append(items, sitemap.Item{
-				Loc:        fmt.Sprintf("%s%s", domain, comments[i].URL()),
-				LastMod:    comments[i].UpdatedAt,
-				Changefreq: "monthly",
-				Priority:   0.6,
-			})
-		}
-	*/
 
 	if err := sitemap.SiteMap(path.Join(folder, "sitemap1.xml.gz"), items); err != nil {
 		log.Printf("ERROR: %s\n", err)

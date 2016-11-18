@@ -13,6 +13,7 @@
         {{end}}
         {{.csrfField}}
         <input type="hidden" name="id" value="{{.Comment.ID}}" >
+        <input type="hidden" name="article_id" value="{{.Comment.ArticleID}}" >
         <div class="form-group">
           <label class="control-label" for="author_name">{{T "author"}}</label>
           <input id="author_name" name="author_name" value="{{.Comment.AuthorName}}" placeholder="{{T "author_placeholder"}}" class="form-control input-md" >

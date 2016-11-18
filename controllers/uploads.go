@@ -57,7 +57,7 @@ func saveFile(fh *multipart.FileHeader, f multipart.File) (string, error) {
 	}
 	newName := fmt.Sprint(time.Now().Unix()) + fileExt //unique file name ;D
 	uri := "/public/uploads/" + newName
-	fullName := filepath.Join(system.UploadsPath(), newName)
+	fullName := filepath.Join(system.GetConfig().Uploads, newName)
 
 	file, err := os.OpenFile(fullName, os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {

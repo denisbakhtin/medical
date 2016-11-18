@@ -46,22 +46,18 @@
         </div>
 
         <div class="form-group">
+          <label class="control-label" for="meta_keywords">Мета ключевики</label>
+          <input class="form-control" name="meta_keywords" value="{{.Article.MetaKeywords}}"/>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="meta_description">Мета описание</label>
+          <input class="form-control" name="meta_description" value="{{.Article.MetaDescription}}" />
+        </div>
+
+        <div class="form-group">
           <input type="submit" class="btn btn-primary" value="{{T "submit"}}">
-          <input type="button" {{if not .Article.Published}}title="{{T "article_is_unpublished"}}" disabled="disabled"{{end}} class="btn btn-success" value="{{T "post_on_facebook"}}" onclick="postonfacebook();" />
           <input type="button" class="btn btn-default" formnovalidate onclick="window.history.back();" value="{{T "cancel"}}">
-          <script>
-          </script>
-          <script>
-            function postonfacebook() {
-              $.ajax({
-                method: "POST",
-                url: '/admin/post_on_facebook?id={{.Article.ID}}',
-                data: null, 
-                error: function(jqXHR, status){alert('{{T "error_see_logs"}}');},
-                success: function(data, status){alert('{{T "posted_successfully"}}');},
-              });
-            }
-          </script>
         </div>
       </fieldset>
       </form>

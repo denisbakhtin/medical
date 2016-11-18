@@ -26,9 +26,9 @@
         <label class="control-label" for="article_id">{{T "article"}}</label>
         {{$aid := .Review.ArticleID}}
         <select id="article_id" name="article_id" class="form-control">
-          <option value="" {{if eqRI $aid 0}}selected{{end}}>Не выбрана</option>
+          <option value="" {{if eqRU $aid 0}}selected{{end}}>Не выбрана</option>
           {{range .Articles}}
-          <option value="{{.ID}}" {{if eqRI $aid .ID}}selected{{end}}>{{.Name}}</option>
+          <option value="{{.ID}}" {{if eqRU $aid .ID}}selected{{end}}>{{.Name}}</option>
           {{end}}
         </select>
       </div>

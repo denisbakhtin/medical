@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"regexp"
 	"strconv"
 
 	"github.com/denisbakhtin/medical/helpers"
@@ -20,78 +19,15 @@ func CommentIndex(w http.ResponseWriter, r *http.Request) {
 	tmpl := helpers.Template(r)
 	data := helpers.DefaultData(r)
 	T := helpers.T(r)
+	db := models.GetDB()
 	if r.Method == "GET" {
 
-		list, err := models.GetComments()
-		if err != nil {
-			w.WriteHeader(500)
-			tmpl.Lookup("errors/500").Execute(w, helpers.ErrorData(err))
-			return
-		}
+		var list []models.Comment
+		db.Order("id desc").Find(&list)
 		data["Title"] = T("comments")
 		data["Active"] = "comments"
 		data["List"] = list
 		tmpl.Lookup("comments/index").Execute(w, data)
-
-	} else {
-		err := fmt.Errorf("Method %q not allowed", r.Method)
-		log.Printf("ERROR: %s\n", err)
-		w.WriteHeader(405)
-		tmpl.Lookup("errors/405").Execute(w, helpers.ErrorData(err))
-	}
-}
-
-//CommentPublicIndex handles GET /comments route
-func CommentPublicIndex(w http.ResponseWriter, r *http.Request) {
-	tmpl := helpers.Template(r)
-	data := helpers.DefaultData(r)
-	T := helpers.T(r)
-	if r.Method == "GET" {
-
-		list, err := models.GetPublishedComments()
-		if err != nil {
-			w.WriteHeader(500)
-			tmpl.Lookup("errors/500").Execute(w, helpers.ErrorData(err))
-			return
-		}
-		data["Title"] = T("questions_and_answers")
-		data["Active"] = "/comments"
-		data["List"] = list
-		tmpl.Lookup("comments/public-index").Execute(w, data)
-
-	} else {
-		err := fmt.Errorf("Method %q not allowed", r.Method)
-		log.Printf("ERROR: %s\n", err)
-		w.WriteHeader(405)
-		tmpl.Lookup("errors/405").Execute(w, helpers.ErrorData(err))
-	}
-}
-
-//CommentShow handles GET /comments/:id-slug route
-func CommentShow(w http.ResponseWriter, r *http.Request) {
-	tmpl := helpers.Template(r)
-	data := helpers.DefaultData(r)
-	if r.Method == "GET" {
-
-		re := regexp.MustCompile("^[0-9]+")
-		id := re.FindString(r.URL.Path[len("/comments/"):])
-		comment, err := models.GetComment(id)
-		if err != nil || !comment.Published {
-			w.WriteHeader(404)
-			tmpl.Lookup("errors/404").Execute(w, nil)
-			return
-		}
-		//redirect to canonical url
-		if r.URL.Path != comment.URL() {
-			http.Redirect(w, r, comment.URL(), http.StatusSeeOther)
-			return
-		}
-		data["Comment"] = comment
-		data["SimilarComments"], _ = comment.GetSimilar()
-		data["Article"], _ = models.GetArticle(comment.ArticleID)
-		data["Title"] = comment.Title()
-		data["Active"] = "/comments"
-		tmpl.Lookup("comments/show").Execute(w, data)
 
 	} else {
 		err := fmt.Errorf("Method %q not allowed", r.Method)
@@ -106,6 +42,7 @@ func CommentPublicCreate(w http.ResponseWriter, r *http.Request) {
 	session := helpers.Session(r)
 	tmpl := helpers.Template(r)
 	T := helpers.T(r)
+	db := models.GetDB()
 	if r.Method == "POST" {
 
 		r.ParseForm()
@@ -123,7 +60,7 @@ func CommentPublicCreate(w http.ResponseWriter, r *http.Request) {
 		}
 
 		comment := &models.Comment{
-			ArticleID:   helpers.Atoi64(r.PostFormValue("article_id")),
+			ArticleID:   helpers.Atouint(r.PostFormValue("article_id")),
 			AuthorCity:  r.PostFormValue("author_city"),
 			AuthorName:  r.PostFormValue("author_name"),
 			AuthorEmail: r.PostFormValue("author_email"),
@@ -131,7 +68,7 @@ func CommentPublicCreate(w http.ResponseWriter, r *http.Request) {
 			Published:   false, //comments are published by admin via dashboard
 		}
 
-		if err := comment.Insert(); err != nil {
+		if err := db.Create(comment).Error; err != nil {
 			log.Printf("ERROR: %s\n", err)
 			w.WriteHeader(400)
 			tmpl.Lookup("errors/400").Execute(w, helpers.ErrorData(err))
@@ -156,13 +93,15 @@ func CommentUpdate(w http.ResponseWriter, r *http.Request) {
 	session := helpers.Session(r)
 	data := helpers.DefaultData(r)
 	T := helpers.T(r)
+	db := models.GetDB()
 	if r.Method == "GET" {
 
 		id := r.URL.Path[len("/admin/edit_comment/"):]
-		comment, err := models.GetComment(id)
-		if err != nil {
+		comment := &models.Comment{}
+		db.First(comment, id)
+		if comment.ID == 0 {
 			w.WriteHeader(404)
-			tmpl.Lookup("errors/404").Execute(w, helpers.ErrorData(err))
+			tmpl.Lookup("errors/404").Execute(w, nil)
 			return
 		}
 
@@ -177,14 +116,17 @@ func CommentUpdate(w http.ResponseWriter, r *http.Request) {
 
 		r.ParseForm()
 		comment := &models.Comment{
-			ID:         helpers.Atoi64(r.PostFormValue("id")),
-			AuthorCity: r.PostFormValue("author_city"),
-			Content:    r.PostFormValue("content"),
-			Answer:     r.PostFormValue("answer"),
-			Published:  helpers.Atob(r.PostFormValue("published")),
+			ID:          helpers.Atouint(r.PostFormValue("id")),
+			ArticleID:   helpers.Atouint(r.PostFormValue("article_id")),
+			AuthorCity:  r.PostFormValue("author_city"),
+			AuthorName:  r.PostFormValue("author_name"),
+			AuthorEmail: r.PostFormValue("author_email"),
+			Content:     r.PostFormValue("content"),
+			Answer:      r.PostFormValue("answer"),
+			Published:   helpers.Atob(r.PostFormValue("published")),
 		}
 
-		if err := comment.Update(); err != nil {
+		if err := db.Save(comment).Error; err != nil {
 			session.AddFlash(err.Error(), "comments")
 			session.Save(r, w)
 			http.Redirect(w, r, r.RequestURI, 303)
@@ -206,11 +148,13 @@ func CommentPublicUpdate(w http.ResponseWriter, r *http.Request) {
 	session := helpers.Session(r)
 	data := helpers.DefaultData(r)
 	T := helpers.T(r)
+	db := models.GetDB()
 	if r.Method == "GET" {
 
 		id := getIDFromToken(r.FormValue("token"))
-		comment, err := models.GetComment(id)
-		if err != nil || comment.Published {
+		comment := &models.Comment{}
+		db.First(comment, id)
+		if comment.ID == 0 || comment.Published {
 			err := fmt.Errorf(T("comment_not_found_or_already_published"))
 			w.WriteHeader(404)
 			tmpl.Lookup("errors/404").Execute(w, helpers.ErrorData(err))
@@ -230,7 +174,7 @@ func CommentPublicUpdate(w http.ResponseWriter, r *http.Request) {
 
 		r.ParseForm()
 		comment := &models.Comment{
-			ID:          helpers.Atoi64(r.PostFormValue("id")),
+			ID:          helpers.Atouint(r.PostFormValue("id")),
 			AuthorName:  r.PostFormValue("author_name"),
 			AuthorEmail: r.PostFormValue("author_email"),
 			AuthorCity:  r.PostFormValue("author_city"),
@@ -239,7 +183,7 @@ func CommentPublicUpdate(w http.ResponseWriter, r *http.Request) {
 			Published:   helpers.Atob(r.PostFormValue("published")),
 		}
 
-		if err := comment.Update(); err != nil {
+		if err := db.Save(comment).Error; err != nil {
 			session.AddFlash(err.Error(), "comments")
 			session.Save(r, w)
 			http.Redirect(w, r, r.RequestURI, 303)
@@ -247,7 +191,6 @@ func CommentPublicUpdate(w http.ResponseWriter, r *http.Request) {
 		}
 		if comment.Published {
 			notifyClientOfComment(r, comment)
-			postCommentOnSocialWalls(r, comment)
 		}
 		session.AddFlash(T("comment_has_been_successfully_updated"))
 		session.Save(r, w)
@@ -264,17 +207,18 @@ func CommentPublicUpdate(w http.ResponseWriter, r *http.Request) {
 //CommentDelete handles /admin/delete_comment route
 func CommentDelete(w http.ResponseWriter, r *http.Request) {
 	tmpl := helpers.Template(r)
+	db := models.GetDB()
 
 	if r.Method == "POST" {
 
-		comment, err := models.GetComment(r.PostFormValue("id"))
-		if err != nil {
-			log.Printf("ERROR: %s\n", err)
+		comment := &models.Comment{}
+		db.First(comment, r.PostFormValue("id"))
+		if comment.ID == 0 {
 			w.WriteHeader(404)
-			tmpl.Lookup("errors/404").Execute(w, helpers.ErrorData(err))
+			tmpl.Lookup("errors/404").Execute(w, nil)
 		}
 
-		if err := comment.Delete(); err != nil {
+		if err := db.Delete(comment).Error; err != nil {
 			log.Printf("ERROR: %s\n", err)
 			w.WriteHeader(500)
 			tmpl.Lookup("errors/500").Execute(w, helpers.ErrorData(err))
@@ -374,8 +318,4 @@ func notifyClientOfComment(r *http.Request, comment *models.Comment) {
 			return
 		}
 	}()
-}
-
-func postCommentOnSocialWalls(r *http.Request, comment *models.Comment) {
-	//TODO
 }

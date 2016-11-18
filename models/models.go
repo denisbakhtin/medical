@@ -1,22 +1,30 @@
 package models
 
 import (
-	"github.com/fiam/gounidecode/unidecode"
-	"github.com/jmoiron/sqlx"
-	_ "github.com/lib/pq" //postgresql driver, don't remove
+	"log"
 	"regexp"
 	"strings"
+
+	"github.com/fiam/gounidecode/unidecode"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
-var db *sqlx.DB
+var db *gorm.DB
 
 //InitDB establishes connection to database and saves its handler into db *sqlx.DB
 func InitDB(connection string) {
-	db = sqlx.MustConnect("postgres", connection)
+	var err error
+	db, err = gorm.Open("postgres", connection)
+	if err != nil {
+		log.Fatal(err)
+	}
+	//automigrate
+	db.AutoMigrate(&Article{}, &Comment{}, &Page{}, &Review{}, &User{})
 }
 
 //GetDB returns database handler
-func GetDB() *sqlx.DB {
+func GetDB() *gorm.DB {
 	return db
 }
 

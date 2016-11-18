@@ -1,5 +1,6 @@
 package controllers
 
+/*
 import (
 	"fmt"
 	"github.com/denisbakhtin/medical/helpers"
@@ -30,3 +31,4 @@ func Search(w http.ResponseWriter, r *http.Request) {
 		tmpl.Lookup("errors/405").Execute(w, helpers.ErrorData(err))
 	}
 }
+*/
