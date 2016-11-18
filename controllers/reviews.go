@@ -20,7 +20,6 @@ import (
 func ReviewShow(w http.ResponseWriter, r *http.Request) {
 	tmpl := helpers.Template(r)
 	data := helpers.DefaultData(r)
-	T := helpers.T(r)
 	db := models.GetDB()
 	if r.Method == "GET" {
 
@@ -33,7 +32,7 @@ func ReviewShow(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		data["Review"] = review
-		data["Title"] = T("testimonial_title") + ". " + review.AuthorName
+		data["Title"] = "Отзыв о работе кинезиолога" + ". " + review.AuthorName
 		data["Active"] = "/reviews"
 		data["MetaDescription"] = review.MetaDescription
 		data["MetaKeywords"] = review.MetaKeywords
@@ -52,13 +51,12 @@ func ReviewPublicIndex(w http.ResponseWriter, r *http.Request) {
 	tmpl := helpers.Template(r)
 	data := helpers.DefaultData(r)
 	session := helpers.Session(r)
-	T := helpers.T(r)
 	db := models.GetDB()
 	if r.Method == "GET" {
 
 		var list []models.Review
 		db.Where("published = ?", true).Order("id desc").Find(&list)
-		data["Title"] = T("testimonials_title")
+		data["Title"] = "Кинезиология - отзывы пациентов"
 		data["Active"] = r.RequestURI
 		data["List"] = list
 		data["Flash"] = session.Flashes("reviews")
@@ -77,13 +75,12 @@ func ReviewPublicIndex(w http.ResponseWriter, r *http.Request) {
 func ReviewIndex(w http.ResponseWriter, r *http.Request) {
 	tmpl := helpers.Template(r)
 	data := helpers.DefaultData(r)
-	T := helpers.T(r)
 	db := models.GetDB()
 	if r.Method == "GET" {
 
 		var list []models.Review
 		db.Order("id desc").Find(&list)
-		data["Title"] = T("reviews")
+		data["Title"] = "Отзывы"
 		data["Active"] = "reviews"
 		data["List"] = list
 		tmpl.Lookup("reviews/index").Execute(w, data)
@@ -101,11 +98,10 @@ func ReviewPublicCreate(w http.ResponseWriter, r *http.Request) {
 	session := helpers.Session(r)
 	tmpl := helpers.Template(r)
 	data := helpers.DefaultData(r)
-	T := helpers.T(r)
 	db := models.GetDB()
 	if r.Method == "GET" {
 
-		data["Title"] = T("new_review")
+		data["Title"] = "Новый отзыв"
 		data["Active"] = "reviews"
 		data["Flash"] = session.Flashes("reviews")
 		session.Save(r, w)
@@ -152,7 +148,7 @@ func ReviewPublicCreate(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		notifyAdminOfReview(r, review)
-		session.AddFlash(T("thank_you_for_posting_review"), "reviews")
+		session.AddFlash("Спасибо! Ваш отзыв будет опубликован после проверки.", "reviews")
 		session.Save(r, w)
 		http.Redirect(w, r, "/reviews", 303)
 
@@ -169,13 +165,12 @@ func ReviewCreate(w http.ResponseWriter, r *http.Request) {
 	session := helpers.Session(r)
 	tmpl := helpers.Template(r)
 	data := helpers.DefaultData(r)
-	T := helpers.T(r)
 	db := models.GetDB()
 	if r.Method == "GET" {
 
 		var articles []models.Article
 		db.Where("published = ?", true).Find(&articles)
-		data["Title"] = T("new_review")
+		data["Title"] = "Новый отзыв"
 		data["Active"] = "reviews"
 		data["Articles"] = articles
 		data["Flash"] = session.Flashes("reviews")
@@ -228,7 +223,6 @@ func ReviewUpdate(w http.ResponseWriter, r *http.Request) {
 	tmpl := helpers.Template(r)
 	session := helpers.Session(r)
 	data := helpers.DefaultData(r)
-	T := helpers.T(r)
 	db := models.GetDB()
 	if r.Method == "GET" {
 
@@ -243,7 +237,7 @@ func ReviewUpdate(w http.ResponseWriter, r *http.Request) {
 
 		var articles []models.Article
 		db.Where("published = ?", true).Find(&articles)
-		data["Title"] = T("edit_review")
+		data["Title"] = "Редактировать отзыв"
 		data["Active"] = "reviews"
 		data["Review"] = review
 		data["Articles"] = articles
@@ -306,7 +300,6 @@ func ReviewPublicUpdate(w http.ResponseWriter, r *http.Request) {
 	tmpl := helpers.Template(r)
 	session := helpers.Session(r)
 	data := helpers.DefaultData(r)
-	T := helpers.T(r)
 	db := models.GetDB()
 	if r.Method == "GET" {
 
@@ -314,7 +307,7 @@ func ReviewPublicUpdate(w http.ResponseWriter, r *http.Request) {
 		review := &models.Review{}
 		db.First(review, id)
 		if review.ID == 0 || review.Published {
-			err := fmt.Errorf(T("review_not_found_or_already_published"))
+			err := fmt.Errorf("Отзыв не найден или уже был опубликован и не подлежит редактированию")
 			w.WriteHeader(404)
 			tmpl.Lookup("errors/404").Execute(w, helpers.ErrorData(err))
 			return
@@ -323,7 +316,7 @@ func ReviewPublicUpdate(w http.ResponseWriter, r *http.Request) {
 		var articles []models.Article
 		db.Where("published = ?", true).Find(&articles)
 		review.Published = true //set default to true
-		data["Title"] = T("edit_review")
+		data["Title"] = "Редактировать отзыв"
 		data["Articles"] = articles
 		data["Active"] = "reviews"
 		data["Review"] = review
@@ -370,7 +363,7 @@ func ReviewPublicUpdate(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, r.RequestURI, 303)
 			return
 		}
-		session.AddFlash(T("review_has_been_successfully_updated"), "reviews")
+		session.AddFlash("Отзыв был успешно сохранен", "reviews")
 		session.Save(r, w)
 		http.Redirect(w, r, "/reviews", 303)
 
@@ -415,7 +408,6 @@ func ReviewDelete(w http.ResponseWriter, r *http.Request) {
 func notifyAdminOfReview(r *http.Request, review *models.Review) {
 	//closure is needed here, as r may be released by the time func finishes
 	tmpl := helpers.Template(r)
-	T := helpers.T(r)
 	go func() {
 		data := map[string]interface{}{
 			"Review": review,
@@ -434,7 +426,7 @@ func notifyAdminOfReview(r *http.Request, review *models.Review) {
 		if len(smtp.Cc) > 0 {
 			msg.SetHeader("Cc", smtp.Cc)
 		}
-		msg.SetHeader("Subject", T("new_review_has_been_created", map[string]interface{}{"Name": review.AuthorName}))
+		msg.SetHeader("Subject", fmt.Sprintf("Новый отзыв на сайте www.miobalans.ru: %s", review.AuthorName))
 		msg.SetBody(
 			"text/html",
 			b.String(),

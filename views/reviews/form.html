@@ -14,22 +14,22 @@
         {{.csrfField}}
         <input type="hidden" name="id" value="{{.Review.ID}}" >
         <div class="form-group">
-          <label class="control-label" for="author_name">{{T "author"}}</label>
-          <input id="author_name" name="author_name" value="{{.Review.AuthorName}}" placeholder="{{T "author_placeholder"}}" class="form-control input-md" required="">
+          <label class="control-label" for="author_name">Автор</label>
+          <input id="author_name" name="author_name" value="{{.Review.AuthorName}}" placeholder="Укажите имя автора" class="form-control input-md" required="">
         </div>
 
         <div class="form-group">
-          <label class="control-label" for="author_email">{{T "email"}}</label>
-          <input id="author_email" type="email" name="author_email" value="{{.Review.AuthorEmail}}" placeholder="{{T "author_email_placeholder"}}" class="form-control input-md" >
+          <label class="control-label" for="author_email">Адрес эл. почты</label>
+          <input id="author_email" type="email" name="author_email" value="{{.Review.AuthorEmail}}" placeholder="Укажите адрес эл. почты" class="form-control input-md" >
         </div>
 
         <div class="form-group">
-          <label class="control-label" for="video">{{T "youtube_video"}}</label>
-          <input id="video" name="video" value="{{.Review.Video}}" placeholder="{{T "youtube_video_placeholder"}}" class="form-control input-md" >
+          <label class="control-label" for="video">Видео YouTube</label>
+          <input id="video" name="video" value="{{.Review.Video}}" placeholder="Ссылка на видео Youtube из раздела Поделиться - HTML-код" class="form-control input-md" >
         </div>
 
         <div class="form-group">
-          <label class="control-label" for="article_id">{{T "article"}}</label>
+          <label class="control-label" for="article_id">К статье</label>
           {{$aid := .Review.ArticleID}}
           <select id="article_id" name="article_id" class="form-control">
             <option value="" {{if eqRU $aid 0}}selected{{end}}>Не выбрана</option>
@@ -40,19 +40,19 @@
         </div>
 
         <div class="form-group">
-          <label class="control-label" for="content">{{T "content"}}</label>
+          <label class="control-label" for="content">Содержание</label>
           <textarea class="form-control" required="" name="content" id="content">{{.Review.Content}}</textarea>
         </div>
 
         <div class="form-group">
-          <label class="control-label" for="image">{{T "photo"}}</label>
+          <label class="control-label" for="image">Фото</label>
           <input type="file" id="image" name="image" accept="image/*">
         </div>
 
         <div class="form-group">
           <label for="published">
             <input id="published" name="published" type="checkbox" value="true" {{if .Review.Published}}checked{{end}} >
-            {{T "published"}}
+            Опубликовать
           </label>
         </div>
 
@@ -67,8 +67,8 @@
         </div>
 
         <div class="form-group">
-          <input type="submit" class="btn btn-primary" value="{{T "submit"}}" >
-          <input type="button" class="btn btn-default" formnovalidate onclick="window.history.back();" value="{{T "cancel"}}">
+          <input type="submit" class="btn btn-primary" value="Сохранить" >
+          <input type="button" class="btn btn-default" formnovalidate onclick="window.history.back();" value="Отмена">
         </div>
       </fieldset>
       </form>

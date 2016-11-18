@@ -18,13 +18,12 @@ import (
 func CommentIndex(w http.ResponseWriter, r *http.Request) {
 	tmpl := helpers.Template(r)
 	data := helpers.DefaultData(r)
-	T := helpers.T(r)
 	db := models.GetDB()
 	if r.Method == "GET" {
 
 		var list []models.Comment
 		db.Order("id desc").Find(&list)
-		data["Title"] = T("comments")
+		data["Title"] = "Вопросы посетителей"
 		data["Active"] = "comments"
 		data["List"] = list
 		tmpl.Lookup("comments/index").Execute(w, data)
@@ -41,7 +40,6 @@ func CommentIndex(w http.ResponseWriter, r *http.Request) {
 func CommentPublicCreate(w http.ResponseWriter, r *http.Request) {
 	session := helpers.Session(r)
 	tmpl := helpers.Template(r)
-	T := helpers.T(r)
 	db := models.GetDB()
 	if r.Method == "POST" {
 
@@ -75,7 +73,7 @@ func CommentPublicCreate(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		notifyAdminOfComment(r, comment)
-		session.AddFlash(T("thank_you_for_posting_question"), "comments")
+		session.AddFlash("Спасибо! Ваш вопрос будет опубликован после проверки.", "comments")
 		session.Save(r, w)
 		http.Redirect(w, r, fmt.Sprintf("/articles/%d#comments", comment.ArticleID), 303)
 
@@ -92,7 +90,6 @@ func CommentUpdate(w http.ResponseWriter, r *http.Request) {
 	tmpl := helpers.Template(r)
 	session := helpers.Session(r)
 	data := helpers.DefaultData(r)
-	T := helpers.T(r)
 	db := models.GetDB()
 	if r.Method == "GET" {
 
@@ -105,7 +102,7 @@ func CommentUpdate(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		data["Title"] = T("edit_comment")
+		data["Title"] = "Редактировать вопрос"
 		data["Active"] = "comments"
 		data["Comment"] = comment
 		data["Flash"] = session.Flashes("comments")
@@ -147,7 +144,6 @@ func CommentPublicUpdate(w http.ResponseWriter, r *http.Request) {
 	tmpl := helpers.Template(r)
 	session := helpers.Session(r)
 	data := helpers.DefaultData(r)
-	T := helpers.T(r)
 	db := models.GetDB()
 	if r.Method == "GET" {
 
@@ -155,14 +151,14 @@ func CommentPublicUpdate(w http.ResponseWriter, r *http.Request) {
 		comment := &models.Comment{}
 		db.First(comment, id)
 		if comment.ID == 0 || comment.Published {
-			err := fmt.Errorf(T("comment_not_found_or_already_published"))
+			err := fmt.Errorf("Вопрос не существует или уже был опубликован ранее")
 			w.WriteHeader(404)
 			tmpl.Lookup("errors/404").Execute(w, helpers.ErrorData(err))
 			return
 		}
 
 		comment.Published = true //set default to true
-		data["Title"] = T("edit_comment")
+		data["Title"] = "Редактировать вопрос"
 		data["Active"] = "comments"
 		data["Comment"] = comment
 		data["SecureEdit"] = true
@@ -192,7 +188,7 @@ func CommentPublicUpdate(w http.ResponseWriter, r *http.Request) {
 		if comment.Published {
 			notifyClientOfComment(r, comment)
 		}
-		session.AddFlash(T("comment_has_been_successfully_updated"))
+		session.AddFlash("Вопрос был успешно сохранен")
 		session.Save(r, w)
 		http.Redirect(w, r, "/", 303)
 
@@ -237,7 +233,6 @@ func CommentDelete(w http.ResponseWriter, r *http.Request) {
 func notifyAdminOfComment(r *http.Request, comment *models.Comment) {
 	//closure is needed here, as r may be released by the time func finishes
 	tmpl := helpers.Template(r)
-	T := helpers.T(r)
 	go func() {
 		data := map[string]interface{}{
 			"Comment": comment,
@@ -259,7 +254,7 @@ func notifyAdminOfComment(r *http.Request, comment *models.Comment) {
 		if len(smtp.Cc) > 0 {
 			msg.SetHeader("Cc", smtp.Cc)
 		}
-		msg.SetHeader("Subject", T("new_comment_has_been_created", map[string]interface{}{"Name": comment.AuthorName}))
+		msg.SetHeader("Subject", fmt.Sprintf("Новый вопрос на сайте www.miobalans.ru: %s", comment.AuthorName))
 		msg.SetBody(
 			"text/html",
 			b.String(),
@@ -285,7 +280,6 @@ func notifyClientOfComment(r *http.Request, comment *models.Comment) {
 		return
 	}
 	tmpl := helpers.Template(r)
-	T := helpers.T(r)
 	go func() {
 		data := map[string]interface{}{
 			"Comment": comment,
@@ -300,7 +294,7 @@ func notifyClientOfComment(r *http.Request, comment *models.Comment) {
 		msg := gomail.NewMessage()
 		msg.SetHeader("From", smtp.From)
 		msg.SetHeader("To", comment.AuthorEmail)
-		msg.SetHeader("Subject", T("your_question_has_been_answered"))
+		msg.SetHeader("Subject", "Врач ответил на ваш вопрос на сайте www.miobalans.ru")
 		msg.SetBody(
 			"text/html",
 			b.String(),

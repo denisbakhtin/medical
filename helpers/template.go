@@ -10,7 +10,7 @@ import (
 //MenuItem represents main menu item
 type MenuItem struct {
 	URL      string
-	Title    string //will be passed to T i18n function
+	Title    string
 	CssClass string
 	IsActive bool
 }
@@ -64,20 +64,20 @@ func MainMenu() []MenuItem {
 	menu := []MenuItem{
 		MenuItem{
 			URL:   "/reviews",
-			Title: "reviews",
+			Title: "Отзывы",
 		},
 		MenuItem{
 			URL:   "/articles",
-			Title: "articles",
+			Title: "Статьи",
 		},
 		MenuItem{
 			URL:      about.URL(),
-			Title:    "about_doctor",
+			Title:    "О враче",
 			CssClass: "small",
 		},
 		MenuItem{
 			URL:      contacts.URL(),
-			Title:    "contacts",
+			Title:    "Контакты",
 			CssClass: "small",
 		},
 	}
@@ -92,15 +92,15 @@ func ScrollMenu() []MenuItem {
 	menu := []MenuItem{
 		MenuItem{
 			URL:   about.URL(),
-			Title: "about_doctor",
+			Title: "О враче",
 		},
 		MenuItem{
 			URL:   "#withoutpain",
-			Title: "treatment_stages",
+			Title: "Этапы лечения",
 		},
 		MenuItem{
 			URL:   "/reviews",
-			Title: "reviews",
+			Title: "Отзывы",
 		},
 	}
 	return menu

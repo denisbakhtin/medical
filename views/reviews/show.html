@@ -4,13 +4,13 @@
 <div id="review">
   <h1>
     {{if .Review.Video}}
-      {{T "testimonial_video_title"}}: {{.Review.AuthorName}}
+      Видео отзыв о работе кинезиолога: {{.Review.AuthorName}}
     {{else}}
-      {{T "testimonial_title"}}: {{.Review.AuthorName}}
+      Отзыв о работе кинезиолога: {{.Review.AuthorName}}
     {{end}}
     {{if .ActiveUser}}
     <a class="btn btn-primary" href="/admin/edit_review/{{.Review.ID}}">
-      {{T "edit_review"}}
+      Редактировать отзыв
     </a>
     {{end}}
   </h1>
@@ -31,7 +31,7 @@
     <p class="content">{{.Review.Content}}</p>
   {{end}}
   <p class="text-center">
-    <a class="btn btn-lg btn-success btn-outline" href="/reviews">{{T "view_all_reviews"}}</a>
+    <a class="btn btn-lg btn-success btn-outline" href="/reviews">Просмотреть все отзывы</a>
   </p>
 </div>
 
@@ -40,7 +40,7 @@
 {{template "withoutpain" .}}
 {{template "testimonials" .}}
 {{template "sellingblock" .}}
-{{template "mapp" .}}
+{{template "map" .}}
 {{template "optinform" .}}
 
 {{template "footer" .}}

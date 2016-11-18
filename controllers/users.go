@@ -14,13 +14,12 @@ import (
 func UserIndex(w http.ResponseWriter, r *http.Request) {
 	tmpl := helpers.Template(r)
 	data := helpers.DefaultData(r)
-	T := helpers.T(r)
 	db := models.GetDB()
 	if r.Method == "GET" {
 
 		var list []models.User
 		db.Find(&list)
-		data["Title"] = T("users")
+		data["Title"] = "Пользователи"
 		data["Active"] = "users"
 		data["List"] = list
 		tmpl.Lookup("users/index").Execute(w, data)
@@ -38,11 +37,10 @@ func UserCreate(w http.ResponseWriter, r *http.Request) {
 	tmpl := helpers.Template(r)
 	session := helpers.Session(r)
 	data := helpers.DefaultData(r)
-	T := helpers.T(r)
 	db := models.GetDB()
 	if r.Method == "GET" {
 
-		data["Title"] = T("new_user")
+		data["Title"] = "Новый пользователь"
 		data["Active"] = "users"
 		data["Flash"] = session.Flashes()
 		session.Save(r, w)
@@ -77,7 +75,6 @@ func UserUpdate(w http.ResponseWriter, r *http.Request) {
 	tmpl := helpers.Template(r)
 	session := helpers.Session(r)
 	data := helpers.DefaultData(r)
-	T := helpers.T(r)
 	db := models.GetDB()
 	if r.Method == "GET" {
 
@@ -90,7 +87,7 @@ func UserUpdate(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		data["Title"] = T("edit_user")
+		data["Title"] = "Редактировать пользователя"
 		data["Active"] = "users"
 		data["User"] = user
 		data["Flash"] = session.Flashes()

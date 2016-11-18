@@ -8,7 +8,6 @@ import (
 	"github.com/denisbakhtin/medical/models"
 	"github.com/gorilla/context"
 	"github.com/gorilla/sessions"
-	"github.com/nicksnyder/go-i18n/i18n"
 )
 
 var (
@@ -16,7 +15,7 @@ var (
 	//store *sessions.CookieStore
 )
 
-func createSession() {
+func createSessionStore() {
 	store = sessions.NewFilesystemStore("", []byte(config.SessionSecret))
 	//store = sessions.NewCookieStore([]byte(config.SessionSecret))
 	store.Options = &sessions.Options{Domain: config.Domain, Path: "/", Secure: config.Ssl, HttpOnly: true, MaxAge: 7 * 86400}
@@ -42,30 +41,10 @@ func SessionMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(fn)
 }
 
-//LocaleMiddleware stores current locale
-func LocaleMiddleware(next http.Handler) http.Handler {
-	fn := func(w http.ResponseWriter, r *http.Request) {
-		T, lang, err := i18n.TfuncAndLanguage("ru")
-		if err != nil {
-			w.WriteHeader(500)
-			w.Write([]byte(err.Error()))
-			log.Printf("ERROR: %s\n", err)
-			return
-		}
-		context.Set(r, "T", T)
-		context.Set(r, "language", lang.Tag)
-		next.ServeHTTP(w, r)
-	}
-	return http.HandlerFunc(fn)
-}
-
 //TemplateMiddleware stores parsed templates in context. Must be preceded by LocaleMiddleware
 func TemplateMiddleware(next http.Handler) http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) {
-		t := tmpl.Funcs(map[string]interface{}{
-			"T": context.Get(r, "T").(i18n.TranslateFunc), //translation func for current locale, see LocaleMiddleware
-		})
-		context.Set(r, "template", t)
+		context.Set(r, "template", tmpl)
 		next.ServeHTTP(w, r)
 	}
 	return http.HandlerFunc(fn)

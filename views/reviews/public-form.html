@@ -12,18 +12,18 @@
       {{.csrfField}}
       <input type="hidden" name="id" value="{{.Review.ID}}" >
       <div class="form-group">
-        <label class="control-label" for="author_name">{{T "your_name"}}</label>
-        <input id="author_name" name="author_name" placeholder="{{T "your_name_placeholder"}}" value="{{.Review.AuthorName}}" required="" class="form-control input-md" data-parsley-required-message="{{T "parsley_your_name_required"}}">
+        <label class="control-label" for="author_name">Представьтесь</label>
+        <input id="author_name" name="author_name" placeholder="Укажите Ваше имя" value="{{.Review.AuthorName}}" required="" class="form-control input-md" data-parsley-required-message="Ваше имя обязательно">
       </div>
 
       <div class="form-group">
-        <label class="control-label" for="author_email">{{T "your_email"}}</label>
-        <input type="email" id="author_email" name="author_email" placeholder="{{T "your_email_placeholder"}}" value="{{.Review.AuthorEmail}}" class="form-control input-md" >
+        <label class="control-label" for="author_email">Адрес эл. почты</label>
+        <input type="email" id="author_email" name="author_email" placeholder="Укажите адрес эл. почты (останется в секрете)" value="{{.Review.AuthorEmail}}" class="form-control input-md" >
       </div>
 
       {{if .Articles}}
       <div class="form-group">
-        <label class="control-label" for="article_id">{{T "article"}}</label>
+        <label class="control-label" for="article_id">К статье</label>
         {{$aid := .Review.ArticleID}}
         <select id="article_id" name="article_id" class="form-control">
           <option value="" {{if eqRU $aid 0}}selected{{end}}>Не выбрана</option>
@@ -35,12 +35,12 @@
       {{end}}
 
       <div class="form-group">
-        <label class="control-label" for="content">{{T "review"}}</label>
-        <textarea class="form-control" name="content" id="content" required="" data-parsley-required-message="{{T "parsley_review_required"}}">{{.Review.Content}}</textarea>
+        <label class="control-label" for="content">Текст отзыва</label>
+        <textarea class="form-control" name="content" id="content" required="" data-parsley-required-message="Текст отзыва обязателен">{{.Review.Content}}</textarea>
       </div>
 
       <div class="form-group">
-        <label class="control-label" for="image">{{T "your_photo"}}</label>
+        <label class="control-label" for="image">Ваше фото</label>
         <input type="file" id="image" name="image" accept="image/*">
       </div>
 
@@ -48,18 +48,18 @@
       <div class="form-group">
         <label for="published">
           <input id="published" name="published" type="checkbox" value="true" {{if .Review.Published}}checked{{end}} >
-          {{T "published"}}
+          Опубликовать
         </label>
       </div>
 
       <div class="form-group">
-        <input id="submit-with-captcha-btn" type="submit" class="btn btn-primary" value="{{T "submit"}}" >
-        <input type="button" class="btn btn-default" formnovalidate onclick="window.history.back();" value="{{T "cancel"}}">
+        <input id="submit-with-captcha-btn" type="submit" class="btn btn-primary" value="Отправить" >
+        <input type="button" class="btn btn-default" formnovalidate onclick="window.history.back();" value="Отмена">
       </div>
       {{else}}
       <div class="well well-sm">
         <div class="form-group">
-          <label class="control-label" for="captcha-slider">{{T "to_prove_you_are_not_a_robot"}}</label>
+          <label class="control-label" for="captcha-slider">Докажите, что Вы не робот: передвиньте ползунок вправо до упора</label>
           <div id="captcha-wrapper">
             <div id="captcha-slider"></div>
             <i id="ok-sign" class="glyphicon glyphicon-ok-circle"></i>
@@ -68,8 +68,8 @@
         </div>
 
         <div class="form-group">
-          <input id="submit-with-captcha-btn" type="submit" class="btn btn-primary" value="{{T "submit"}}" >
-          <input type="button" class="btn btn-default" formnovalidate onclick="window.history.back();" value="{{T "cancel"}}">
+          <input id="submit-with-captcha-btn" type="submit" class="btn btn-primary" value="Отправить" >
+          <input type="button" class="btn btn-default" formnovalidate onclick="window.history.back();" value="Отмена">
         </div>
       </div>
       {{end}}

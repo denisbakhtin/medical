@@ -50,13 +50,12 @@ func PageShow(w http.ResponseWriter, r *http.Request) {
 func PageIndex(w http.ResponseWriter, r *http.Request) {
 	tmpl := helpers.Template(r)
 	data := helpers.DefaultData(r)
-	T := helpers.T(r)
 	db := models.GetDB()
 	if r.Method == "GET" {
 
 		var list []models.Page
 		db.Order("published desc, id desc").Find(&list)
-		data["Title"] = T("pages")
+		data["Title"] = "Страницы"
 		data["Active"] = "pages"
 		data["List"] = list
 		tmpl.Lookup("pages/index").Execute(w, data)
@@ -74,11 +73,10 @@ func PageCreate(w http.ResponseWriter, r *http.Request) {
 	tmpl := helpers.Template(r)
 	session := helpers.Session(r)
 	data := helpers.DefaultData(r)
-	T := helpers.T(r)
 	db := models.GetDB()
 	if r.Method == "GET" {
 
-		data["Title"] = T("new_page")
+		data["Title"] = "Новая страница"
 		data["Active"] = "pages"
 		data["Flash"] = session.Flashes()
 		session.Save(r, w)
@@ -116,7 +114,6 @@ func PageUpdate(w http.ResponseWriter, r *http.Request) {
 	tmpl := helpers.Template(r)
 	session := helpers.Session(r)
 	data := helpers.DefaultData(r)
-	T := helpers.T(r)
 	db := models.GetDB()
 	if r.Method == "GET" {
 
@@ -129,7 +126,7 @@ func PageUpdate(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		data["Title"] = T("edit_page")
+		data["Title"] = "Редактировать страницу"
 		data["Active"] = "pages"
 		data["Page"] = page
 		data["Flash"] = session.Flashes()

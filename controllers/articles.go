@@ -69,7 +69,6 @@ func ArticleShow(w http.ResponseWriter, r *http.Request) {
 func ArticlePublicIndex(w http.ResponseWriter, r *http.Request) {
 	tmpl := helpers.Template(r)
 	data := helpers.DefaultData(r)
-	T := helpers.T(r)
 	db := models.GetDB()
 	if r.Method == "GET" {
 
@@ -80,7 +79,7 @@ func ArticlePublicIndex(w http.ResponseWriter, r *http.Request) {
 			tmpl.Lookup("errors/500").Execute(w, helpers.ErrorData(err))
 			return
 		}
-		data["Title"] = T("kinesiology_in_practice")
+		data["Title"] = "Кинезиология во врачебной практике"
 		data["Active"] = r.RequestURI
 		data["List"] = list
 		tmpl.Lookup("articles/public-index").Execute(w, data)
@@ -97,7 +96,6 @@ func ArticlePublicIndex(w http.ResponseWriter, r *http.Request) {
 func ArticleIndex(w http.ResponseWriter, r *http.Request) {
 	tmpl := helpers.Template(r)
 	data := helpers.DefaultData(r)
-	T := helpers.T(r)
 	db := models.GetDB()
 	if r.Method == "GET" {
 
@@ -108,7 +106,7 @@ func ArticleIndex(w http.ResponseWriter, r *http.Request) {
 			tmpl.Lookup("errors/500").Execute(w, helpers.ErrorData(err))
 			return
 		}
-		data["Title"] = T("articles")
+		data["Title"] = "Статьи"
 		data["Active"] = "articles"
 		data["List"] = list
 		tmpl.Lookup("articles/index").Execute(w, data)
@@ -126,11 +124,10 @@ func ArticleCreate(w http.ResponseWriter, r *http.Request) {
 	tmpl := helpers.Template(r)
 	session := helpers.Session(r)
 	data := helpers.DefaultData(r)
-	T := helpers.T(r)
 	db := models.GetDB()
 	if r.Method == "GET" {
 
-		data["Title"] = T("new_article")
+		data["Title"] = "Новая статья"
 		data["Active"] = "articles"
 		data["Flash"] = session.Flashes()
 		session.Save(r, w)
@@ -171,7 +168,6 @@ func ArticleUpdate(w http.ResponseWriter, r *http.Request) {
 	tmpl := helpers.Template(r)
 	session := helpers.Session(r)
 	data := helpers.DefaultData(r)
-	T := helpers.T(r)
 	db := models.GetDB()
 	if r.Method == "GET" {
 
@@ -184,7 +180,7 @@ func ArticleUpdate(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		data["Title"] = T("edit_article")
+		data["Title"] = "Редактировать статью"
 		data["Active"] = "articles"
 		data["Article"] = article
 		data["Flash"] = session.Flashes()

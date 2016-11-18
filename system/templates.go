@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"github.com/denisbakhtin/medical/helpers"
-	"github.com/nicksnyder/go-i18n/i18n"
 )
 
 var tmpl *template.Template
@@ -27,7 +26,6 @@ func loadTemplates() {
 		"promoTill":      helpers.PromoTill,
 		"cityList":       helpers.CityList,
 		"eqRU":           helpers.EqRU,
-		"T":              i18n.MustTfunc(config.Language), //will be replaced by actual TranslationFunc in LocaleMiddleware
 	})
 
 	fn := func(path string, f os.FileInfo, err error) error {

@@ -13,7 +13,7 @@
       </a>
       <div class="excerpt">
         {{.Excerpt}}
-        <a href="{{.URL}}">{{T "read_more"}}</a>
+        <a href="{{.URL}}">Читать полностью</a>
       </div>
     </div>
     {{if oddEvenClass $i | eq "even"}}
@@ -26,7 +26,7 @@
 {{template "withoutpain" .}}
 {{template "testimonials" .}}
 {{template "sellingblock" .}}
-{{template "mapp" .}}
+{{template "map" .}}
 {{template "optinform" .}}
 {{template "footer" .}}
 {{end}}

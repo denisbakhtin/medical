@@ -6,29 +6,29 @@
     <div class="panel-body">
       <form class="form-horizontal" method="post" data-parsley-validate>
       <fieldset>
-        <legend>{{T "sign_in"}}</legend>
+        <legend>Вход в систему</legend>
         {{range .Flash}}
           <div class="alert alert-danger">{{.}}</div><p>
         {{end}}
         {{.csrfField}}
         <div class="form-group">
-          <label class="col-md-4 control-label" for="email">{{T "email"}}</label>
+          <label class="col-md-4 control-label" for="email">Эл. почта</label>
           <div class="col-md-6">
-            <input id="email" name="email" type="email" placeholder="{{T "email_placeholder"}}" class="form-control input-md" required="" data-parsley-required-message="{{T "parsley_email_required"}}">
+            <input id="email" name="email" type="email" placeholder="Введите адрес эл. почты" class="form-control input-md" required="" data-parsley-required-message="Адрес является обязательным">
           </div>
         </div>
 
         <div class="form-group">
-          <label class="col-md-4 control-label" for="password">{{T "password"}}</label>
+          <label class="col-md-4 control-label" for="password">Пароль</label>
           <div class="col-md-6">
-            <input id="password" name="password" type="password" placeholder="{{T "password_placeholder"}}" class="form-control input-md" required="" data-parsley-required-message="{{T "parsley_password_required"}}">
+            <input id="password" name="password" type="password" placeholder="Введите пароль" class="form-control input-md" required="" data-parsley-required-message="Пароль является обязательным">
           </div>
         </div>
 
         <div class="form-group">
           <label class="col-md-4 control-label" for="signin"></label>
           <div class="col-md-4">
-            <button id="signin" name="signin" class="btn btn-primary">{{T "sign_in"}}</button>
+            <button id="signin" name="signin" class="btn btn-primary">Войти</button>
           </div>
         </div>
       </fieldset>

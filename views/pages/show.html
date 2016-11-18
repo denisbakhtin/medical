@@ -7,7 +7,7 @@
       {{.Page.Name}}
       {{if .ActiveUser}}
       <a class="btn btn-primary" href="/admin/edit_page/{{.Page.ID}}">
-        {{T "edit_page"}}
+        Редактировать страницу
       </a>
       {{end}}
     </h1>
@@ -18,7 +18,7 @@
 {{template "withoutpain" .}}
 {{template "testimonials" .}}
 {{template "sellingblock" .}}
-{{template "mapp" .}}
+{{template "map" .}}
 {{template "optinform" .}}
 
 {{template "footer" .}}

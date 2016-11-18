@@ -10,7 +10,6 @@ import (
 func Dashboard(w http.ResponseWriter, r *http.Request) {
 	tmpl := helpers.Template(r)
 	data := helpers.DefaultData(r)
-	T := helpers.T(r)
-	data["Title"] = T("dashboard")
+	data["Title"] = "Панель управления"
 	tmpl.Lookup("dashboard/show").Execute(w, data)
 }

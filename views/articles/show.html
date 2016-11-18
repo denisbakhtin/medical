@@ -7,9 +7,7 @@
     <h1>
       {{.Article.Name}} 
       {{if .ActiveUser}}
-      <a class="btn btn-primary" href="/admin/edit_article/{{.Article.ID}}">
-        {{T "edit_article"}}
-      </a>
+      <a class="btn btn-primary" href="/admin/edit_article/{{.Article.ID}}">Редактировать статью</a>
       {{end}}
     </h1>
     {{.Article.HTMLContent}}
@@ -29,6 +27,6 @@
   {{template "comments/public-list" .Article.Comments}}
 </div>
 
-{{template "mapp" .}}
+{{template "map" .}}
 {{template "footer" .}}
 {{end}}

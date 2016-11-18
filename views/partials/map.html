@@ -23,7 +23,7 @@ function initialize() {
     mapTypeControl: false,
     disableDefaultUI: true,
     scrollwheel: false,
-    center: new google.maps.LatLng(55.7579275,37.6337091),
+    center: new google.maps.LatLng(55.758064,37.633479),
     mapTypeControlOptions: {
       mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'map_style']
     }
@@ -34,6 +34,29 @@ function initialize() {
   //Associate the styled map with the MapTypeId and set it to display.
   map.mapTypes.set('map_style', styledMap);
   map.setMapTypeId('map_style');
+
+  var directionsService = new google.maps.DirectionsService();
+  var directionsRequest = {
+    origin: new google.maps.LatLng(55.757284,37.631602),
+    destination: new google.maps.LatLng(55.758064,37.633479),
+    travelMode: google.maps.DirectionsTravelMode.WALKING,
+    unitSystem: google.maps.UnitSystem.METRIC
+  };
+  directionsService.route(
+      directionsRequest,
+      function(response, status)
+      {
+        if (status == google.maps.DirectionsStatus.OK)
+        {
+          new google.maps.DirectionsRenderer({
+            map: map,
+            directions: response
+          });
+        }
+        else
+          $("#error").append("Unable to retrieve your route<br />");
+      }
+  );
 
 
   var iconc = {
@@ -82,7 +105,7 @@ window.onload = loadScript;
     <h2 class="text-center">Схема проезда</h2>
     <p class="text-center well well-sm">
     <i class="glyphicon glyphicon-road indent"></i>
-    {{T "site_address"}}
+    г. Москва, м. Китай-город, Малый Златоустинский пер. 2/9 стр. 6, центр красоты и здоровья 'Лайт' (4 мин. пешком от метро).
     </p>
   </div>
   <div id="map-canvas"></div>

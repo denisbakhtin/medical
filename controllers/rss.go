@@ -15,19 +15,18 @@ import (
 //RssXML handles GET /rss route
 func RssXML(w http.ResponseWriter, r *http.Request) {
 	tmpl := helpers.Template(r)
-	T := helpers.T(r)
 	db := models.GetDB()
 	if r.Method == "GET" {
 
 		now := time.Now()
 		domain := system.GetConfig().Domain
 		feed := &feeds.Feed{
-			Title:       T("site_name"),
+			Title:       "Миобаланс",
 			Link:        &feeds.Link{Href: domain},
-			Description: T("blog_description"),
+			Description: "Кинезиология Миобаланс",
 			Author:      &feeds.Author{Name: "Blog Author"},
 			Created:     now,
-			Copyright:   fmt.Sprintf("© %s", T("site_name")),
+			Copyright:   fmt.Sprintf("© %s", "Миобаланс"),
 		}
 
 		feed.Items = make([]*feeds.Item, 0)

@@ -2,18 +2,18 @@
   <section id="comment-form-wrapper">
     <form method="post" action="/new_comment" data-parsley-validate>
       <fieldset>
-        <legend class="text-center">{{T "ask_a_doctor"}}</legend>
+        <legend class="text-center">Задать доктору вопрос</legend>
         {{.csrfField}}
         <input type="hidden" name="article_id" value="{{.Article.ID}}" >
 
         <div class="form-group">
-          <textarea id="textarea-comment" class="form-control" name="content" id="content" required data-parsley-required-message="{{T "parsley_comment_required"}}"></textarea>
+          <textarea id="textarea-comment" class="form-control" name="content" id="content" required data-parsley-required-message="Необходимо указать текст вопроса"></textarea>
         </div>
 
         <div id="comment-hidden">
           <div class="form-group">
-            <label class="control-label" for="author_city">{{T "your_city"}}</label>
-            <select id="author_city" name="author_city" required="" class="form-control input-md" data-parsley-required-message="{{T "parsley_your_city_required"}}">
+            <label class="control-label" for="author_city">Ваш город</label>
+            <select id="author_city" name="author_city" required="" class="form-control input-md" data-parsley-required-message="Необходимо выбрать город из списка">
               <option value="">Выберите город</option>
               {{range cityList}}
               <option value="{{.}}">{{.}}</option>
@@ -22,17 +22,17 @@
           </div>
 
           <div class="form-group">
-            <label class="control-label" for="author_name">{{T "your_name"}}</label>
-            <input id="author_name" name="author_name" placeholder="{{T "your_name_placeholder"}}" required="" class="form-control input-md" data-parsley-required-message="{{T "parsley_your_name_required"}}">
+            <label class="control-label" for="author_name">Представьтесь</label>
+            <input id="author_name" name="author_name" placeholder="Укажите ваше имя" required="" class="form-control input-md" data-parsley-required-message="Необходимо указать свое имя">
           </div>
 
           <div class="form-group">
-            <label class="control-label" for="author_email">{{T "your_email"}}</label>
-            <input type="email" id="author_email" name="author_email" placeholder="{{T "your_email_placeholder"}}" class="form-control input-md" >
+            <label class="control-label" for="author_email">Адрес эл. почты</label>
+            <input type="email" id="author_email" name="author_email" placeholder="Укажите свою эл. почту (останется в тайне)" class="form-control input-md" >
           </div>
 
           <div id="captcha-form-group" class="form-group">
-            <label class="control-label" for="captcha-slider">{{T "to_prove_you_are_not_a_robot"}}</label>
+            <label class="control-label" for="captcha-slider">Подтвердите, что Вы не робот: передвиньте ползунок вправо до упора</label>
             <div id="captcha-wrapper">
               <div id="captcha-slider"></div>
               <i id="ok-sign" class="glyphicon glyphicon-ok-circle"></i>
@@ -42,7 +42,7 @@
         </div>
 
         <div class="form-group">
-          <input id="submit-with-captcha-btn" type="submit" class="btn btn-primary" value="{{T "submit"}}" >
+          <input id="submit-with-captcha-btn" type="submit" class="btn btn-primary" value="Отправить" >
         </div>
       </fieldset>
     </form>

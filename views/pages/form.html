@@ -14,24 +14,24 @@
         {{.csrfField}}
         <input type="hidden" name="id" value="{{.Page.ID}}" >
         <div class="form-group">
-          <label class="control-label" for="name">{{T "title"}}</label>
-          <input id="name" name="name" value="{{.Page.Name}}" placeholder="{{T "title_placeholder"}}" class="form-control input-md" required=""  data-parsley-required-message="{{T "parsley_title_required"}}">
+          <label class="control-label" for="name">Название</label>
+          <input id="name" name="name" value="{{.Page.Name}}" placeholder="Введите название страницы" class="form-control input-md" required=""  data-parsley-required-message="Название обязательно">
         </div>
 
         <div class="form-group">
-          <label class="control-label" for="slug">{{T "slug"}}</label>
-          <input id="slug" name="slug" pattern="[a-z\\-]*" value="{{.Page.Slug}}" placeholder="{{T "slug_placeholder"}}" class="form-control input-md" >
+          <label class="control-label" for="slug">SEO адрес</label>
+          <input id="slug" name="slug" pattern="[a-z\\-]*" value="{{.Page.Slug}}" placeholder="Можно оставить пустым" class="form-control input-md" >
         </div>
 
         <div class="form-group">
-          <label class="control-label" for="content">{{T "content"}}</label>
+          <label class="control-label" for="content">Содержание</label>
           <textarea id="ckeditor" name="content">{{.Page.Content}}</textarea>
         </div>
 
         <div class="form-group">
           <label for="published">
             <input id="published" name="published" type="checkbox" value="true" {{if .Page.Published}}checked{{end}} >
-            {{T "published"}}
+            Опубликовать
           </label>
         </div>
 
@@ -46,8 +46,8 @@
         </div>
 
         <div class="form-group">
-          <input type="submit" class="btn btn-primary" value="{{T "submit"}}">
-          <input type="button" class="btn btn-default" formnovalidate onclick="window.history.back();" value="{{T "cancel"}}">
+          <input type="submit" class="btn btn-primary" value="Сохранить">
+          <input type="button" class="btn btn-default" formnovalidate onclick="window.history.back();" value="Отмена">
         </div>
       </fieldset>
       </form>
