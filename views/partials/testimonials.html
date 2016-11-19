@@ -1,13 +1,22 @@
 {{define "testimonials"}}
+
   {{if .Testimonials}}
+    {{template "reviews" .Testimonials}}
+  {{else}}
+    {{template "reviews" allReviews}}
+  {{end}}
+
+{{end}}
+
+{{define "reviews"}}
   <section id="testimonials">
     <h2 class="text-center">Отзывы пациентов</h2>
     <p>Эффективность и качество применяемых на практике кинезиологических методик подтверждено многочисленными положительными отзывами наших пациентов.</p>
 
-    {{$len := len .Testimonials}}
+    {{$len := len .}}
     <div class="carousel slide" id="testimonials-slide" data-interval="false">
       <div class="carousel-inner">
-        {{range $i, $v := .Testimonials}}
+        {{range $i, $v := .}}
           <div class="item {{if eq $i 0}}active{{end}}">
             <div class="col-xs-12 {{if gt $len 1}}col-sm-6{{end}}">
               <div class="thumbnail">
@@ -33,5 +42,4 @@
       {{end}}
     </div>
   </section>
-  {{end}}
 {{end}}

@@ -1,7 +1,7 @@
 package models
 
 type Request struct {
-	Name    string
-	Phone   string
-	Comment string
+	Name    string `form:"name" binding:"required"`
+	Phone   string `form:"phone" binding:"required"`
+	Comment string `form:"comment" binding:"required"`
 }

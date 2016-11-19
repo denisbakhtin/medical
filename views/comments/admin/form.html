@@ -1,24 +1,30 @@
-{{define "comments/public-edit-form"}}
-{{template "header" .}}
-{{template "navbar" .}}
+{{define "comments/admin/form"}}
+{{template "dashboard/header" .}}
+{{template "dashboard/navbar" .}}
+{{template "dashboard/sidebar" .}}
 <div id="main-column" class="container-fluid" role="main">
-  <section id="comment-form-wrapper">
-    <form method="post" data-parsley-validate>
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <form method="post">
       <fieldset>
-        <legend>Ответ посетителю</legend>
+        <legend>{{.Title}}</legend>
+        {{range .Flash}}
+          <div class="alert alert-danger">{{.}}</div><p>
+        {{end}}
         {{.csrfField}}
         <input type="hidden" name="id" value="{{.Comment.ID}}" >
+        <input type="hidden" name="article_id" value="{{.Comment.ArticleID}}" >
         <div class="form-group">
           <label class="control-label" for="author_name">Автор</label>
-          <input id="author_name" name="author_name" value="{{.Comment.AuthorName}}" class="form-control input-md" >
+          <input id="author_name" name="author_name" value="{{.Comment.AuthorName}}" placeholder="Укажите автора" class="form-control input-md" >
         </div>
 
         <div class="form-group">
           <label class="control-label" for="author_email">Эл. почта</label>
-          <input id="author_email" name="author_email" value="{{.Comment.AuthorEmail}}" class="form-control input-md" >
+          <input id="author_email" name="author_email" value="{{.Comment.AuthorEmail}}" placeholder="Укажите адрес эл. почты" class="form-control input-md" >
         </div>
 
-        <div class="form-group hidden">
+        <div class="form-group">
           <label class="control-label" for="author_city">Город</label>
           <select id="author_city" name="author_city" class="form-control input-md">
             <option value="">Выберите город</option>
@@ -28,7 +34,6 @@
             {{end}}
           </select>
         </div>
-
 
         <div class="form-group">
           <label class="control-label" for="content">Вопрос</label>
@@ -52,8 +57,9 @@
           <input type="button" class="btn btn-default" formnovalidate onclick="window.history.back();" value="Отмена">
         </div>
       </fieldset>
-    </form>
-  </section>
+      </form>
+    </div>
+  </div>
 </div>
-{{template "footer" .}}
+{{template "dashboard/footer" .}}
 {{end}}

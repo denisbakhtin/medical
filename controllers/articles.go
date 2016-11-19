@@ -2,249 +2,185 @@ package controllers
 
 import (
 	"fmt"
-	"log"
-	"net/http"
-	"regexp"
+	"strings"
 
 	"github.com/denisbakhtin/medical/helpers"
 	"github.com/denisbakhtin/medical/models"
+	"github.com/gin-gonic/contrib/sessions"
+	"github.com/gin-gonic/gin"
 )
 
 //ArticleShow handles GET /articles/:id-slug route
-func ArticleShow(w http.ResponseWriter, r *http.Request) {
-	tmpl := helpers.Template(r)
-	session := helpers.Session(r)
-	data := helpers.DefaultData(r)
+func ArticleShow(c *gin.Context) {
 	db := models.GetDB()
-	if r.Method == "GET" {
+	session := sessions.Default(c)
 
-		re := regexp.MustCompile("^[0-9]+")
-		id := re.FindString(r.URL.Path[len("/articles/"):])
-		article := &models.Article{}
-		db.First(article, id)
-		if article.ID == 0 || !article.Published {
-			w.WriteHeader(404)
-			tmpl.Lookup("errors/404").Execute(w, nil)
-			return
-		}
-		//redirect to canonical url
-		if r.URL.Path != article.URL() {
-			http.Redirect(w, r, article.URL(), http.StatusSeeOther)
-			return
-		}
-		var testimonials []models.Review
-		db.Where("published = ? and article_id = ?", true, article.ID).Order("created_at desc").Find(&testimonials)
-		topComments := models.GetTopComments(article.ID)
-		comments := models.GetComments(article.ID)
-		article.Comments = append(topComments, comments...)
-		data["Article"] = article
-		data["Testimonials"] = testimonials
-		data["Title"] = article.Name
-		data["Active"] = "/articles"
-		data["MetaDescription"] = article.MetaDescription
-		data["MetaKeywords"] = article.MetaKeywords
-		//Facebook open graph meta tags
-		data["Ogheadprefix"] = "og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#"
-		data["Ogtitle"] = article.Name
-		data["Ogurl"] = fmt.Sprintf("http://%s/articles/%d", r.Host, article.ID)
-		data["Ogtype"] = "article"
-		data["Ogdescription"] = article.Excerpt
-		if img := article.GetImage(); len(img) > 0 {
-			data["Ogimage"] = fmt.Sprintf("http://%s%s", r.Host, img)
-		}
-		//flashes
-		data["Flash"] = session.Flashes("comments")
-		session.Save(r, w)
-		tmpl.Lookup("articles/show").Execute(w, data)
-
-	} else {
-		err := fmt.Errorf("Method %q not allowed", r.Method)
-		log.Printf("ERROR: %s\n", err)
-		w.WriteHeader(405)
-		tmpl.Lookup("errors/405").Execute(w, helpers.ErrorData(err))
+	idslug := c.Param("idslug")
+	id := helpers.Atouint(strings.Split(idslug, "-")[0])
+	article := &models.Article{}
+	db.First(article, id)
+	if article.ID == 0 || !article.Published {
+		c.HTML(404, "errors/404", nil)
+		return
 	}
+	//redirect to canonical url
+	if c.Request.URL.Path != article.URL() {
+		c.Redirect(303, article.URL())
+		return
+	}
+	var testimonials []models.Review
+	db.Where("published = ? and article_id = ?", true, article.ID).Order("created_at desc").Find(&testimonials)
+	topComments := models.GetTopComments(article.ID)
+	comments := models.GetComments(article.ID)
+	article.Comments = append(topComments, comments...)
+	imageurl := ""
+	if img := article.GetImage(); len(img) > 0 {
+		imageurl = fmt.Sprintf("http://%s%s", c.Request.Host, img)
+	}
+	flashes := session.Flashes()
+	session.Save()
+	c.HTML(200, "articles/show", gin.H{
+		"Article":         article,
+		"Testimonials":    testimonials,
+		"Title":           article.Name,
+		"Active":          "/articles",
+		"MetaDescription": article.MetaDescription,
+		"MetaKeywords":    article.MetaKeywords,
+		"Ogheadprefix":    "og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#",
+		"Ogtitle":         article.Name,
+		"Ogurl":           fmt.Sprintf("http://%s/articles/%d", c.Request.Host, article.ID),
+		"Ogtype":          "article",
+		"Ogdescription":   article.Excerpt,
+		"Ogimage":         imageurl,
+		"Flash":           flashes,
+		"Authenticated":   (session.Get("user_id") != nil),
+	})
 }
 
-//ArticlePublicIndex handles GET /articles route
-func ArticlePublicIndex(w http.ResponseWriter, r *http.Request) {
-	tmpl := helpers.Template(r)
-	data := helpers.DefaultData(r)
+//ArticlesIndex handles GET /articles route
+func ArticlesIndex(c *gin.Context) {
 	db := models.GetDB()
-	if r.Method == "GET" {
 
-		var list []models.Article
-		if err := db.Where("published = ?", true).Order("id desc").Find(&list).Error; err != nil {
-			log.Printf("ERROR: %s\n", err)
-			w.WriteHeader(500)
-			tmpl.Lookup("errors/500").Execute(w, helpers.ErrorData(err))
-			return
-		}
-		data["Title"] = "Кинезиология во врачебной практике"
-		data["Active"] = r.RequestURI
-		data["List"] = list
-		tmpl.Lookup("articles/public-index").Execute(w, data)
-
-	} else {
-		err := fmt.Errorf("Method %q not allowed", r.Method)
-		log.Printf("ERROR: %s\n", err)
-		w.WriteHeader(405)
-		tmpl.Lookup("errors/405").Execute(w, helpers.ErrorData(err))
+	var list []models.Article
+	if err := db.Where("published = ?", true).Order("id desc").Find(&list).Error; err != nil {
+		c.HTML(500, "errors/500", helpers.ErrorData(err))
+		return
 	}
+	c.HTML(200, "articles/index", gin.H{
+		"Title":           "Кинезиология во врачебной практике",
+		"Active":          c.Request.RequestURI,
+		"List":            list,
+		"MetaDescription": "Статьи о кинезиологической практике лечения заболеваний опорно-двигательного аппарата...",
+		"MetaKeywords":    "кинезиология, статьи, лечение болей, прикладная кинезиология",
+	})
 }
 
-//ArticleIndex handles GET /admin/articles route
-func ArticleIndex(w http.ResponseWriter, r *http.Request) {
-	tmpl := helpers.Template(r)
-	data := helpers.DefaultData(r)
+//ArticlesAdminIndex handles GET /admin/articles route
+func ArticlesAdminIndex(c *gin.Context) {
 	db := models.GetDB()
-	if r.Method == "GET" {
 
-		var list []models.Article
-		if err := db.Order("published desc, id desc").Find(&list).Error; err != nil {
-			log.Printf("ERROR: %s\n", err)
-			w.WriteHeader(500)
-			tmpl.Lookup("errors/500").Execute(w, helpers.ErrorData(err))
-			return
-		}
-		data["Title"] = "Статьи"
-		data["Active"] = "articles"
-		data["List"] = list
-		tmpl.Lookup("articles/index").Execute(w, data)
-
-	} else {
-		err := fmt.Errorf("Method %q not allowed", r.Method)
-		log.Printf("ERROR: %s\n", err)
-		w.WriteHeader(405)
-		tmpl.Lookup("errors/405").Execute(w, helpers.ErrorData(err))
+	var list []models.Article
+	if err := db.Order("published desc, id desc").Find(&list).Error; err != nil {
+		c.HTML(500, "errors/500", helpers.ErrorData(err))
+		return
 	}
+	c.HTML(200, "articles/admin/index", gin.H{
+		"Title":  "Статьи",
+		"Active": "articles",
+		"List":   list,
+	})
 }
 
-//ArticleCreate handles /admin/new_article route
-func ArticleCreate(w http.ResponseWriter, r *http.Request) {
-	tmpl := helpers.Template(r)
-	session := helpers.Session(r)
-	data := helpers.DefaultData(r)
+//ArticleAdminCreate handles /admin/new_article route
+func ArticleAdminCreateGet(c *gin.Context) {
+	session := sessions.Default(c)
+	flashes := session.Flashes()
+	session.Save()
+
+	c.HTML(200, "articles/admin/form", gin.H{
+		"Title":  "Новая статья",
+		"Active": "articles",
+		"Flash":  flashes,
+	})
+}
+
+func ArticleAdminCreatePost(c *gin.Context) {
+	session := sessions.Default(c)
 	db := models.GetDB()
-	if r.Method == "GET" {
 
-		data["Title"] = "Новая статья"
-		data["Active"] = "articles"
-		data["Flash"] = session.Flashes()
-		session.Save(r, w)
-		tmpl.Lookup("articles/form").Execute(w, data)
-
-	} else if r.Method == "POST" {
-
-		r.ParseForm()
-		article := &models.Article{
-			Name:            r.PostFormValue("name"),
-			Slug:            r.PostFormValue("slug"),
-			Content:         r.PostFormValue("content"),
-			Excerpt:         r.PostFormValue("excerpt"),
-			SellingPreface:  r.PostFormValue("selling_preface"),
-			MetaDescription: r.PostFormValue("meta_description"),
-			MetaKeywords:    r.PostFormValue("meta_keywords"),
-			Published:       helpers.Atob(r.PostFormValue("published")),
-		}
-
+	article := &models.Article{}
+	if c.Bind(article) == nil {
 		if err := db.Create(article).Error; err != nil {
 			session.AddFlash(err.Error())
-			session.Save(r, w)
-			http.Redirect(w, r, "/admin/new_article", 303)
+			session.Save()
+			c.Redirect(303, "/admin/new_article")
 			return
 		}
-		http.Redirect(w, r, "/admin/articles", 303)
-
+		c.Redirect(303, "/admin/articles")
 	} else {
-		err := fmt.Errorf("Method %q not allowed", r.Method)
-		log.Printf("ERROR: %s\n", err)
-		w.WriteHeader(405)
-		tmpl.Lookup("errors/405").Execute(w, helpers.ErrorData(err))
+		session.AddFlash("Ошибка! Проверьте внимательно заполнение всех полей!")
+		session.Save()
+		c.Redirect(303, "/admin/new_article")
 	}
 }
 
-//ArticleUpdate handles /admin/edit_article/:id route
-func ArticleUpdate(w http.ResponseWriter, r *http.Request) {
-	tmpl := helpers.Template(r)
-	session := helpers.Session(r)
-	data := helpers.DefaultData(r)
+//ArticleAdminUpdate handles /admin/edit_article/:id route
+func ArticleAdminUpdateGet(c *gin.Context) {
+	session := sessions.Default(c)
+	flashes := session.Flashes()
+	session.Save()
 	db := models.GetDB()
-	if r.Method == "GET" {
 
-		id := r.URL.Path[len("/admin/edit_article/"):]
-		article := &models.Article{}
-		db.First(article, id)
-		if article.ID == 0 {
-			w.WriteHeader(404)
-			tmpl.Lookup("errors/404").Execute(w, nil)
-			return
-		}
+	id := c.Param("id")
+	article := &models.Article{}
+	db.First(article, id)
+	if article.ID == 0 {
+		c.HTML(404, "errors/404", nil)
+		return
+	}
 
-		data["Title"] = "Редактировать статью"
-		data["Active"] = "articles"
-		data["Article"] = article
-		data["Flash"] = session.Flashes()
-		session.Save(r, w)
-		tmpl.Lookup("articles/form").Execute(w, data)
+	c.HTML(200, "articles/admin/form", gin.H{
+		"Title":   "Редактировать статью",
+		"Active":  "articles",
+		"Article": article,
+		"Flash":   flashes,
+	})
+}
 
-	} else if r.Method == "POST" {
+func ArticleAdminUpdatePost(c *gin.Context) {
+	session := sessions.Default(c)
+	db := models.GetDB()
 
-		r.ParseForm()
-		article := &models.Article{
-			ID:              helpers.Atouint(r.PostFormValue("id")),
-			Name:            r.PostFormValue("name"),
-			Slug:            r.PostFormValue("slug"),
-			Content:         r.PostFormValue("content"),
-			Excerpt:         r.PostFormValue("excerpt"),
-			SellingPreface:  r.PostFormValue("selling_preface"),
-			MetaDescription: r.PostFormValue("meta_description"),
-			MetaKeywords:    r.PostFormValue("meta_keywords"),
-			Published:       helpers.Atob(r.PostFormValue("published")),
-		}
-
+	article := &models.Article{}
+	if c.Bind(article) == nil {
 		if err := db.Save(article).Error; err != nil {
 			session.AddFlash(err.Error())
-			session.Save(r, w)
-			http.Redirect(w, r, r.RequestURI, 303)
+			session.Save()
+			c.Redirect(303, c.Request.RequestURI)
 			return
 		}
-		http.Redirect(w, r, "/admin/articles", 303)
-
+		c.Redirect(303, "/admin/articles")
 	} else {
-		err := fmt.Errorf("Method %q not allowed", r.Method)
-		log.Printf("ERROR: %s\n", err)
-		w.WriteHeader(405)
-		tmpl.Lookup("errors/405").Execute(w, helpers.ErrorData(err))
+		session.AddFlash("Ошибка! Проверьте внимательно заполнение всех полей!")
+		session.Save()
+		c.Redirect(303, c.Request.RequestURI)
 	}
 }
 
-//ArticleDelete handles /admin/delete_article route
-func ArticleDelete(w http.ResponseWriter, r *http.Request) {
-	tmpl := helpers.Template(r)
+//ArticleAdminDelete handles /admin/delete_article route
+func ArticleAdminDelete(c *gin.Context) {
 	db := models.GetDB()
 
-	if r.Method == "POST" {
-
-		article := &models.Article{}
-		db.First(article, r.PostFormValue("id"))
-		if article.ID == 0 {
-			w.WriteHeader(404)
-			tmpl.Lookup("errors/404").Execute(w, nil)
-			return
-		}
-
-		if err := db.Delete(article).Error; err != nil {
-			log.Printf("ERROR: %s\n", err)
-			w.WriteHeader(500)
-			tmpl.Lookup("errors/500").Execute(w, helpers.ErrorData(err))
-			return
-		}
-		http.Redirect(w, r, "/admin/articles", 303)
-
-	} else {
-		err := fmt.Errorf("Method %q not allowed", r.Method)
-		log.Printf("ERROR: %s\n", err)
-		w.WriteHeader(405)
-		tmpl.Lookup("errors/405").Execute(w, helpers.ErrorData(err))
+	article := &models.Article{}
+	db.First(article, c.Request.PostFormValue("id"))
+	if article.ID == 0 {
+		c.HTML(404, "errors/404", nil)
+		return
 	}
+
+	if err := db.Delete(article).Error; err != nil {
+		c.HTML(500, "errors/500", helpers.ErrorData(err))
+		return
+	}
+	c.Redirect(303, "/admin/articles")
 }

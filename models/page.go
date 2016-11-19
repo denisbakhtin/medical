@@ -9,15 +9,15 @@ import (
 
 //Page type contains page info
 type Page struct {
-	ID              uint   `json:"id"`
-	Name            string `json:"name"`
-	Slug            string `json:"slug"`
-	Content         string `json:"content"`
-	MetaKeywords    string
-	MetaDescription string
-	Published       bool      `json:"published"`
-	CreatedAt       time.Time `json:"created_at"`
-	UpdatedAt       time.Time `json:"updated_at"`
+	ID              uint   `form:"id"`
+	Name            string `form:"name"`
+	Slug            string `form:"slug"`
+	Content         string `form:"content"`
+	MetaKeywords    string `form:"meta_keywords"`
+	MetaDescription string `form:"meta_description"`
+	Published       bool   `form:"published"`
+	CreatedAt       time.Time
+	UpdatedAt       time.Time
 }
 
 //HTMLContent returns parsed html content

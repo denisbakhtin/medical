@@ -3,9 +3,7 @@ package controllers
 import (
 	"fmt"
 	"io"
-	"log"
 	"mime/multipart"
-	"net/http"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -13,40 +11,31 @@ import (
 	"time"
 
 	"github.com/denisbakhtin/medical/system"
+	"github.com/gin-gonic/gin"
 )
 
 //CkUpload handles POST /admin/ckupload route
-func CkUpload(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "POST" {
+func CkUpload(c *gin.Context) {
 
-		err := r.ParseMultipartForm(32 << 20)
-		if err != nil {
-			log.Printf("ERROR: %s\n", err)
-			http.Error(w, err.Error(), 500)
-			return
-		}
-		mpartFile, mpartHeader, err := r.FormFile("upload")
-		if err != nil {
-			log.Println(err.Error())
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
-		}
-		defer mpartFile.Close()
-		uri, err := saveFile(mpartHeader, mpartFile)
-		if err != nil {
-			log.Println(err.Error())
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
-		}
-
-		CKEdFunc := r.FormValue("CKEditorFuncNum")
-		fmt.Fprintln(w, "<script>window.parent.CKEDITOR.tools.callFunction("+CKEdFunc+", \""+uri+"\");</script>")
-
-	} else {
-		err := fmt.Errorf("Method %q not allowed", r.Method)
-		log.Printf("ERROR: %s\n", err)
-		http.Error(w, err.Error(), 405)
+	err := c.Request.ParseMultipartForm(32 << 20)
+	if err != nil {
+		c.String(500, err.Error())
+		return
 	}
+	mpartFile, mpartHeader, err := c.Request.FormFile("upload")
+	if err != nil {
+		c.String(400, err.Error())
+		return
+	}
+	defer mpartFile.Close()
+	uri, err := saveFile(mpartHeader, mpartFile)
+	if err != nil {
+		c.String(400, err.Error())
+		return
+	}
+
+	CKEdFunc := c.Request.FormValue("CKEditorFuncNum")
+	fmt.Fprintln(c.Writer, "<script>window.parent.CKEDITOR.tools.callFunction("+CKEdFunc+", \""+uri+"\");</script>")
 }
 
 //saveFile saves file to disc and returns its relative uri

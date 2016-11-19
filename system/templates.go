@@ -26,6 +26,7 @@ func loadTemplates() {
 		"promoTill":      helpers.PromoTill,
 		"cityList":       helpers.CityList,
 		"eqRU":           helpers.EqRU,
+		"allReviews":     helpers.AllReviews,
 	})
 
 	fn := func(path string, f os.FileInfo, err error) error {
@@ -43,4 +44,8 @@ func loadTemplates() {
 	if err != nil {
 		log.Panic(err)
 	}
+}
+
+func GetTemplates() *template.Template {
+	return tmpl
 }

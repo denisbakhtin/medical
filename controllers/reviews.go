@@ -2,412 +2,311 @@ package controllers
 
 import (
 	"bytes"
-	"crypto/sha1"
 	"encoding/base64"
 	"fmt"
 	"log"
-	"net/http"
 	"strconv"
-	"strings"
 
 	"github.com/denisbakhtin/medical/helpers"
 	"github.com/denisbakhtin/medical/models"
 	"github.com/denisbakhtin/medical/system"
+	"github.com/gin-gonic/contrib/sessions"
+	"github.com/gin-gonic/gin"
 	"gopkg.in/gomail.v2"
 )
 
 //ReviewShow handles /reviews/:id route
-func ReviewShow(w http.ResponseWriter, r *http.Request) {
-	tmpl := helpers.Template(r)
-	data := helpers.DefaultData(r)
+func ReviewShow(c *gin.Context) {
 	db := models.GetDB()
-	if r.Method == "GET" {
+	session := sessions.Default(c)
 
-		id := r.URL.Path[len("/reviews/"):]
-		review := &models.Review{}
-		db.First(review, id)
-		if review.ID == 0 || !review.Published {
-			w.WriteHeader(404)
-			tmpl.Lookup("errors/404").Execute(w, nil)
-			return
-		}
-		data["Review"] = review
-		data["Title"] = "Отзыв о работе кинезиолога" + ". " + review.AuthorName
-		data["Active"] = "/reviews"
-		data["MetaDescription"] = review.MetaDescription
-		data["MetaKeywords"] = review.MetaKeywords
-		tmpl.Lookup("reviews/show").Execute(w, data)
-
-	} else {
-		err := fmt.Errorf("Method %q not allowed", r.Method)
-		log.Printf("ERROR: %s\n", err)
-		w.WriteHeader(405)
-		tmpl.Lookup("errors/405").Execute(w, helpers.ErrorData(err))
+	id := c.Param("id")
+	review := &models.Review{}
+	db.First(review, id)
+	if review.ID == 0 || !review.Published {
+		c.HTML(404, "errors/404", nil)
+		return
 	}
+	c.HTML(200, "reviews/show", gin.H{
+		"Review":          review,
+		"Title":           "Отзыв о работе кинезиолога: " + review.AuthorName,
+		"Active":          "/reviews",
+		"MetaDescription": review.MetaDescription,
+		"MetaKeywords":    review.MetaKeywords,
+		"Authenticated":   (session.Get("user_id") != nil),
+	})
 }
 
-//ReviewPublicIndex handles GET /reviews route
-func ReviewPublicIndex(w http.ResponseWriter, r *http.Request) {
-	tmpl := helpers.Template(r)
-	data := helpers.DefaultData(r)
-	session := helpers.Session(r)
+//ReviewsIndex handles GET /reviews route
+func ReviewsIndex(c *gin.Context) {
+	session := sessions.Default(c)
 	db := models.GetDB()
-	if r.Method == "GET" {
+	flashes := session.Flashes()
+	session.Save()
 
-		var list []models.Review
-		db.Where("published = ?", true).Order("id desc").Find(&list)
-		data["Title"] = "Кинезиология - отзывы пациентов"
-		data["Active"] = r.RequestURI
-		data["List"] = list
-		data["Flash"] = session.Flashes("reviews")
-		session.Save(r, w)
-		tmpl.Lookup("reviews/public-index").Execute(w, data)
-
-	} else {
-		err := fmt.Errorf("Method %q not allowed", r.Method)
-		log.Printf("ERROR: %s\n", err)
-		w.WriteHeader(405)
-		tmpl.Lookup("errors/405").Execute(w, helpers.ErrorData(err))
-	}
+	var list []models.Review
+	db.Where("published = ?", true).Order("id desc").Find(&list)
+	c.HTML(200, "reviews/index", gin.H{
+		"Title":           "Кинезиология - отзывы пациентов",
+		"Active":          c.Request.RequestURI,
+		"List":            list,
+		"Flash":           flashes,
+		"MetaDescription": "Отзывы пациентов о работе врача кинезиолога Ростовцева Е.В...",
+		"MetaKeywords":    "кинезиология отзывы, прикладная кинезиология отзывы, отзывы пациентов",
+		"Authenticated":   (session.Get("user_id") != nil),
+	})
 }
 
-//ReviewIndex handles GET /admin/reviews route
-func ReviewIndex(w http.ResponseWriter, r *http.Request) {
-	tmpl := helpers.Template(r)
-	data := helpers.DefaultData(r)
+//ReviewsAdminIndex handles GET /admin/reviews route
+func ReviewsAdminIndex(c *gin.Context) {
 	db := models.GetDB()
-	if r.Method == "GET" {
 
-		var list []models.Review
-		db.Order("id desc").Find(&list)
-		data["Title"] = "Отзывы"
-		data["Active"] = "reviews"
-		data["List"] = list
-		tmpl.Lookup("reviews/index").Execute(w, data)
-
-	} else {
-		err := fmt.Errorf("Method %q not allowed", r.Method)
-		log.Printf("ERROR: %s\n", err)
-		w.WriteHeader(405)
-		tmpl.Lookup("errors/405").Execute(w, helpers.ErrorData(err))
-	}
+	var list []models.Review
+	db.Order("id desc").Find(&list)
+	c.HTML(200, "reviews/admin/index", gin.H{
+		"Title":  "Отзывы",
+		"Active": "reviews",
+		"List":   list,
+	})
 }
 
-//ReviewPublicCreate handles /new_review route
-func ReviewPublicCreate(w http.ResponseWriter, r *http.Request) {
-	session := helpers.Session(r)
-	tmpl := helpers.Template(r)
-	data := helpers.DefaultData(r)
+//ReviewCreate handles /new_review route
+func ReviewCreateGet(c *gin.Context) {
+	session := sessions.Default(c)
+	flashes := session.Flashes()
+	session.Save()
+
+	c.HTML(200, "reviews/form", gin.H{
+		"Title":  "Новый отзыв",
+		"Active": "reviews",
+		"Flash":  flashes,
+	})
+}
+
+func ReviewCreatePost(c *gin.Context) {
 	db := models.GetDB()
-	if r.Method == "GET" {
+	session := sessions.Default(c)
 
-		data["Title"] = "Новый отзыв"
-		data["Active"] = "reviews"
-		data["Flash"] = session.Flashes("reviews")
-		session.Save(r, w)
-		tmpl.Lookup("reviews/public-form").Execute(w, data)
-
-	} else if r.Method == "POST" {
-
-		r.ParseMultipartForm(32 << 20)
+	c.Request.ParseMultipartForm(32 << 20)
+	review := &models.Review{}
+	if c.Bind(review) == nil {
 		//simple captcha check
-		captcha, err := base64.StdEncoding.DecodeString(r.FormValue("captcha"))
+		captcha, err := base64.StdEncoding.DecodeString(review.Captcha)
 		if err != nil {
-			w.WriteHeader(500)
-			tmpl.Lookup("errors/500").Execute(w, helpers.ErrorData(err))
+			c.HTML(500, "errors/500", helpers.ErrorData(err))
 			return
 		}
 		if string(captcha) != "100.00" {
-			w.WriteHeader(400)
-			tmpl.Lookup("errors/400").Execute(w, nil)
+			c.HTML(400, "errors/400", nil)
 			return
 		}
+		review.Published = false
 
-		review := &models.Review{
-			AuthorName:  r.FormValue("author_name"),
-			AuthorEmail: r.FormValue("author_email"),
-			Content:     r.FormValue("content"),
-			Published:   false, //reviews are published by admin via dashboard
-		}
-
-		if mpartFile, mpartHeader, err := r.FormFile("image"); err == nil {
+		if mpartFile, mpartHeader, err := c.Request.FormFile("image"); err == nil {
 			defer mpartFile.Close()
 			review.Image, err = saveFile(mpartHeader, mpartFile)
 			if err != nil {
-				log.Println(err.Error())
-				w.WriteHeader(500)
-				tmpl.Lookup("errors/500").Execute(w, helpers.ErrorData(err))
+				c.HTML(500, "errors/500", helpers.ErrorData(err))
 				return
 			}
 		}
 
 		if err := db.Create(review).Error; err != nil {
-			log.Printf("ERROR: %s\n", err)
-			w.WriteHeader(400)
-			tmpl.Lookup("errors/400").Execute(w, helpers.ErrorData(err))
+			c.HTML(400, "errors/400", helpers.ErrorData(err))
 			return
 		}
-		notifyAdminOfReview(r, review)
-		session.AddFlash("Спасибо! Ваш отзыв будет опубликован после проверки.", "reviews")
-		session.Save(r, w)
-		http.Redirect(w, r, "/reviews", 303)
-
+		notifyAdminOfReview(review)
+		session.AddFlash("Спасибо! Ваш отзыв будет опубликован после проверки.")
 	} else {
-		err := fmt.Errorf("Method %q not allowed", r.Method)
-		log.Printf("ERROR: %s\n", err)
-		w.WriteHeader(405)
-		tmpl.Lookup("errors/405").Execute(w, helpers.ErrorData(err))
+		session.AddFlash("Ошибка! Внимательно проверьте заполнение всех полей!")
 	}
+	session.Save()
+	c.Redirect(303, "/reviews")
 }
 
-//ReviewCreate handles /admin/new_review route
-func ReviewCreate(w http.ResponseWriter, r *http.Request) {
-	session := helpers.Session(r)
-	tmpl := helpers.Template(r)
-	data := helpers.DefaultData(r)
+//ReviewAdminCreate handles /admin/new_review route
+func ReviewAdminCreateGet(c *gin.Context) {
+	session := sessions.Default(c)
+	flashes := session.Flashes()
+	session.Save()
 	db := models.GetDB()
-	if r.Method == "GET" {
 
-		var articles []models.Article
-		db.Where("published = ?", true).Find(&articles)
-		data["Title"] = "Новый отзыв"
-		data["Active"] = "reviews"
-		data["Articles"] = articles
-		data["Flash"] = session.Flashes("reviews")
-		session.Save(r, w)
-		tmpl.Lookup("reviews/form").Execute(w, data)
+	var articles []models.Article
+	db.Where("published = ?", true).Find(&articles)
+	c.HTML(200, "reviews/admin/form", gin.H{
+		"Title":    "Новый отзыв",
+		"Active":   "reviews",
+		"Articles": articles,
+		"Flash":    flashes,
+	})
+}
 
-	} else if r.Method == "POST" {
+func ReviewAdminCreatePost(c *gin.Context) {
+	session := sessions.Default(c)
+	db := models.GetDB()
 
-		r.ParseMultipartForm(32 << 20)
-		review := &models.Review{
-			ArticleID:       helpers.Atouintr(r.FormValue("article_id")),
-			AuthorName:      r.FormValue("author_name"),
-			AuthorEmail:     r.FormValue("author_email"),
-			Content:         r.FormValue("content"),
-			Published:       helpers.Atob(r.FormValue("published")),
-			Video:           r.FormValue("video"),
-			MetaDescription: r.FormValue("meta_description"),
-			MetaKeywords:    r.FormValue("meta_keywords"),
-		}
-
-		if mpartFile, mpartHeader, err := r.FormFile("image"); err == nil {
+	c.Request.ParseMultipartForm(32 << 20)
+	review := &models.Review{}
+	if c.Bind(review) == nil {
+		review.ArticleID = helpers.Atouintr(c.Request.FormValue("article_id"))
+		if mpartFile, mpartHeader, err := c.Request.FormFile("image"); err == nil {
 			defer mpartFile.Close()
 			review.Image, err = saveFile(mpartHeader, mpartFile)
 			if err != nil {
-				log.Println(err.Error())
-				w.WriteHeader(500)
-				tmpl.Lookup("errors/500").Execute(w, helpers.ErrorData(err))
+				c.HTML(500, "errors/500", helpers.ErrorData(err))
 				return
 			}
 		}
 
 		if err := db.Create(review).Error; err != nil {
-			log.Printf("ERROR: %s\n", err)
-			w.WriteHeader(400)
-			tmpl.Lookup("errors/400").Execute(w, helpers.ErrorData(err))
+			c.HTML(400, "errors/400", helpers.ErrorData(err))
 			return
 		}
-		http.Redirect(w, r, "/admin/reviews", 303)
-
+		c.Redirect(303, "/admin/reviews")
 	} else {
-		err := fmt.Errorf("Method %q not allowed", r.Method)
-		log.Printf("ERROR: %s\n", err)
-		w.WriteHeader(405)
-		tmpl.Lookup("errors/405").Execute(w, helpers.ErrorData(err))
+		session.AddFlash("Ошибка! Проверьте внимательно заполнение всех полей!")
+		session.Save()
+		c.Redirect(303, "/admin/new_review")
 	}
 }
 
-//ReviewUpdate handles /admin/edit_review/:id route
-func ReviewUpdate(w http.ResponseWriter, r *http.Request) {
-	tmpl := helpers.Template(r)
-	session := helpers.Session(r)
-	data := helpers.DefaultData(r)
+//ReviewAdminUpdate handles /admin/edit_review/:id route
+func ReviewAdminUpdateGet(c *gin.Context) {
+	session := sessions.Default(c)
+	flashes := session.Flashes()
+	session.Save()
 	db := models.GetDB()
-	if r.Method == "GET" {
 
-		id := r.URL.Path[len("/admin/edit_review/"):]
-		review := &models.Review{}
-		db.First(review, id)
-		if review.ID == 0 {
-			w.WriteHeader(404)
-			tmpl.Lookup("errors/404").Execute(w, nil)
-			return
-		}
+	id := c.Param("id")
+	review := &models.Review{}
+	db.First(review, id)
+	if review.ID == 0 {
+		c.HTML(404, "errors/404", nil)
+		return
+	}
 
-		var articles []models.Article
-		db.Where("published = ?", true).Find(&articles)
-		data["Title"] = "Редактировать отзыв"
-		data["Active"] = "reviews"
-		data["Review"] = review
-		data["Articles"] = articles
-		data["Flash"] = session.Flashes("reviews")
-		session.Save(r, w)
-		tmpl.Lookup("reviews/form").Execute(w, data)
+	var articles []models.Article
+	db.Where("published = ?", true).Find(&articles)
+	c.HTML(200, "reviews/admin/form", gin.H{
+		"Title":    "Редактировать отзыв",
+		"Active":   "reviews",
+		"Review":   review,
+		"Articles": articles,
+		"Flash":    flashes,
+	})
+}
 
-	} else if r.Method == "POST" {
+func ReviewAdminUpdatePost(c *gin.Context) {
+	session := sessions.Default(c)
+	db := models.GetDB()
 
-		r.ParseMultipartForm(32 << 20)
-		rev := &models.Review{}
-		db.First(rev, r.FormValue("id"))
-		if rev.ID == 0 {
-			w.WriteHeader(400)
-			tmpl.Lookup("errors/400").Execute(w, nil)
-			return
-		}
-
-		review := &models.Review{
-			ID:              rev.ID,
-			ArticleID:       helpers.Atouintr(r.FormValue("article_id")),
-			AuthorName:      r.FormValue("author_name"),
-			AuthorEmail:     r.FormValue("author_email"),
-			Content:         r.FormValue("content"),
-			Image:           rev.Image,
-			Published:       helpers.Atob(r.FormValue("published")),
-			Video:           r.FormValue("video"),
-			MetaDescription: r.FormValue("meta_description"),
-			MetaKeywords:    r.FormValue("meta_keywords"),
-		}
-		if mpartFile, mpartHeader, err := r.FormFile("image"); err == nil {
+	c.Request.ParseMultipartForm(32 << 20)
+	review := &models.Review{}
+	if c.Bind(review) == nil {
+		review.ArticleID = helpers.Atouintr(c.Request.FormValue("article_id"))
+		if mpartFile, mpartHeader, err := c.Request.FormFile("image"); err == nil {
 			defer mpartFile.Close()
 			review.Image, err = saveFile(mpartHeader, mpartFile)
 			if err != nil {
-				log.Println(err.Error())
-				w.WriteHeader(500)
-				tmpl.Lookup("errors/500").Execute(w, helpers.ErrorData(err))
+				c.HTML(500, "errors/500", helpers.ErrorData(err))
 				return
 			}
 		}
 
-		if err := db.Save(review).Error; err != nil {
-			session.AddFlash(err.Error(), "reviews")
-			session.Save(r, w)
-			http.Redirect(w, r, r.RequestURI, 303)
+		if err := db.Model(&models.Review{}).Updates(review).Error; err != nil {
+			session.AddFlash(err.Error())
+			session.Save()
+			c.Redirect(303, c.Request.RequestURI)
 			return
 		}
-		http.Redirect(w, r, "/admin/reviews", 303)
-
+		c.Redirect(303, "/admin/reviews")
 	} else {
-		err := fmt.Errorf("Method %q not allowed", r.Method)
-		log.Printf("ERROR: %s\n", err)
-		w.WriteHeader(405)
-		tmpl.Lookup("errors/405").Execute(w, helpers.ErrorData(err))
+		session.AddFlash("Ошибка! Проверьте внимательно заполнение всех полей!")
+		session.Save()
+		c.Redirect(303, c.Request.RequestURI)
 	}
 }
 
-//ReviewPublicUpdate handles /edit_review?token=:secure_token route
-func ReviewPublicUpdate(w http.ResponseWriter, r *http.Request) {
-	tmpl := helpers.Template(r)
-	session := helpers.Session(r)
-	data := helpers.DefaultData(r)
+//ReviewUpdate handles /edit_review?token=:secure_token route
+func ReviewUpdateGet(c *gin.Context) {
+	session := sessions.Default(c)
+	flashes := session.Flashes()
+	session.Save()
 	db := models.GetDB()
-	if r.Method == "GET" {
 
-		id := getIDFromToken(r.FormValue("token"))
-		review := &models.Review{}
-		db.First(review, id)
-		if review.ID == 0 || review.Published {
-			err := fmt.Errorf("Отзыв не найден или уже был опубликован и не подлежит редактированию")
-			w.WriteHeader(404)
-			tmpl.Lookup("errors/404").Execute(w, helpers.ErrorData(err))
-			return
-		}
+	id := getIDFromToken(c.Request.FormValue("token"))
+	review := &models.Review{}
+	db.First(review, id)
+	if review.ID == 0 || review.Published {
+		err := fmt.Errorf("Отзыв не найден или уже был опубликован и не подлежит редактированию")
+		c.HTML(404, "errors/404", helpers.ErrorData(err))
+		return
+	}
 
-		var articles []models.Article
-		db.Where("published = ?", true).Find(&articles)
-		review.Published = true //set default to true
-		data["Title"] = "Редактировать отзыв"
-		data["Articles"] = articles
-		data["Active"] = "reviews"
-		data["Review"] = review
-		data["SecureEdit"] = true
-		data["Flash"] = session.Flashes("reviews")
-		session.Save(r, w)
-		tmpl.Lookup("reviews/public-form").Execute(w, data)
+	var articles []models.Article
+	db.Where("published = ?", true).Find(&articles)
+	review.Published = true //set default to true
+	c.HTML(200, "reviews/form", gin.H{
+		"Title":      "Редактировать отзыв",
+		"Articles":   articles,
+		"Active":     "reviews",
+		"Review":     review,
+		"SecureEdit": true,
+		"Flash":      flashes,
+	})
+}
 
-	} else if r.Method == "POST" {
+func ReviewUpdatePost(c *gin.Context) {
+	session := sessions.Default(c)
+	db := models.GetDB()
 
-		r.ParseMultipartForm(32 << 20)
-		rev := &models.Review{}
-		db.First(rev, r.FormValue("id"))
-		if rev.ID == 0 {
-			w.WriteHeader(400)
-			tmpl.Lookup("errors/400").Execute(w, nil)
-			return
-		}
+	c.Request.ParseMultipartForm(32 << 20)
+	review := &models.Review{}
+	if err := c.Bind(review); err == nil {
 
-		review := &models.Review{
-			ID:          rev.ID,
-			ArticleID:   helpers.Atouintr(r.FormValue("article_id")),
-			AuthorName:  r.FormValue("author_name"),
-			AuthorEmail: r.FormValue("author_email"),
-			Content:     r.FormValue("content"),
-			Image:       rev.Image,
-			Published:   helpers.Atob(r.FormValue("published")),
-			Video:       rev.Video,
-		}
-		if mpartFile, mpartHeader, err := r.FormFile("image"); err == nil {
+		if mpartFile, mpartHeader, err := c.Request.FormFile("image"); err == nil {
 			defer mpartFile.Close()
 			review.Image, err = saveFile(mpartHeader, mpartFile)
 			if err != nil {
-				log.Println(err.Error())
-				w.WriteHeader(500)
-				tmpl.Lookup("errors/500").Execute(w, helpers.ErrorData(err))
+				c.HTML(500, "errors/500", helpers.ErrorData(err))
 				return
 			}
 		}
 
-		if err := db.Save(review).Error; err != nil {
-			session.AddFlash(err.Error(), "reviews")
-			session.Save(r, w)
-			http.Redirect(w, r, r.RequestURI, 303)
+		if err := db.Model(&models.Review{}).Updates(review).Error; err != nil {
+			session.AddFlash(err.Error())
+			session.Save()
+			c.Redirect(303, c.Request.RequestURI)
 			return
 		}
-		session.AddFlash("Отзыв был успешно сохранен", "reviews")
-		session.Save(r, w)
-		http.Redirect(w, r, "/reviews", 303)
-
+		session.AddFlash("Отзыв был успешно сохранен")
 	} else {
-		err := fmt.Errorf("Method %q not allowed", r.Method)
-		log.Printf("ERROR: %s\n", err)
-		w.WriteHeader(405)
-		tmpl.Lookup("errors/405").Execute(w, helpers.ErrorData(err))
+		log.Println(err)
+		session.AddFlash("Ошибка! Внимательно проверьте заполнение всех полей")
 	}
+	session.Save()
+	c.Redirect(303, "/reviews")
 }
 
-//ReviewDelete handles /admin/delete_review route
-func ReviewDelete(w http.ResponseWriter, r *http.Request) {
-	tmpl := helpers.Template(r)
+//ReviewAdminDelete handles /admin/delete_review route
+func ReviewAdminDelete(c *gin.Context) {
 	db := models.GetDB()
 
-	if r.Method == "POST" {
-
-		review := &models.Review{}
-		db.First(review, r.PostFormValue("id"))
-		if review.ID == 0 {
-			w.WriteHeader(404)
-			tmpl.Lookup("errors/404").Execute(w, nil)
-		}
-
-		if err := db.Delete(review).Error; err != nil {
-			log.Printf("ERROR: %s\n", err)
-			w.WriteHeader(500)
-			tmpl.Lookup("errors/500").Execute(w, helpers.ErrorData(err))
-			return
-		}
-		http.Redirect(w, r, "/admin/reviews", 303)
-
-	} else {
-		err := fmt.Errorf("Method %q not allowed", r.Method)
-		log.Printf("ERROR: %s\n", err)
-		w.WriteHeader(405)
-		tmpl.Lookup("errors/405").Execute(w, helpers.ErrorData(err))
+	review := &models.Review{}
+	db.First(review, c.Request.PostFormValue("id"))
+	if review.ID == 0 {
+		c.HTML(404, "errors/404", nil)
 	}
+
+	if err := db.Delete(review).Error; err != nil {
+		c.HTML(500, "errors/500", helpers.ErrorData(err))
+		return
+	}
+	c.Redirect(303, "/admin/reviews")
 }
 
-func notifyAdminOfReview(r *http.Request, review *models.Review) {
-	//closure is needed here, as r may be released by the time func finishes
-	tmpl := helpers.Template(r)
+func notifyAdminOfReview(review *models.Review) {
+	tmpl := system.GetTemplates()
 	go func() {
 		data := map[string]interface{}{
 			"Review": review,
@@ -444,27 +343,4 @@ func notifyAdminOfReview(r *http.Request, review *models.Review) {
 			return
 		}
 	}()
-}
-
-//createTokenFromId creates secure token for id
-func createTokenFromID(ID uint) string {
-	digest := sha1.New().Sum([]byte(fmt.Sprintf("%d-%s", ID, system.GetConfig().Salt)))
-	return base64.URLEncoding.EncodeToString(
-		[]byte(fmt.Sprintf("%d-%x", ID, digest)),
-	)
-}
-
-//getIDFromToken deciphers token and returns review ID. Returns empty string if error
-func getIDFromToken(token string) string {
-	idDigest, err := base64.URLEncoding.DecodeString(token)
-	if err != nil {
-		return ""
-	}
-	if sl := strings.Split(string(idDigest), "-"); len(sl) == 2 {
-		digest := sha1.New().Sum([]byte(fmt.Sprintf("%s-%s", sl[0], system.GetConfig().Salt)))
-		if fmt.Sprintf("%x", digest) == sl[1] {
-			return sl[0]
-		}
-	}
-	return ""
 }

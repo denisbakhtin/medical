@@ -1,150 +1,121 @@
 package controllers
 
 import (
-	"log"
-	"net/http"
-
 	"fmt"
 
 	"github.com/denisbakhtin/medical/helpers"
 	"github.com/denisbakhtin/medical/models"
+	"github.com/gin-gonic/contrib/sessions"
+	"github.com/gin-gonic/gin"
 )
 
-//UserIndex handles GET /admin/users route
-func UserIndex(w http.ResponseWriter, r *http.Request) {
-	tmpl := helpers.Template(r)
-	data := helpers.DefaultData(r)
+//UsersAdminIndex handles GET /admin/users route
+func UsersAdminIndex(c *gin.Context) {
 	db := models.GetDB()
-	if r.Method == "GET" {
 
-		var list []models.User
-		db.Find(&list)
-		data["Title"] = "Пользователи"
-		data["Active"] = "users"
-		data["List"] = list
-		tmpl.Lookup("users/index").Execute(w, data)
-
-	} else {
-		err := fmt.Errorf("Method %q not allowed", r.Method)
-		log.Printf("ERROR: %s\n", err)
-		w.WriteHeader(405)
-		tmpl.Lookup("errors/405").Execute(w, helpers.ErrorData(err))
-	}
+	var list []models.User
+	db.Find(&list)
+	c.HTML(200, "users/admin/index", gin.H{
+		"Title":  "Пользователи",
+		"Active": "users",
+		"List":   list,
+	})
 }
 
-//UserCreate handles /admin/new_user route
-func UserCreate(w http.ResponseWriter, r *http.Request) {
-	tmpl := helpers.Template(r)
-	session := helpers.Session(r)
-	data := helpers.DefaultData(r)
+//UserAdminCreate handles /admin/new_user route
+func UserAdminCreateGet(c *gin.Context) {
+	session := sessions.Default(c)
+	flashes := session.Flashes()
+	session.Save()
+
+	c.HTML(200, "users/admin/form", gin.H{
+		"Title":  "Новый пользователь",
+		"Active": "users",
+		"Flash":  flashes,
+	})
+}
+
+func UserAdminCreatePost(c *gin.Context) {
 	db := models.GetDB()
-	if r.Method == "GET" {
+	session := sessions.Default(c)
 
-		data["Title"] = "Новый пользователь"
-		data["Active"] = "users"
-		data["Flash"] = session.Flashes()
-		session.Save(r, w)
-		tmpl.Lookup("users/form").Execute(w, data)
-
-	} else if r.Method == "POST" {
-
-		user := &models.User{
-			Name:     r.PostFormValue("name"),
-			Email:    r.PostFormValue("email"),
-			Password: r.PostFormValue("password"),
-		}
+	user := &models.User{}
+	if c.Bind(user) == nil {
 
 		if err := db.Create(user).Error; err != nil {
 			session.AddFlash(err.Error())
-			session.Save(r, w)
-			http.Redirect(w, r, "/admin/new_user", 303)
+			session.Save()
+			c.Redirect(303, "/admin/new_user")
 			return
 		}
-		http.Redirect(w, r, "/admin/users", 303)
-
 	} else {
-		err := fmt.Errorf("Method %q not allowed", r.Method)
-		log.Printf("ERROR: %s\n", err)
-		w.WriteHeader(405)
-		tmpl.Lookup("errors/405").Execute(w, helpers.ErrorData(err))
+		session.AddFlash("Ошибка! Проверьте заполнение всех полей!")
+		session.Save()
+		c.Redirect(303, "/admin/new_user")
+		return
 	}
+	c.Redirect(303, "/admin/users")
 }
 
-//UserUpdate handles /admin/edit_user/:id route
-func UserUpdate(w http.ResponseWriter, r *http.Request) {
-	tmpl := helpers.Template(r)
-	session := helpers.Session(r)
-	data := helpers.DefaultData(r)
+//UserAdminUpdate handles /admin/edit_user/:id route
+func UserAdminUpdateGet(c *gin.Context) {
 	db := models.GetDB()
-	if r.Method == "GET" {
+	session := sessions.Default(c)
+	flashes := session.Flashes()
+	session.Save()
 
-		id := r.URL.Path[len("/admin/edit_user/"):]
-		user := &models.User{}
-		db.First(user, id)
-		if user.ID == 0 {
-			w.WriteHeader(404)
-			tmpl.Lookup("errors/404").Execute(w, nil)
-			return
-		}
+	id := c.Param("id")
+	user := &models.User{}
+	db.First(user, id)
+	if user.ID == 0 {
+		c.HTML(404, "errors/404", nil)
+		return
+	}
 
-		data["Title"] = "Редактировать пользователя"
-		data["Active"] = "users"
-		data["User"] = user
-		data["Flash"] = session.Flashes()
-		session.Save(r, w)
-		tmpl.Lookup("users/form").Execute(w, data)
+	c.HTML(200, "users/admin/form", gin.H{
+		"Title":  "Редактировать пользователя",
+		"Active": "users",
+		"User":   user,
+		"Flash":  flashes,
+	})
+}
 
-	} else if r.Method == "POST" {
+func UserAdminUpdatePost(c *gin.Context) {
+	db := models.GetDB()
+	session := sessions.Default(c)
 
-		user := &models.User{
-			ID:       helpers.Atouint(r.PostFormValue("id")),
-			Name:     r.PostFormValue("name"),
-			Email:    r.PostFormValue("email"),
-			Password: r.PostFormValue("password"),
-		}
+	user := &models.User{}
+	id := c.Param("id")
+	if c.Bind(user) == nil {
 
 		if err := db.Save(user).Error; err != nil {
 			session.AddFlash(err.Error())
-			session.Save(r, w)
-			http.Redirect(w, r, r.RequestURI, 303)
+			session.Save()
+			c.Redirect(303, fmt.Sprintf("/admin/edit_user/%v", id))
 			return
 		}
-		http.Redirect(w, r, "/admin/users", 303)
-
 	} else {
-		err := fmt.Errorf("Method %q not allowed", r.Method)
-		log.Printf("ERROR: %s\n", err)
-		w.WriteHeader(405)
-		tmpl.Lookup("errors/405").Execute(w, helpers.ErrorData(err))
+		session.AddFlash("Ошибка! Проверьте заполнение всех полей!")
+		session.Save()
+		c.Redirect(303, fmt.Sprintf("/admin/edit_user/%v", id))
+		return
 	}
+	c.Redirect(303, "/admin/users")
 }
 
-//UserDelete handles /admin/delete_user route
-func UserDelete(w http.ResponseWriter, r *http.Request) {
-	tmpl := helpers.Template(r)
+//UserAdminDelete handles /admin/delete_user route
+func UserAdminDelete(c *gin.Context) {
 	db := models.GetDB()
 
-	if r.Method == "POST" {
-
-		user := &models.User{}
-		db.First(user, r.PostFormValue("id"))
-		if user.ID == 0 {
-			w.WriteHeader(404)
-			tmpl.Lookup("errors/404").Execute(w, nil)
-		}
-
-		if err := db.Delete(user).Error; err != nil {
-			log.Printf("ERROR: %s\n", err)
-			w.WriteHeader(500)
-			tmpl.Lookup("errors/500").Execute(w, helpers.ErrorData(err))
-			return
-		}
-		http.Redirect(w, r, "/admin/users", 303)
-
-	} else {
-		err := fmt.Errorf("Method %q not allowed", r.Method)
-		log.Printf("ERROR: %s\n", err)
-		w.WriteHeader(405)
-		tmpl.Lookup("errors/405").Execute(w, helpers.ErrorData(err))
+	user := &models.User{}
+	db.First(user, c.Request.PostFormValue("id"))
+	if user.ID == 0 {
+		c.HTML(404, "errors/404", nil)
 	}
+
+	if err := db.Delete(user).Error; err != nil {
+		c.HTML(500, "errors/500", helpers.ErrorData(err))
+		return
+	}
+	c.Redirect(303, "/admin/users")
 }

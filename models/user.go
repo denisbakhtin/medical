@@ -9,10 +9,10 @@ import (
 
 //User type contains user info
 type User struct {
-	ID        uint      `json:"id"`
-	Email     string    `json:"email"`
-	Name      string    `json:"name"`
-	Password  string    `json:"password"`
+	ID        uint      `json:"id" form:"id"`
+	Email     string    `json:"email" form:"email" binding:"required"`
+	Name      string    `json:"name" form:"name"`
+	Password  string    `json:"password" form:"password" binding:"required"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }

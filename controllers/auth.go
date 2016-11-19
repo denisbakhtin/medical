@@ -1,117 +1,100 @@
 package controllers
 
 import (
-	"fmt"
 	"log"
-	"net/http"
 
-	"github.com/denisbakhtin/medical/helpers"
 	"github.com/denisbakhtin/medical/models"
+	"github.com/gin-gonic/contrib/sessions"
+	"github.com/gin-gonic/gin"
 )
 
 //SignIn handles /signin route
-func SignIn(w http.ResponseWriter, r *http.Request) {
-	tmpl := helpers.Template(r)
-	session := helpers.Session(r)
-	data := helpers.DefaultData(r)
+func SignInGet(c *gin.Context) {
+	session := sessions.Default(c)
+	flashes := session.Flashes()
+	session.Save()
+	c.HTML(200, "auth/signin", gin.H{
+		"Title":  "Вход в систему",
+		"Active": "signin",
+		"Flash":  flashes,
+	})
+}
+
+func SignInPost(c *gin.Context) {
 	db := models.GetDB()
+	session := sessions.Default(c)
 
-	if r.Method == "GET" {
-
-		data["Title"] = "Вход в систему"
-		data["Active"] = "signin"
-		data["Flash"] = session.Flashes()
-		session.Save(r, w)
-		tmpl.Lookup("auth/signin").Execute(w, data)
-
-	} else if r.Method == "POST" {
-
-		//check existence
-		email := r.PostFormValue("email")
-		password := r.PostFormValue("password")
+	login := &models.Login{}
+	if c.Bind(login) == nil {
 		user := &models.User{}
-		db.Where("lower(email) = lower(?)", email).First(user)
+		db.Where("lower(email) = lower(?)", login.Email).First(user)
 		if user.ID == 0 {
-			log.Printf("ERROR: Login failed, IP: %s, Email: %s\n", r.RemoteAddr, email)
-			session.AddFlash("Email or password incorrect")
-			session.Save(r, w)
-			http.Redirect(w, r, "/signin", 303)
+			log.Printf("ERROR: Login failed, IP: %s, Email: %s\n", c.ClientIP(), login.Email)
+			session.AddFlash("Эл. адрес или пароль указаны неверно")
+			session.Save()
+			c.Redirect(303, "/signin")
 			return
 		}
 		//create user
-		if err := user.ComparePassword(password); err != nil {
-			log.Printf("ERROR: Login failed, IP: %s, Email: %s\n", r.RemoteAddr, email)
-			session.AddFlash("Email or password incorrect")
-			session.Save(r, w)
-			http.Redirect(w, r, "/signin", 303)
+		if err := user.ComparePassword(login.Password); err != nil {
+			log.Printf("ERROR: Login failed, IP: %s, Email: %s\n", c.ClientIP(), login.Email)
+			session.AddFlash("Эл. адрес или пароль указаны неверно")
+			session.Save()
+			c.Redirect(303, "/signin")
 			return
 		}
 
-		session.Values["user_id"] = user.ID
-		session.Save(r, w)
-		http.Redirect(w, r, "/", 303)
-
-	} else {
-		err := fmt.Errorf("Method %q not allowed", r.Method)
-		log.Printf("ERROR: %s\n", err)
-		tmpl.Lookup("errors/405").Execute(w, helpers.ErrorData(err))
+		session.Set("user_id", user.ID)
+		session.Save()
+		c.Redirect(303, "/")
 	}
+}
+
+func LogOut(c *gin.Context) {
+	session := sessions.Default(c)
+	session.Delete("user_id")
+	session.Save()
+	c.Redirect(303, "/")
 }
 
 //SignUp handles /signup route
-func SignUp(w http.ResponseWriter, r *http.Request) {
-	tmpl := helpers.Template(r)
-	session := helpers.Session(r)
-	data := helpers.DefaultData(r)
+func SignUpGet(c *gin.Context) {
+	session := sessions.Default(c)
+	flashes := session.Flashes()
+	session.Save()
+	c.HTML(200, "auth/signup", gin.H{
+		"Title":  "Регистрация в системе",
+		"Active": "signup",
+		"Flash":  flashes,
+	})
+}
+
+func SignUpPost(c *gin.Context) {
+	session := sessions.Default(c)
 	db := models.GetDB()
 
-	if r.Method == "GET" {
-
-		data["Title"] = "Регистрация в системе"
-		data["Active"] = "signup"
-		data["Flash"] = session.Flashes()
-		session.Save(r, w)
-		tmpl.Lookup("auth/signup").Execute(w, data)
-
-	} else if r.Method == "POST" {
-
-		email := r.PostFormValue("email")
-		password := r.PostFormValue("password")
-		//check existence
+	register := &models.Register{}
+	if c.Bind(register) == nil {
 		user := &models.User{}
-		db.Where("lower(email) = lower(?)", email).First(user)
+		db.Where("lower(email) = lower(?)", register.Email).First(user)
 		if user.ID != 0 {
-			session.AddFlash("User exists")
-			session.Save(r, w)
-			http.Redirect(w, r, "/signup", 303)
+			session.AddFlash("Пользователь с таким эл. адресом уже существует")
+			session.Save()
+			c.Redirect(303, "/signup")
 			return
 		}
 		//create user
-		user.Email = email
-		user.Password = password
+		user.Email = register.Email
+		user.Password = register.Password
 		if err := db.Create(user).Error; err != nil {
-			session.AddFlash("Error whilst registering user.")
-			session.Save(r, w)
-			log.Printf("ERROR: can't register user: %v", err)
-			http.Redirect(w, r, "/signup", 303)
+			session.AddFlash("Ошибка регистрации пользователя")
+			session.Save()
+			log.Printf("ERROR: ошибка регистрации пользователя: %v", err)
+			c.Redirect(303, "/signup")
 			return
 		}
-		session.Values["user_id"] = user.ID
-		session.Save(r, w)
-		http.Redirect(w, r, "/", 303)
-
-	} else {
-		err := fmt.Errorf("Method %q not allowed", r.Method)
-		log.Printf("ERROR: %s\n", err)
-		tmpl.Lookup("errors/405").Execute(w, helpers.ErrorData(err))
+		session.Set("user_id", user.ID)
+		session.Save()
+		c.Redirect(303, "/")
 	}
-}
-
-//Logout handles /logout route
-func Logout(w http.ResponseWriter, r *http.Request) {
-	//any method will do :3
-	session := helpers.Session(r)
-	delete(session.Values, "user_id")
-	session.Save(r, w)
-	http.Redirect(w, r, "/", 303)
 }

@@ -1,15 +1,11 @@
 package controllers
 
-import (
-	"net/http"
-
-	"github.com/denisbakhtin/medical/helpers"
-)
+import "github.com/gin-gonic/gin"
 
 //Dashboard handles GET /admin route
-func Dashboard(w http.ResponseWriter, r *http.Request) {
-	tmpl := helpers.Template(r)
-	data := helpers.DefaultData(r)
-	data["Title"] = "Панель управления"
-	tmpl.Lookup("dashboard/show").Execute(w, data)
+func Dashboard(c *gin.Context) {
+	c.HTML(200, "dashboard/show", gin.H{
+		"Title":         "Панель управления",
+		"Authenticated": true,
+	})
 }

@@ -4,44 +4,33 @@ import (
 	"bytes"
 	"fmt"
 	"log"
-	"net/http"
 	"strconv"
 
-	"github.com/denisbakhtin/medical/helpers"
 	"github.com/denisbakhtin/medical/models"
 	"github.com/denisbakhtin/medical/system"
+	"github.com/gin-gonic/contrib/sessions"
+	"github.com/gin-gonic/gin"
 	"gopkg.in/gomail.v2"
 )
 
 //RequestCreate handles /new_request route
-func RequestCreate(w http.ResponseWriter, r *http.Request) {
-	session := helpers.Session(r)
-	tmpl := helpers.Template(r)
-	if r.Method == "POST" {
+func RequestCreatePost(c *gin.Context) {
+	session := sessions.Default(c)
 
-		r.ParseForm()
-		request := &models.Request{
-			Name:    r.PostFormValue("name"),
-			Phone:   r.PostFormValue("phone"),
-			Comment: r.PostFormValue("comment"),
-		}
-
-		notifyAdminOfRequest(r, request)
+	request := &models.Request{}
+	if c.Bind(request) == nil {
+		notifyAdminOfRequest(request)
 		session.AddFlash("Спасибо, что оставили заявку на приём. В ближайшее время наш специалист свяжется с Вами по указанному телефону и согласует детали")
-		session.Save(r, w)
-		http.Redirect(w, r, "/", 303)
-
 	} else {
-		err := fmt.Errorf("Method %q not allowed", r.Method)
-		log.Printf("ERROR: %s\n", err)
-		w.WriteHeader(405)
-		tmpl.Lookup("errors/405").Execute(w, helpers.ErrorData(err))
+		session.AddFlash("Ошибка! Проверьте внимательно заполнение всех полей!")
 	}
+	session.Save()
+	c.Redirect(303, "/")
 }
 
-func notifyAdminOfRequest(r *http.Request, request *models.Request) {
+func notifyAdminOfRequest(request *models.Request) {
 	//closure is needed here, as r may be released by the time func finishes
-	tmpl := helpers.Template(r)
+	tmpl := system.GetTemplates()
 	go func() {
 		data := map[string]interface{}{
 			"Request": request,

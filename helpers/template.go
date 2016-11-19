@@ -188,3 +188,8 @@ func mon(m time.Month) string {
 		return ""
 	}
 }
+
+func AllReviews() (reviews []models.Review) {
+	models.GetDB().Where("published = ?", true).Order("id desc").Find(&reviews)
+	return
+}

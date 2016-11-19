@@ -20,11 +20,11 @@
 {{template "testimonials" .}}
 
 <div id="comments">
-  {{template "comments/public-form" .}}
+  {{template "comments/form" .}}
   {{range .Flash}}
     <div class="alert alert-info">{{.}}</div><p>
   {{end}}
-  {{template "comments/public-list" .Article.Comments}}
+  {{template "comments/list" .Article.Comments}}
 </div>
 
 {{template "map" .}}

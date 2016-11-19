@@ -7,7 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="alternate" type="application/rss+xml" title="Blog rss" href="/rss" />
     <link href="/public/favicon.ico" rel="icon" type="image/x-icon">
-    <title>{{.Title}}{{.TitleSuffix}}</title>
+    <title>
+      {{.Title}}
+      {{if not .TitleSuffix}}
+        | Кинезиология Миобаланс г. Москва
+      {{else}}
+        {{.TitleSuffix}}
+      {{end}}
+    </title>
     {{if .MetaDescription}}
     <meta name="description" content="{{.MetaDescription}}" />
     {{end}}

@@ -1,51 +1,46 @@
 {{define "reviews/index"}}
-{{template "dashboard/header" .}}
-{{template "dashboard/navbar" .}}
-{{template "dashboard/sidebar" .}}
-<div id="main-column" class="container-fluid" role="main">
-  <h2>{{.Title}} <a class="btn btn-primary" href="/admin/new_review">Новый отзыв</a></h2>
-  <table class="table">
-    <thead>
-      <tr>
-        <th class="id">№</th>
-        <th class="author_name">Автор</th>
-        <th class="author_email">Эл. почта</th>
-        <th class="content">Текст отзыва</th>
-        <th class="published">Опубликовано</th>
-        <th class="actions">Действия</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{$csrfField := .csrfField}}
-      {{range .List}}
-        <tr>
-          <td class="id">{{.ID}}</td>
-          <td class="author_name">{{.AuthorName}}</td>
-          <td class="author_email">{{.AuthorEmail}}</td>
-          <td class="content">{{.Excerpt}}</td>
-          <td class="published">
-            {{if .Published}}
-            <span class="glyphicon glyphicon-ok"></span>
+{{template "header" .}}
+{{template "navbar" .}}
+<div id="reviews" role="main">
+  <h1 class="text-center">{{.Title}}</h1>
+  {{range .Flash}}
+    <div class="alert alert-danger text-center">{{.}}</div><p>
+  {{end}}
+  {{template "reviews/review-btn"}}
+  <div class="review-previews row">
+    {{$length := len .List}}
+    {{range $i, $a := .List}}
+    <div class="review-preview col-sm-12 col-md-6">
+      <h2 class="review-title"><a href="{{.URL}}">{{.AuthorName}}</a></h2>
+      <div class="excerpt">
+        {{if or .Video .Image}}
+          <div class="thumbnail">
+            {{if .Image}}
+              <a href="{{.URL}}">
+                <img class="img-responsive" src="{{.Image}}" />
+              </a>
             {{else}}
-            <span class="glyphicon glyphicon-remove"></span>
+              {{if .Video}}
+                <iframe src="{{.Video}}" frameborder="0" allowfullscreen></iframe>
+              {{end}}
             {{end}}
-          </td>
-          <td class="actions">
-            <a href="/reviews/{{.ID}}" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-eye-open"></span></a>
-            <a href="/admin/edit_review/{{.ID}}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-pencil"></span></a>
-            <form class="inline-block" action="/admin/delete_review" method="post">
-              {{$csrfField}}
-              <input type="hidden" name="id" value="{{.ID}}">
-              <button type="button" class="btn btn-sm btn-danger" onclick="((confirm('Вы уверены?')) ? this.form.submit() : null);"><span class="glyphicon glyphicon-remove"></span></button>
-            </form>
-          </td>
-        </tr>
-      {{end}}
-    </tbody>
-  </table>
-  <div class="actions">
-    <a href="/admin/new_review" class="btn btn-primary">Новый отзыв</a>
+          </div>
+        {{end}}
+        {{.Excerpt}}
+        <a href="{{.URL}}">Читать полностью</a>
+      </div>
+    </div>
+    {{if oddEvenClass $i | eq "even"}}
+    <div class="clearfix"></div>
+    {{end}}
+    {{end}}
   </div>
 </div>
-{{template "dashboard/footer" .}}
+
+{{template "withoutpain" .}}
+{{template "testimonials" .}}
+{{template "sellingblock" .}}
+{{template "map" .}}
+{{template "optinform" .}}
+{{template "footer" .}}
 {{end}}

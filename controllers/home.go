@@ -1,30 +1,28 @@
 package controllers
 
 import (
-	"net/http"
-
-	"github.com/denisbakhtin/medical/helpers"
 	"github.com/denisbakhtin/medical/models"
+	"github.com/gin-gonic/contrib/sessions"
+	"github.com/gin-gonic/gin"
 )
 
 //Home handles GET / route
-func Home(w http.ResponseWriter, r *http.Request) {
-	tmpl, data := helpers.Template(r), helpers.DefaultData(r)
-	session := helpers.Session(r)
+func Home(c *gin.Context) {
 	db := models.GetDB()
-	if r.RequestURI != "/" {
-		w.WriteHeader(404)
-		tmpl.Lookup("errors/404").Execute(w, nil)
-		return
-	}
 	page := &models.Page{}
 	db.First(page, 1)
-	data["Title"] = "Кинезиология Миобаланс"
-	data["Page"] = page
-	data["Active"] = "/"
-	data["Flash"] = session.Flashes()
-	data["TitleSuffix"] = ""
-	data["MetaDescription"] = "Прикладная кинезиология МиоБаланс - восстановление баланса обмена веществ, опорно-двигательного аппарата и нервной системы..."
-	session.Save(r, w)
-	tmpl.Lookup("home/show").Execute(w, data)
+	session := sessions.Default(c)
+	flashes := session.Flashes()
+	session.Save()
+
+	c.HTML(200, "home/show", gin.H{
+		"Title":           "Кинезиология Миобаланс",
+		"Page":            page,
+		"Active":          "/",
+		"Flash":           flashes,
+		"TitleSuffix":     "| Доктор Ростовцев Е.В.",
+		"MetaDescription": "Прикладная кинезиология МиоБаланс - восстановление баланса обмена веществ, опорно-двигательного аппарата и нервной системы...",
+		"Authenticated":   (session.Get("user_id") != nil),
+	})
+
 }

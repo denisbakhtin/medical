@@ -10,15 +10,15 @@ import (
 
 //Article type contains article info
 type Article struct {
-	ID              uint
-	Name            string
-	Slug            string
-	Excerpt         string
-	Content         string
-	SellingPreface  string
-	MetaKeywords    string
-	MetaDescription string
-	Published       bool
+	ID              uint   `form:"id"`
+	Name            string `form:"name"`
+	Slug            string `form:"slug"`
+	Excerpt         string `form:"excerpt"`
+	Content         string `form:"content"`
+	SellingPreface  string `form:"selling_preface"`
+	MetaKeywords    string `form:"meta_keywords"`
+	MetaDescription string `form:"meta_description"`
+	Published       bool   `form:"published"`
 	CreatedAt       time.Time
 	UpdatedAt       time.Time
 	//calculated

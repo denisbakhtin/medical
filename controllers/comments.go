@@ -5,141 +5,107 @@ import (
 	"encoding/base64"
 	"fmt"
 	"log"
-	"net/http"
 	"strconv"
 
 	"github.com/denisbakhtin/medical/helpers"
 	"github.com/denisbakhtin/medical/models"
 	"github.com/denisbakhtin/medical/system"
+	"github.com/gin-gonic/contrib/sessions"
+	"github.com/gin-gonic/gin"
 	"gopkg.in/gomail.v2"
 )
 
-//CommentIndex handles GET /admin/comments route
-func CommentIndex(w http.ResponseWriter, r *http.Request) {
-	tmpl := helpers.Template(r)
-	data := helpers.DefaultData(r)
+//CommentsAdminIndex handles GET /admin/comments route
+func CommentsAdminIndex(c *gin.Context) {
 	db := models.GetDB()
-	if r.Method == "GET" {
 
-		var list []models.Comment
-		db.Order("id desc").Find(&list)
-		data["Title"] = "Вопросы посетителей"
-		data["Active"] = "comments"
-		data["List"] = list
-		tmpl.Lookup("comments/index").Execute(w, data)
-
-	} else {
-		err := fmt.Errorf("Method %q not allowed", r.Method)
-		log.Printf("ERROR: %s\n", err)
-		w.WriteHeader(405)
-		tmpl.Lookup("errors/405").Execute(w, helpers.ErrorData(err))
-	}
+	var list []models.Comment
+	db.Order("id desc").Find(&list)
+	c.HTML(200, "comments/admin/index", gin.H{
+		"Title":  "Вопросы посетителей",
+		"Active": "comments",
+		"List":   list,
+	})
 }
 
-//CommentPublicCreate handles /new_comment route
-func CommentPublicCreate(w http.ResponseWriter, r *http.Request) {
-	session := helpers.Session(r)
-	tmpl := helpers.Template(r)
+//CommentCreatePost handles /new_comment route
+func CommentCreatePost(c *gin.Context) {
+	session := sessions.Default(c)
 	db := models.GetDB()
-	if r.Method == "POST" {
 
-		r.ParseForm()
+	comment := &models.Comment{}
+	if c.Bind(comment) == nil {
 		//simple captcha check
-		captcha, err := base64.StdEncoding.DecodeString(r.FormValue("captcha"))
+		captcha, err := base64.StdEncoding.DecodeString(comment.Captcha)
 		if err != nil {
-			w.WriteHeader(500)
-			tmpl.Lookup("errors/500").Execute(w, helpers.ErrorData(err))
+			c.HTML(500, "errors/500", helpers.ErrorData(err))
 			return
 		}
 		if string(captcha) != "100.00" {
-			w.WriteHeader(400)
-			tmpl.Lookup("errors/400").Execute(w, nil)
+			c.HTML(400, "errors/400", nil)
 			return
 		}
-
-		comment := &models.Comment{
-			ArticleID:   helpers.Atouint(r.PostFormValue("article_id")),
-			AuthorCity:  r.PostFormValue("author_city"),
-			AuthorName:  r.PostFormValue("author_name"),
-			AuthorEmail: r.PostFormValue("author_email"),
-			Content:     r.PostFormValue("content"),
-			Published:   false, //comments are published by admin via dashboard
-		}
-
+		comment.Published = false //leave unpublished
 		if err := db.Create(comment).Error; err != nil {
-			log.Printf("ERROR: %s\n", err)
-			w.WriteHeader(400)
-			tmpl.Lookup("errors/400").Execute(w, helpers.ErrorData(err))
+			c.HTML(400, "errors/400", helpers.ErrorData(err))
 			return
 		}
-		notifyAdminOfComment(r, comment)
-		session.AddFlash("Спасибо! Ваш вопрос будет опубликован после проверки.", "comments")
-		session.Save(r, w)
-		http.Redirect(w, r, fmt.Sprintf("/articles/%d#comments", comment.ArticleID), 303)
-
+		notifyAdminOfComment(comment)
+		session.AddFlash("Спасибо! Ваш вопрос будет опубликован после проверки.")
+		session.Save()
+		c.Redirect(303, fmt.Sprintf("/articles/%d#comments", comment.ArticleID))
 	} else {
-		err := fmt.Errorf("Method %q not allowed", r.Method)
-		log.Printf("ERROR: %s\n", err)
-		w.WriteHeader(405)
-		tmpl.Lookup("errors/405").Execute(w, helpers.ErrorData(err))
+		session.AddFlash("Ошибка! Внимательно проверьте заполнение всех полей!")
+		session.Save()
+		c.Redirect(303, "/")
 	}
 }
 
-//CommentUpdate handles /admin/edit_comment/:id route
-func CommentUpdate(w http.ResponseWriter, r *http.Request) {
-	tmpl := helpers.Template(r)
-	session := helpers.Session(r)
-	data := helpers.DefaultData(r)
+//CommentAdminUpdate handles /admin/edit_comment/:id route
+func CommentAdminUpdateGet(c *gin.Context) {
+	session := sessions.Default(c)
+	flashes := session.Flashes()
+	session.Save()
 	db := models.GetDB()
-	if r.Method == "GET" {
 
-		id := r.URL.Path[len("/admin/edit_comment/"):]
-		comment := &models.Comment{}
-		db.First(comment, id)
-		if comment.ID == 0 {
-			w.WriteHeader(404)
-			tmpl.Lookup("errors/404").Execute(w, nil)
-			return
-		}
+	id := c.Param("id")
+	comment := &models.Comment{}
+	db.First(comment, id)
+	if comment.ID == 0 {
+		c.HTML(404, "errors/404", nil)
+		return
+	}
 
-		data["Title"] = "Редактировать вопрос"
-		data["Active"] = "comments"
-		data["Comment"] = comment
-		data["Flash"] = session.Flashes("comments")
-		session.Save(r, w)
-		tmpl.Lookup("comments/form").Execute(w, data)
+	c.HTML(200, "comments/admin/form", gin.H{
+		"Title":   "Редактировать вопрос",
+		"Active":  "comments",
+		"Comment": comment,
+		"Flash":   flashes,
+	})
+}
 
-	} else if r.Method == "POST" {
+func CommentAdminUpdatePost(c *gin.Context) {
+	session := sessions.Default(c)
+	db := models.GetDB()
 
-		r.ParseForm()
-		comment := &models.Comment{
-			ID:          helpers.Atouint(r.PostFormValue("id")),
-			ArticleID:   helpers.Atouint(r.PostFormValue("article_id")),
-			AuthorCity:  r.PostFormValue("author_city"),
-			AuthorName:  r.PostFormValue("author_name"),
-			AuthorEmail: r.PostFormValue("author_email"),
-			Content:     r.PostFormValue("content"),
-			Answer:      r.PostFormValue("answer"),
-			Published:   helpers.Atob(r.PostFormValue("published")),
-		}
-
+	comment := &models.Comment{}
+	if c.Bind(comment) == nil {
 		if err := db.Save(comment).Error; err != nil {
-			session.AddFlash(err.Error(), "comments")
-			session.Save(r, w)
-			http.Redirect(w, r, r.RequestURI, 303)
+			session.AddFlash(err.Error())
+			session.Save()
+			c.Redirect(303, c.Request.RequestURI)
 			return
 		}
-		http.Redirect(w, r, "/admin/comments", 303)
-
+		c.Redirect(303, "/admin/comments")
 	} else {
-		err := fmt.Errorf("Method %q not allowed", r.Method)
-		log.Printf("ERROR: %s\n", err)
-		w.WriteHeader(405)
-		tmpl.Lookup("errors/405").Execute(w, helpers.ErrorData(err))
+		session.AddFlash("Ошибка! Внимательно проверьте заполнение полей!")
+		session.Save()
+		c.Redirect(303, c.Request.RequestURI)
 	}
 }
 
 //CommentPublicUpdate handles /edit_comment?token=:secure_token route
+/*
 func CommentPublicUpdate(w http.ResponseWriter, r *http.Request) {
 	tmpl := helpers.Template(r)
 	session := helpers.Session(r)
@@ -186,7 +152,7 @@ func CommentPublicUpdate(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		if comment.Published {
-			notifyClientOfComment(r, comment)
+			notifyClientOfComment(comment)
 		}
 		session.AddFlash("Вопрос был успешно сохранен")
 		session.Save(r, w)
@@ -199,40 +165,29 @@ func CommentPublicUpdate(w http.ResponseWriter, r *http.Request) {
 		tmpl.Lookup("errors/405").Execute(w, helpers.ErrorData(err))
 	}
 }
+*/
 
-//CommentDelete handles /admin/delete_comment route
-func CommentDelete(w http.ResponseWriter, r *http.Request) {
-	tmpl := helpers.Template(r)
+//CommentAdminDelete handles /admin/delete_comment route
+func CommentAdminDelete(c *gin.Context) {
 	db := models.GetDB()
 
-	if r.Method == "POST" {
-
-		comment := &models.Comment{}
-		db.First(comment, r.PostFormValue("id"))
-		if comment.ID == 0 {
-			w.WriteHeader(404)
-			tmpl.Lookup("errors/404").Execute(w, nil)
-		}
-
-		if err := db.Delete(comment).Error; err != nil {
-			log.Printf("ERROR: %s\n", err)
-			w.WriteHeader(500)
-			tmpl.Lookup("errors/500").Execute(w, helpers.ErrorData(err))
-			return
-		}
-		http.Redirect(w, r, "/admin/comments", 303)
-
-	} else {
-		err := fmt.Errorf("Method %q not allowed", r.Method)
-		log.Printf("ERROR: %s\n", err)
-		w.WriteHeader(405)
-		tmpl.Lookup("errors/405").Execute(w, helpers.ErrorData(err))
+	comment := &models.Comment{}
+	db.First(comment, c.Request.PostFormValue("id"))
+	if comment.ID == 0 {
+		c.HTML(404, "errors/404", nil)
 	}
+
+	if err := db.Delete(comment).Error; err != nil {
+		c.HTML(500, "errors/500", helpers.ErrorData(err))
+		return
+	}
+	c.Redirect(303, "/admin/comments")
+
 }
 
-func notifyAdminOfComment(r *http.Request, comment *models.Comment) {
+func notifyAdminOfComment(comment *models.Comment) {
 	//closure is needed here, as r may be released by the time func finishes
-	tmpl := helpers.Template(r)
+	tmpl := system.GetTemplates()
 	go func() {
 		data := map[string]interface{}{
 			"Comment": comment,
@@ -275,11 +230,11 @@ func notifyAdminOfComment(r *http.Request, comment *models.Comment) {
 }
 
 //notifyClientOfComment sends notification email to comment(question) author
-func notifyClientOfComment(r *http.Request, comment *models.Comment) {
+func notifyClientOfComment(comment *models.Comment) {
 	if len(comment.AuthorEmail) == 0 {
 		return
 	}
-	tmpl := helpers.Template(r)
+	tmpl := system.GetTemplates()
 	go func() {
 		data := map[string]interface{}{
 			"Comment": comment,
