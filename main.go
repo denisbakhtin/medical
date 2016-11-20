@@ -28,6 +28,7 @@ func main() {
 	gocron.Every(1).Day().Do(system.CreateXMLSitemap) //refresh daily
 	gocron.Start()
 
+	gin.SetMode(system.GetMode())
 	router := gin.Default()
 	store := sessions.NewCookieStore([]byte(system.GetConfig().SessionSecret))
 	router.Use(sessions.Sessions("gin-session", store))
