@@ -3,7 +3,7 @@
 default: build
 
 build: clean vet
-	@go generate ./... && go build -o miobalans-go
+	@go build -o miobalans-go
 
 doc:
 	@godoc -http=:6060 -index
@@ -25,4 +25,3 @@ vet:
 
 clean:
 	@rm -f ./miobalans-go
-	@rm -f ./system/*.rice-box.go
