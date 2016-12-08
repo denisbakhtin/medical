@@ -24,7 +24,9 @@ func main() {
 	system.Init()
 
 	//Periodic tasks
-	//system.CreateXMLSitemap()                         //refresh sitemap now
+	if system.GetMode() == system.ReleaseMode {
+		system.CreateXMLSitemap() //refresh sitemap now
+	}
 	gocron.Every(1).Day().Do(system.CreateXMLSitemap) //refresh daily
 	gocron.Start()
 
