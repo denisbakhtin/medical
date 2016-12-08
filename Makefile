@@ -3,7 +3,7 @@
 default: build
 
 build: clean vet
-	@go build -o medical
+	@go build -o miobalans-go
 
 doc:
 	@godoc -http=:6060 -index
@@ -29,4 +29,4 @@ vet:
 	@go vet ./...
 
 clean:
-	@rm -f ./medical
+	@rm -f ./miobalans-go
