@@ -53,7 +53,7 @@ var (
 
 //loadConfig unmarshals config for current application mode
 func loadConfig() {
-	data, err := ioutil.ReadFile("./config/config.json")
+	data, err := ioutil.ReadFile("config/config.json")
 	if err != nil {
 		panic(err)
 	}

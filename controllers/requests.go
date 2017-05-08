@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"strconv"
+	"strings"
 
 	"github.com/denisbakhtin/medical/models"
 	"github.com/denisbakhtin/medical/system"
@@ -19,7 +20,9 @@ func RequestCreatePost(c *gin.Context) {
 
 	request := &models.Request{}
 	if c.Bind(request) == nil {
-		notifyAdminOfRequest(request)
+		if !strings.Contains(strings.ToLower(request.Comment), "href") {
+			notifyAdminOfRequest(request)
+		}
 		session.AddFlash("Спасибо, что оставили заявку на приём. В ближайшее время наш специалист свяжется с Вами по указанному телефону и согласует детали")
 	} else {
 		session.AddFlash("Ошибка! Проверьте внимательно заполнение всех полей!")
