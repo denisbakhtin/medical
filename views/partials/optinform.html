@@ -4,7 +4,7 @@
   <p class="text-center text-warning">Акция действует {{promoTill}}.</p>
   <form class="panel panel-default" method="post" onsubmit="try{yaCounter19271005.reachGoal('ORDER', function(){}, null);} catch(e){}; return true;" action="/new_request" data-parsley-validate>
     {{.csrfField}}
-    <div class="panel-body">
+    <div class="panel-body row">
       <div class="form-group col-xs-12 col-sm-6">
         <label for="name-input">Ваше имя</label>
         <input id="name-input" class="form-control" name="name" required="" data-parsley-required-message="Введите ваше имя"/>
@@ -17,8 +17,16 @@
         <label for="comment-textarea">Что Вас беспокоит, когда лучше перезвонить</label>
         <textarea id="comment-textarea" class="form-control" name="comment" placeholder="Дополнительная информация, которую Вы хотели бы сообщить врачу"></textarea>
       </div>
+      <div id="captcha-form-group" class="form-group col-xs-12">
+        <label class="control-label" for="captcha-slider">Подтвердите, что Вы не робот: передвиньте ползунок вправо до упора</label>
+        <div id="captcha-wrapper">
+          <div id="captcha-slider"></div>
+          <i id="ok-sign" class="glyphicon glyphicon-ok-circle"></i>
+          <input type="hidden" id="captcha" name="captcha" />
+        </div>
+      </div>
       <div class="actions col-xs-12">
-        <input type="submit" class="btn btn-primary" value="Отправить" />
+        <input id="submit-with-captcha-btn" type="submit" class="btn btn-primary" value="Отправить" />
       </div>
     </div>
   </form>

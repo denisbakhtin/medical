@@ -2,11 +2,13 @@ package controllers
 
 import (
 	"bytes"
+	"encoding/base64"
 	"fmt"
 	"log"
 	"strconv"
 	"strings"
 
+	"github.com/denisbakhtin/medical/helpers"
 	"github.com/denisbakhtin/medical/models"
 	"github.com/denisbakhtin/medical/system"
 	"github.com/gin-gonic/contrib/sessions"
@@ -14,12 +16,21 @@ import (
 	"gopkg.in/gomail.v2"
 )
 
-//RequestCreate handles /new_request route
+//RequestCreatePost handles /new_request route
 func RequestCreatePost(c *gin.Context) {
 	session := sessions.Default(c)
 
 	request := &models.Request{}
 	if c.Bind(request) == nil {
+		captcha, err := base64.StdEncoding.DecodeString(request.Captcha)
+		if err != nil {
+			c.HTML(500, "errors/500", helpers.ErrorData(err))
+			return
+		}
+		if string(captcha) != "100.00" {
+			c.HTML(400, "errors/400", nil)
+			return
+		}
 		if !strings.Contains(strings.ToLower(request.Comment), "href") {
 			notifyAdminOfRequest(request)
 		}

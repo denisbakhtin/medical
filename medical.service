@@ -4,6 +4,7 @@ After=network.target
 After=postgresql.service
 
 [Service]
+User=tabula
 WorkingDirectory=/home/tabula/go/src/github.com/denisbakhtin/medical
 ExecStart=/home/tabula/go/src/github.com/denisbakhtin/medical/miobalans-go -mode=release
 ExecReload=/bin/kill -HUP $MAINPID

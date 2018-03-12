@@ -1,70 +1,74 @@
 {
   "debug": {
     "public": "public",
-    "domain": "http://localhost:8080",
-    "session_secret": "session-secret-phrase",
-    "csrf_secret": "csrf-secret-phrase",
+    "domain": "my-domain.ru",
+    "session_secret": "some-secret-phrase",
+    "csrf_secret": "some-csrf-secret-phrase",
     "ssl": false,
     "signup_enabled": true,
-    "language": "en-US",
+    "salt": "secret_salt_123",
     "database": {
-      "host": "192.168.0.1",
-      "name": "blog_dev",
-      "user": "your_db_user",
-      "password": "your_db_user_password"
+      "host": "localhost",
+      "name": "medical",
+      "user": "medical",
+      "password": "dbpassword"
     },
-    "oauth": {
-      "facebook": {
-        "client_id": "",
-        "client_secret": "",
-        "redirect_url": "http://localhost:8080/facebook_callback",
-        "page": "",
-        "token": ""
-      },
-      "google": {
-        "client_id": "",
-        "client_secret": "",
-        "redirect_url": "http://localhost:8080/google_callback"
-      },
-      "linkedin": {
-        "client_id": "",
-        "client_secret": "",
-        "redirect_url": "http://localhost:8080/linkedin_callback"
-      },
-      "vk": {
-        "client_id": "",
-        "client_secret": "",
-        "redirect_url": "http://localhost:8080/vk_callback"
-      }
+    "smtp": {
+      "from": "noreply@my-domain.ru",
+      "to": "someone@gmail.com",
+      "cc": "someone@gmail.com",
+      "smtp": "smtp.yandex.com",
+      "port": "465",
+      "user": "noreply@my-domain.ru",
+      "password": "emailpassword"
     }
   },
   "release": {
-    "public": "path_to_public_dir",
-    "domain": "http://mydomain.com",
-    "session_secret": "session-secret-phrase",
-    "csrf_secret": "csrf-secret-phrase",
-    "ssl": true,
+    "public": "public",
+    "domain": "my-domain.ru",
+    "session_secret": "some-secret-phrase",
+    "csrf_secret": "some-csrf-secret-phrase",
+    "ssl": false,
     "signup_enabled": false, 
-    "language": "en-US",
+    "salt": "secret_salt_123",
     "database": {
-      "host": "192.168.0.1",
-      "name": "blog_dev",
-      "user": "your_db_user",
-      "password": "your_db_user_password"
+      "host": "localhost",
+      "name": "medical",
+      "user": "medical",
+      "password": "dbpassword"
+    },
+    "smtp": {
+      "from": "noreply@my-domain.ru",
+      "to": "someone@gmail.com",
+      "cc": "someone@gmail.com",
+      "smtp": "smtp.yandex.com",
+      "port": "465",
+      "user": "noreply@my-domain.ru",
+      "password": "emailpassword"
     }
   },
   "test": {
-    "public": "public",
-    "domain": "http://localhost:8080",
-    "session_secret": "session-secret-phrase",
-    "csrf_secret": "csrf-secret-phrase",
+    "public": "path_to_public_dir",
+    "domain": "my-domain.ru",
+    "session_secret": "some-secret-phrase",
+    "csrf_secret": "some-csrf-secret-phrase",
     "ssl": false,
     "signup_enabled": true,
+    "salt": "secret_salt_123",
     "database": {
-      "host": "192.168.0.1",
-      "name": "blog_dev",
-      "user": "your_db_user",
-      "password": "your_db_user_password"
+      "host": "localhost",
+      "name": "medical",
+      "user": "medical",
+      "password": "dbpassword"
+    },
+    "smtp": {
+      "from": "noreply@my-domain.ru",
+      "to": "someone@gmail.com",
+      "cc": "someone@gmail.com",
+      "smtp": "smtp.yandex.com",
+      "port": "465",
+      "user": "noreply@my-domain.ru",
+      "password": "emailpassword"
     }
   }
 }

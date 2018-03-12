@@ -12,7 +12,7 @@ lint:
 	@golint ./...
 
 debug_server: 
-	@reflex -c reflex.conf
+	@watcher
 debug_assets:
 	@gulp watch
 
