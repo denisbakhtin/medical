@@ -46,6 +46,7 @@ func loadTemplates() {
 	}
 }
 
+//GetTemplates exports loaded templates
 func GetTemplates() *template.Template {
 	return tmpl
 }
