@@ -1,0 +1,22 @@
+{{define "info/show"}} 
+{{template "header" .}} 
+{{template "navbar" .}}
+
+<div id="info" role="main">
+  <div class="content">
+    <h1>
+      {{.Info.Name}} 
+      {{if .Authenticated}}
+        <a class="btn btn-primary" href="/admin/edit_info/{{.Info.ID}}">Редактировать материал</a>
+      {{end}}
+    </h1>
+    {{.Info.HTMLContent}}
+  </div>
+</div>
+
+{{template "withoutpain" .}} 
+{{template "optinform" .}} 
+{{template "sellingblock" .}} 
+{{template "map" .}} 
+{{template "footer" .}} 
+{{end}}

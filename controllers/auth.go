@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-//SignIn handles /signin route
+//SignInGet handles /signin get request
 func SignInGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
@@ -20,6 +20,7 @@ func SignInGet(c *gin.Context) {
 	})
 }
 
+//SignInPost handles /signin post request
 func SignInPost(c *gin.Context) {
 	db := models.GetDB()
 	session := sessions.Default(c)
@@ -50,6 +51,7 @@ func SignInPost(c *gin.Context) {
 	}
 }
 
+//LogOut handles logout request
 func LogOut(c *gin.Context) {
 	session := sessions.Default(c)
 	session.Delete("user_id")
@@ -57,7 +59,7 @@ func LogOut(c *gin.Context) {
 	c.Redirect(303, "/")
 }
 
-//SignUp handles /signup route
+//SignUpGet handles /signup get request
 func SignUpGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
@@ -69,6 +71,7 @@ func SignUpGet(c *gin.Context) {
 	})
 }
 
+//SignUpPost handles /signup post request
 func SignUpPost(c *gin.Context) {
 	session := sessions.Default(c)
 	db := models.GetDB()

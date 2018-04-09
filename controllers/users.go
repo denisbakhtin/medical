@@ -22,7 +22,7 @@ func UsersAdminIndex(c *gin.Context) {
 	})
 }
 
-//UserAdminCreate handles /admin/new_user route
+//UserAdminCreateGet handles /admin/new_user get request
 func UserAdminCreateGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
@@ -35,6 +35,7 @@ func UserAdminCreateGet(c *gin.Context) {
 	})
 }
 
+//UserAdminCreatePost handles /admin/new_user post request
 func UserAdminCreatePost(c *gin.Context) {
 	db := models.GetDB()
 	session := sessions.Default(c)
@@ -57,7 +58,7 @@ func UserAdminCreatePost(c *gin.Context) {
 	c.Redirect(303, "/admin/users")
 }
 
-//UserAdminUpdate handles /admin/edit_user/:id route
+//UserAdminUpdateGet handles /admin/edit_user/:id get request
 func UserAdminUpdateGet(c *gin.Context) {
 	db := models.GetDB()
 	session := sessions.Default(c)
@@ -80,6 +81,7 @@ func UserAdminUpdateGet(c *gin.Context) {
 	})
 }
 
+//UserAdminUpdatePost handles /admin/edit_user/:id post request
 func UserAdminUpdatePost(c *gin.Context) {
 	db := models.GetDB()
 	session := sessions.Default(c)

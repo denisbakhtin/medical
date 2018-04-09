@@ -7,7 +7,7 @@ import (
 
 	"github.com/fiam/gounidecode/unidecode"
 	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
+	_ "github.com/jinzhu/gorm/dialects/postgres" //gorm postgres driver
 )
 
 var db *gorm.DB
@@ -20,7 +20,7 @@ func InitDB(connection string) {
 		log.Fatal(err)
 	}
 	//automigrate
-	db.AutoMigrate(&Article{}, &Comment{}, &Page{}, &Review{}, &User{})
+	db.AutoMigrate(&Article{}, &Comment{}, &Page{}, &Review{}, &User{}, &Info{})
 }
 
 //GetDB returns database handler

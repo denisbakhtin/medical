@@ -27,7 +27,7 @@ func (comment *Comment) Excerpt() string {
 	return truncate(comment.Content, 20)
 }
 
-//GetCommentsByArticleID returns a slice of published comments, associated with the given article
+//GetComments returns a slice of published comments, associated with the given article
 func GetComments(articleID uint) (comments []Comment) {
 	var list []Comment
 	//published == false is required ;D
@@ -39,7 +39,7 @@ func GetComments(articleID uint) (comments []Comment) {
 	return
 }
 
-//GetTopCommentsByArticleID returns a slice of top (latest, or rated) published comments, associated with given article
+//GetTopComments returns a slice of top (latest, or rated) published comments, associated with the given article
 func GetTopComments(articleID uint) (comments []Comment) {
 	db.Where("published = ? AND article_id = ? AND author_city = ?",
 		true, articleID, "Москва").Order("id desc").Limit(10).Find(&comments)

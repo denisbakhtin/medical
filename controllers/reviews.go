@@ -70,7 +70,7 @@ func ReviewsAdminIndex(c *gin.Context) {
 	})
 }
 
-//ReviewCreate handles /new_review route
+//ReviewCreateGet handles /new_review get request
 func ReviewCreateGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
@@ -83,6 +83,7 @@ func ReviewCreateGet(c *gin.Context) {
 	})
 }
 
+//ReviewCreatePost handles /new_review post request
 func ReviewCreatePost(c *gin.Context) {
 	db := models.GetDB()
 	session := sessions.Default(c)
@@ -124,7 +125,7 @@ func ReviewCreatePost(c *gin.Context) {
 	c.Redirect(303, "/reviews")
 }
 
-//ReviewAdminCreate handles /admin/new_review route
+//ReviewAdminCreateGet handles /admin/new_review get request
 func ReviewAdminCreateGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
@@ -141,6 +142,7 @@ func ReviewAdminCreateGet(c *gin.Context) {
 	})
 }
 
+//ReviewAdminCreatePost handles /admin/new_review post request
 func ReviewAdminCreatePost(c *gin.Context) {
 	session := sessions.Default(c)
 	db := models.GetDB()
@@ -170,7 +172,7 @@ func ReviewAdminCreatePost(c *gin.Context) {
 	}
 }
 
-//ReviewAdminUpdate handles /admin/edit_review/:id route
+//ReviewAdminUpdateGet handles /admin/edit_review/:id get request
 func ReviewAdminUpdateGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
@@ -196,6 +198,7 @@ func ReviewAdminUpdateGet(c *gin.Context) {
 	})
 }
 
+//ReviewAdminUpdatePost handles /admin/edit_review/:id post request
 func ReviewAdminUpdatePost(c *gin.Context) {
 	session := sessions.Default(c)
 	db := models.GetDB()
@@ -227,7 +230,7 @@ func ReviewAdminUpdatePost(c *gin.Context) {
 	}
 }
 
-//ReviewUpdate handles /edit_review?token=:secure_token route
+//ReviewUpdateGet handles /edit_review?token=:secure_token get request
 func ReviewUpdateGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
@@ -256,6 +259,7 @@ func ReviewUpdateGet(c *gin.Context) {
 	})
 }
 
+//ReviewUpdatePost handles /edit_review post request
 func ReviewUpdatePost(c *gin.Context) {
 	session := sessions.Default(c)
 	db := models.GetDB()

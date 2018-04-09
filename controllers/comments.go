@@ -61,7 +61,7 @@ func CommentCreatePost(c *gin.Context) {
 	}
 }
 
-//CommentAdminUpdate handles /admin/edit_comment/:id route
+//CommentAdminUpdateGet handles /admin/edit_comment/:id get request
 func CommentAdminUpdateGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
@@ -84,6 +84,7 @@ func CommentAdminUpdateGet(c *gin.Context) {
 	})
 }
 
+//CommentAdminUpdatePost handles /admin/edit_comment/:id post request
 func CommentAdminUpdatePost(c *gin.Context) {
 	session := sessions.Default(c)
 	db := models.GetDB()

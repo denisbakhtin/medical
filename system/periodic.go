@@ -46,6 +46,17 @@ func CreateXMLSitemap() {
 		})
 	}
 
+	var infos []models.Info
+	db.Where("published = ?", true).Order("id desc").Find(&infos)
+	for i := range infos {
+		items = append(items, sitemap.Item{
+			Loc:        fmt.Sprintf("%s%s", domain, infos[i].URL()),
+			LastMod:    infos[i].UpdatedAt,
+			Changefreq: "weekly",
+			Priority:   0.9,
+		})
+	}
+
 	//Static pages
 	var pages []models.Page
 	db.Where("published = ?", true).Order("id desc").Find(&pages)

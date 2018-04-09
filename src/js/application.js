@@ -1,4 +1,4 @@
-$(document).ready(function(){
+$(document).ready(function () {
   //wow animation init
   if (typeof WOW != 'undefined') {
     new WOW().init();
@@ -13,7 +13,7 @@ $(document).ready(function(){
 
   //initialize ckeditor
   //need to change filebrowserUploadUrl to '/admin/ckupload' in ckeditor.js
-  if ($('#ckeditor').length > 0 ) {
+  if ($('#ckeditor').length > 0) {
     CKEDITOR.replace('ckeditor', {
       extraPlugins: 'imageuploader',
       language: 'ru',
@@ -23,7 +23,7 @@ $(document).ready(function(){
   }
 
   //captcha-slider
-  if ($('#captcha-slider').length > 0 ) {
+  if ($('#captcha-slider').length > 0) {
     var slider = document.getElementById('captcha-slider');
     noUiSlider.create(slider, {
       start: 0,
@@ -32,7 +32,7 @@ $(document).ready(function(){
         'max': 100
       }
     });
-    slider.noUiSlider.on('update', function(){
+    slider.noUiSlider.on('update', function () {
       var value = slider.noUiSlider.get();
       if (value == 100) {
         $('#captcha-slider .noUi-handle').addClass('ok');
@@ -56,23 +56,23 @@ $(document).ready(function(){
     $('#textarea-comment').css("height", "5em");
   });
   */
-  $('#textarea-comment').one("keyup", function() {
+  $('#textarea-comment').one("keyup", function () {
     $('#comment-hidden').show('fast');
   });
-  $('#comments-more-btn').on('click', function() {
+  $('#comments-more-btn').on('click', function () {
     $('.comment.extra.hide').first().removeClass('hide');
     $('.comment.extra.hide').first().removeClass('hide');
     $('#comments-less-btn').removeClass('hide');
   });
-  $('#comments-less-btn').on('click', function() {
+  $('#comments-less-btn').on('click', function () {
     $('.comment.extra').addClass('hide');
     $('#comments-less-btn').addClass('hide');
   });
 
-  $(window).on("scroll", function() {
+  $(window).on("scroll", function () {
     if ($('#navbar-main').length > 0) {
       var iCurScrollPos = $(this).scrollTop();
-      var navbarBottom = $('#navbar-main').position().top+$('#navbar-main').outerHeight(true)
+      var navbarBottom = $('#navbar-main').position().top + $('#navbar-main').outerHeight(true)
       if (iCurScrollPos > navbarBottom) {
         //show cta-popup
         $('#navbar-scroll').css('display', 'block');
@@ -83,24 +83,24 @@ $(document).ready(function(){
     }
   });
 
-  var withoutpainheight = function() {
+  var withoutpainheight = function () {
     var maxh = 0;
-    $('#withoutpain-slide .item .thumbnail').each(function(){
+    $('#withoutpain-slide .item .thumbnail').each(function () {
       var item = $(this);
       if (item.actual('height') > maxh) {
         maxh = item.actual('height');
       }
     });
-    $('#withoutpain-slide .item .thumbnail').each(function(){
+    $('#withoutpain-slide .item .thumbnail').each(function () {
       var item = $(this);
       item.height(maxh);
     });
   }
   withoutpainheight();
 
-  $('#withoutpain-slide .item').each(function(){
+  $('#withoutpain-slide .item').each(function () {
     var itemToClone = $(this);
-    for (var i=1;i<3;i++) {
+    for (var i = 1; i < 3; i++) {
       itemToClone = itemToClone.next();
 
       if (!itemToClone.length) {
@@ -109,13 +109,14 @@ $(document).ready(function(){
       }
 
       itemToClone.children(':first-child').clone()
-      .addClass("cloneditem-"+(i))
-      .appendTo($(this));
+        .addClass("cloneditem-" + (i))
+        .appendTo($(this));
     }
   });
-  $('#testimonials-slide .item').each(function(){
+
+  $('#testimonials-slide .item').each(function () {
     var itemToClone = $(this);
-    for (var i=1;i<2;i++) {
+    for (var i = 1; i < 2; i++) {
       itemToClone = itemToClone.next();
 
       if (!itemToClone.length) {
@@ -123,15 +124,15 @@ $(document).ready(function(){
       }
 
       itemToClone.children(':first-child').clone()
-      .addClass("cloneditem-"+(i))
-      .appendTo($(this));
+        .addClass("cloneditem-" + (i))
+        .appendTo($(this));
     }
   });
 
   $('#phone-input').mask("9 (999) 999-9999");
 
-  $(window).resize(function() {
+  $(window).resize(function () {
     withoutpainheight();
   });
-    
+
 });

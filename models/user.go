@@ -29,12 +29,10 @@ func (user *User) HashPassword() error {
 
 //ComparePassword compares User.Password hash with raw password
 func (user *User) ComparePassword(password string) error {
-	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
-		return err
-	}
-	return nil
+	return bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 }
 
+//BeforeDelete gorm hook
 func (user *User) BeforeDelete() (err error) {
 	count := 0
 	db.Model(&User{}).Count(&count)
@@ -44,10 +42,12 @@ func (user *User) BeforeDelete() (err error) {
 	return
 }
 
+//BeforeCreate gorm hook
 func (user *User) BeforeCreate() (err error) {
 	return user.HashPassword()
 }
 
+//BeforeSave gorm hook
 func (user *User) BeforeSave() (err error) {
 	return user.HashPassword()
 }

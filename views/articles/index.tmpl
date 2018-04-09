@@ -1,0 +1,45 @@
+{{define "articles/index"}}
+{{template "header" .}}
+{{template "navbar" .}}
+<div id="main-column" role="main">
+  <h1>{{.Title}}</h1>
+  <div class="article-previews">
+    {{$length := len .List}}
+    {{range $i, $a := .List}}
+      {{if isFirstInTheRow $i 3}}<div class="row">{{end}}
+        <div class="col-sm-4">
+          <div class="article-preview">
+            <a href="{{.URL}}">
+              <img class="img-responsive" alt="{{.Name}}" src="{{.GetImage}}" />
+              <h4 class="article-title text-left">{{.Name}}</h4>
+              <div class="excerpt">{{.Excerpt}}</div>
+            </a>
+          </div>
+        </div>
+        {{if isLast $i $length}}
+          <div class="col-sm-4">
+            <div class="article-preview infos">
+              {{$length2 := len $.Infos}}
+              {{if gt $length2 0}}
+                <h4 class="text-center">Дополнительные материалы</h4>
+                {{range $ii, $aa := $.Infos}}
+                  <a href="{{.URL}}">{{.Name}}</a>
+                {{end}}
+              {{end}}            
+            </div>
+          </div>
+        {{end}}
+      {{if isLastInTheRow $i 3 $length}}</div>{{end}}
+    {{end}}
+
+  </div>
+    
+</div>
+
+{{template "withoutpain" .}}
+{{template "testimonials" .}}
+{{template "sellingblock" .}}
+{{template "map" .}}
+{{template "optinform" .}}
+{{template "footer" .}}
+{{end}}

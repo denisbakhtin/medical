@@ -54,6 +54,27 @@ func OddEvenClass(index int) string {
 	return "even"
 }
 
+//IsFirstInTheRow checks if index element is the first one in the row of inrow elements
+func IsFirstInTheRow(index int, inrow int) bool {
+	if inrow == 0 || index%inrow == 0 {
+		return true
+	}
+	return false
+}
+
+//IsLastInTheRow checks if index element is the last one in the row of inrow elements, or the last in sequence
+func IsLastInTheRow(index int, inrow int, length int) bool {
+	if inrow == 0 || index%inrow == inrow-1 || index == length-1 {
+		return true
+	}
+	return false
+}
+
+//IsLast checks if index element is the last in sequence
+func IsLast(index int, length int) bool {
+	return index == length-1
+}
+
 //MainMenu returns the list of main menu items
 func MainMenu() []MenuItem {
 	db := models.GetDB()
@@ -115,6 +136,7 @@ func Truncate(s string, n int) string {
 	return s
 }
 
+//SellingPreface is the beginning of the selling block partial
 func SellingPreface() string {
 	return "Выяснить причины возникновения жалоб и пройти кинезиологическое тестирование можно во время:"
 }
@@ -189,6 +211,7 @@ func mon(m time.Month) string {
 	}
 }
 
+//AllReviews returns a slice of all published reviews
 func AllReviews() (reviews []models.Review) {
 	models.GetDB().Where("published = ?", true).Order("id desc").Find(&reviews)
 	return

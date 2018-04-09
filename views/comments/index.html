@@ -1,9 +1,0 @@
-{{define "comments/index"}}
-{{template "header" .}}
-{{template "navbar" .}}
-<div id="comment" class="container" role="main">
-  <h1>{{.Title}}</h1>
-  {{template "comments/list" .List}}
-</div>
-{{template "footer" .}}
-{{end}}

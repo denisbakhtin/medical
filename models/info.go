@@ -7,8 +7,8 @@ import (
 	"time"
 )
 
-//Page type contains page info
-type Page struct {
+//Info type represents info article
+type Info struct {
 	ID              uint   `form:"id"`
 	Name            string `form:"name"`
 	Slug            string `form:"slug"`
@@ -21,27 +21,27 @@ type Page struct {
 }
 
 //HTMLContent returns parsed html content
-func (page *Page) HTMLContent() template.HTML {
-	return template.HTML(page.Content)
+func (info *Info) HTMLContent() template.HTML {
+	return template.HTML(info.Content)
 }
 
-//URL returns page url
-func (page *Page) URL() string {
-	return fmt.Sprintf("/pages/%d-%s", page.ID, page.Slug)
+//URL returns article url
+func (info *Info) URL() string {
+	return fmt.Sprintf("/info/%d-%s", info.ID, info.Slug)
 }
 
 //BeforeCreate gorm hook
-func (page *Page) BeforeCreate() (err error) {
-	if strings.TrimSpace(page.Slug) == "" {
-		page.Slug = createSlug(page.Name)
+func (info *Info) BeforeCreate() (err error) {
+	if strings.TrimSpace(info.Slug) == "" {
+		info.Slug = createSlug(info.Name)
 	}
 	return
 }
 
 //BeforeSave gorm hook
-func (page *Page) BeforeSave() (err error) {
-	if strings.TrimSpace(page.Slug) == "" {
-		page.Slug = createSlug(page.Name)
+func (info *Info) BeforeSave() (err error) {
+	if strings.TrimSpace(info.Slug) == "" {
+		info.Slug = createSlug(info.Name)
 	}
 	return
 }

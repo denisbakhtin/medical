@@ -31,12 +31,3 @@ func (review *Review) Excerpt() string {
 func (review *Review) URL() string {
 	return fmt.Sprintf("/reviews/%d", review.ID)
 }
-
-//GetRecentReviewsByArticle returns a slice of last published reviews by article
-/*
-func GetRecentReviewsByArticle(aID int64) ([]Review, error) {
-	var list []Review
-	err := db.Select(&list, "SELECT * FROM reviews WHERE published=$1 AND article_id=$2 ORDER BY video DESC, id DESC LIMIT 7", true, aID)
-	return list, err
-}
-*/

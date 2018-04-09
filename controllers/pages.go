@@ -50,7 +50,7 @@ func PagesAdminIndex(c *gin.Context) {
 	})
 }
 
-//PageAdminCreate handles /admin/new_page route
+//PageAdminCreateGet handles /admin/new_page get request
 func PageAdminCreateGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
@@ -63,6 +63,7 @@ func PageAdminCreateGet(c *gin.Context) {
 	})
 }
 
+//PageAdminCreatePost handles /admin/new_page post request
 func PageAdminCreatePost(c *gin.Context) {
 	session := sessions.Default(c)
 	db := models.GetDB()
@@ -83,7 +84,7 @@ func PageAdminCreatePost(c *gin.Context) {
 	}
 }
 
-//PageAdminUpdate handles /admin/edit_page/:id route
+//PageAdminUpdateGet handles /admin/edit_page/:id get request
 func PageAdminUpdateGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
@@ -106,6 +107,7 @@ func PageAdminUpdateGet(c *gin.Context) {
 	})
 }
 
+//PageAdminUpdatePost handles /admin/edit_page/:id post request
 func PageAdminUpdatePost(c *gin.Context) {
 	session := sessions.Default(c)
 	db := models.GetDB()

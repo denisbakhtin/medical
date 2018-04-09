@@ -1,0 +1,68 @@
+{{define "articles/admin/form"}}
+{{template "dashboard/header" .}}
+{{template "dashboard/navbar" .}}
+{{template "dashboard/sidebar" .}}
+<div id="main-column" class="container-fluid" role="main">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <form method="post" data-parsley-validate>
+      <fieldset>
+        <legend>{{.Title}}</legend>
+        {{range .Flash}}
+          <div class="alert alert-danger">{{.}}</div><p>
+        {{end}}
+        {{.csrfField}}
+        <input type="hidden" name="id" value="{{.Article.ID}}" >
+        <div class="form-group">
+          <label class="control-label" for="name">Название</label>
+          <input id="name" name="name" value="{{.Article.Name}}" placeholder="Введите название статьи" class="form-control input-md" required="" data-parsley-required-message="Название является обязательным">
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="slug">SEO адрес</label>
+          <input id="slug" name="slug" pattern="[a-z\\-]*" value="{{.Article.Slug}}" placeholder="Можно оставить пустым" class="form-control input-md" >
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="content">Содержание</label>
+          <textarea id="ckeditor" name="content">{{.Article.Content}}</textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="excerpt">Выдержка</label>
+          <textarea id="excerpt" class="form-control" name="excerpt">{{.Article.Excerpt}}</textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="selling_preface">Начало продающего блока</label>
+          <input id="selling_preface" name="selling_preface" value="{{.Article.SellingPreface}}" class="form-control input-md" >
+        </div>
+
+        <div class="form-group">
+          <label for="published">
+            <input id="published" name="published" type="checkbox" value="true" {{if .Article.Published}}checked{{end}} >
+            Опубликовать
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="meta_keywords">Мета ключевики</label>
+          <input class="form-control" name="meta_keywords" value="{{.Article.MetaKeywords}}"/>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="meta_description">Мета описание</label>
+          <input class="form-control" name="meta_description" value="{{.Article.MetaDescription}}" />
+        </div>
+
+        <div class="form-group">
+          <input type="submit" class="btn btn-primary" value="Сохранить">
+          <input type="button" class="btn btn-default" formnovalidate onclick="window.history.back();" value="Отмена">
+        </div>
+      </fieldset>
+      </form>
+    </div>
+  </div>
+</div>
+{{template "dashboard/footer" .}}
+{{end}}

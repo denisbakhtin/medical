@@ -52,6 +52,7 @@ func (article *Article) URL() string {
 	return fmt.Sprintf("/articles/%d-%s", article.ID, article.Slug)
 }
 
+//BeforeCreate gorm hook
 func (article *Article) BeforeCreate() (err error) {
 	if strings.TrimSpace(article.Slug) == "" {
 		article.Slug = createSlug(article.Name)
@@ -59,6 +60,7 @@ func (article *Article) BeforeCreate() (err error) {
 	return
 }
 
+//BeforeSave gorm hook
 func (article *Article) BeforeSave() (err error) {
 	if strings.TrimSpace(article.Slug) == "" {
 		article.Slug = createSlug(article.Name)

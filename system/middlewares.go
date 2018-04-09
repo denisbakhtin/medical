@@ -18,6 +18,7 @@ func Authenticated() gin.HandlerFunc {
 		if user.ID == 0 {
 			c.AbortWithStatus(403)
 		}
+		c.Set("user", user)
 		c.Next()
 	}
 }

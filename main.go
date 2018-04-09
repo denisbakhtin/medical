@@ -49,6 +49,7 @@ func main() {
 	router.GET("/pages/:idslug", controllers.PageShow)
 	router.GET("/articles", controllers.ArticlesIndex)
 	router.GET("/articles/:idslug", controllers.ArticleShow)
+	router.GET("/info/:idslug", controllers.InfoShow)
 	router.GET("/reviews", controllers.ReviewsIndex)
 	router.GET("/reviews/:id", controllers.ReviewShow)
 	router.POST("/new_request", controllers.RequestCreatePost)
@@ -82,6 +83,13 @@ func main() {
 		authorized.GET("/edit_article/:id", controllers.ArticleAdminUpdateGet)
 		authorized.POST("/edit_article/:id", controllers.ArticleAdminUpdatePost)
 		authorized.POST("/delete_article", controllers.ArticleAdminDelete)
+
+		authorized.GET("/info", controllers.InfoAdminIndex)
+		authorized.GET("/new_info", controllers.InfoAdminCreateGet)
+		authorized.POST("/new_info", controllers.InfoAdminCreatePost)
+		authorized.GET("/edit_info/:id", controllers.InfoAdminUpdateGet)
+		authorized.POST("/edit_info/:id", controllers.InfoAdminUpdatePost)
+		authorized.POST("/delete_info", controllers.InfoAdminDelete)
 
 		authorized.GET("/comments", controllers.CommentsAdminIndex)
 		authorized.GET("/edit_comment/:id", controllers.CommentAdminUpdateGet)

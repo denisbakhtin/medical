@@ -48,7 +48,7 @@ func ArticleShow(c *gin.Context) {
 		"MetaKeywords":    article.MetaKeywords,
 		"Ogheadprefix":    "og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#",
 		"Ogtitle":         article.Name,
-		"Ogurl":           fmt.Sprintf("http://%s/articles/%d", c.Request.Host, article.ID),
+		"Ogurl":           fmt.Sprintf("http://%s%s", c.Request.Host, article.URL()),
 		"Ogtype":          "article",
 		"Ogdescription":   article.Excerpt,
 		"Ogimage":         imageurl,
@@ -60,9 +60,16 @@ func ArticleShow(c *gin.Context) {
 //ArticlesIndex handles GET /articles route
 func ArticlesIndex(c *gin.Context) {
 	db := models.GetDB()
+	session := sessions.Default(c)
 
 	var list []models.Article
 	if err := db.Where("published = ?", true).Order("id desc").Find(&list).Error; err != nil {
+		c.HTML(500, "errors/500", helpers.ErrorData(err))
+		return
+	}
+
+	var infos []models.Info
+	if err := db.Where("published = ?", true).Order("id desc").Find(&infos).Error; err != nil {
 		c.HTML(500, "errors/500", helpers.ErrorData(err))
 		return
 	}
@@ -70,8 +77,10 @@ func ArticlesIndex(c *gin.Context) {
 		"Title":           "Кинезиология во врачебной практике",
 		"Active":          c.Request.RequestURI,
 		"List":            list,
+		"Infos":           infos,
 		"MetaDescription": "Статьи о кинезиологической практике лечения заболеваний опорно-двигательного аппарата...",
 		"MetaKeywords":    "кинезиология, статьи, лечение болей, прикладная кинезиология",
+		"Authenticated":   (session.Get("user_id") != nil),
 	})
 }
 
@@ -91,7 +100,7 @@ func ArticlesAdminIndex(c *gin.Context) {
 	})
 }
 
-//ArticleAdminCreate handles /admin/new_article route
+//ArticleAdminCreateGet handles /admin/new_article route
 func ArticleAdminCreateGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
@@ -104,6 +113,7 @@ func ArticleAdminCreateGet(c *gin.Context) {
 	})
 }
 
+//ArticleAdminCreatePost handles /admin/new_article post request
 func ArticleAdminCreatePost(c *gin.Context) {
 	session := sessions.Default(c)
 	db := models.GetDB()
@@ -124,7 +134,7 @@ func ArticleAdminCreatePost(c *gin.Context) {
 	}
 }
 
-//ArticleAdminUpdate handles /admin/edit_article/:id route
+//ArticleAdminUpdateGet handles /admin/edit_article/:id get request
 func ArticleAdminUpdateGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
@@ -147,6 +157,7 @@ func ArticleAdminUpdateGet(c *gin.Context) {
 	})
 }
 
+//ArticleAdminUpdatePost handles /admin/edit_article/:id post request
 func ArticleAdminUpdatePost(c *gin.Context) {
 	session := sessions.Default(c)
 	db := models.GetDB()
