@@ -7,7 +7,6 @@
       <p id="name" class="text-success">миобаланс</p>
       <p class="text-success">Прикладная кинезиология</p>
     </div>
-    
   </a>
   <div id="header-cta" class="hidden-xs">
     <a class="btn btn-primary" href="#optin-form"><i class="glyphicon glyphicon-ok"></i>Записаться на бесплатный приём</a>
@@ -35,13 +34,13 @@
     <ul class="nav navbar-nav">
       {{$active := .Active}}
       {{range mainMenu}}
-      <li class="{{.CssClass}} {{isActive $active .URL}}">
+      <li class="{{.CSSClass}} {{isActive $active .URL}}">
         <a href="{{.URL}}">{{.Title}}</a>
       </li>
       {{end}}
       {{if .Authenticated}}
       <li>
-        <a href="/admin"><i class="glyphicon glyphicon-cog indent"></i>Админка</a>
+        <a href="/admin/articles"><i class="glyphicon glyphicon-cog indent"></i>Админка</a>
       </li>
       <li>
         <a href="/logout"><i class="glyphicon glyphicon-log-out indent"></i>Выйти</a>

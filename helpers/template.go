@@ -2,6 +2,7 @@ package helpers
 
 import (
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/denisbakhtin/medical/models"
@@ -11,7 +12,7 @@ import (
 type MenuItem struct {
 	URL      string
 	Title    string
-	CssClass string
+	CSSClass string
 	IsActive bool
 }
 
@@ -94,12 +95,12 @@ func MainMenu() []MenuItem {
 		MenuItem{
 			URL:      about.URL(),
 			Title:    "О враче",
-			CssClass: "small",
+			CSSClass: "small",
 		},
 		MenuItem{
 			URL:      contacts.URL(),
 			Title:    "Контакты",
-			CssClass: "small",
+			CSSClass: "small",
 		},
 	}
 	return menu
@@ -215,4 +216,20 @@ func mon(m time.Month) string {
 func AllReviews() (reviews []models.Review) {
 	models.GetDB().Where("published = ?", true).Order("id desc").Find(&reviews)
 	return
+}
+
+//CSSVersion - a closure returning css version function
+func CSSVersion(path string) func() string {
+	return func() string {
+		file, err := os.Stat(path)
+		if err != nil {
+			return timeToString(time.Now())
+		}
+		modified := file.ModTime()
+		return timeToString(modified)
+	}
+}
+
+func timeToString(t time.Time) string {
+	return fmt.Sprintf("%04d%02d%02d-%02d%02d", t.Year(), t.Month(), t.Day(), t.Hour(), t.Minute())
 }

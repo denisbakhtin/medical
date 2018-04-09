@@ -4,6 +4,7 @@ import (
 	"html/template"
 	"log"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 
@@ -30,10 +31,11 @@ func loadTemplates() {
 		"isFirstInTheRow": helpers.IsFirstInTheRow,
 		"isLastInTheRow":  helpers.IsLastInTheRow,
 		"isLast":          helpers.IsLast,
+		"cssVersion":      helpers.CSSVersion(path.Join(GetConfig().Public, "css", "application.css")),
 	})
 
 	fn := func(path string, f os.FileInfo, err error) error {
-		if f.IsDir() != true && strings.HasSuffix(f.Name(), ".tmpl") {
+		if f.IsDir() != true && strings.HasSuffix(f.Name(), ".gohtml") {
 			var err error
 			tmpl, err = tmpl.ParseFiles(path)
 			if err != nil {
