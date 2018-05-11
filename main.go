@@ -60,7 +60,7 @@ func main() {
 	router.GET("/edit_review", controllers.ReviewUpdateGet)
 	router.POST("/edit_review", controllers.ReviewUpdatePost)
 
-	authorized := router.Group("/admin", system.Authenticated())
+	authorized := router.Group("/admin", controllers.Authenticated())
 	{
 		authorized.GET("/", controllers.Dashboard)
 		authorized.GET("/users", controllers.UsersAdminIndex)
