@@ -9,6 +9,7 @@ import (
 	"github.com/denisbakhtin/medical/controllers"
 	"github.com/denisbakhtin/medical/system"
 	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 )
 
@@ -32,7 +33,7 @@ func main() {
 
 	gin.SetMode(system.GetMode())
 	router := gin.Default()
-	store := sessions.NewCookieStore([]byte(system.GetConfig().SessionSecret))
+	store := cookie.NewStore([]byte(system.GetConfig().SessionSecret))
 	router.Use(sessions.Sessions("gin-session", store))
 	router.SetHTMLTemplate(system.GetTemplates())
 	router.NoRoute(controllers.Error404)
