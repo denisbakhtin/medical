@@ -8,7 +8,7 @@ import (
 	"github.com/claudiu/gocron"
 	"github.com/denisbakhtin/medical/controllers"
 	"github.com/denisbakhtin/medical/system"
-	"github.com/gin-gonic/contrib/sessions"
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 

@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"github.com/denisbakhtin/medical/models"
-	"github.com/gin-gonic/contrib/sessions"
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
