@@ -4,7 +4,9 @@ public/uploads/*.png
 public/fonts/*
 public/images/*
 public/sitemap/*
+tmp/*
 node_modules
 git_save
 go-miobalans
+miobalans-go
 *.rice-box.go
