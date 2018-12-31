@@ -269,3 +269,21 @@ func notifyClientOfComment(comment *models.Comment) {
 		}
 	}()
 }
+
+//CommentsIndex handles GET /comments/:id route, where :id is the article id
+func CommentsIndex(c *gin.Context) {
+	db := models.GetDB()
+	id := c.Param("id")
+
+	article := models.Article{}
+	db.First(&article, id)
+
+	var list []models.Comment
+	db.Where("article_id = ?", id).Order("answer desc, id desc").Find(&list)
+	c.HTML(200, "comments/index", gin.H{
+		"Title":   "Вопросы посетителей",
+		"Active":  "comments",
+		"Article": &article,
+		"List":    list,
+	})
+}

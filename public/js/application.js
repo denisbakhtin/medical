@@ -176,7 +176,7 @@ $(document).ready(function () {
       item.height(maxh);
     });
   }
-  withoutpainheight();
+  //withoutpainheight();
 
   $('#withoutpain-slide .item').each(function () {
     var itemToClone = $(this);

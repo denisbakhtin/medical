@@ -50,6 +50,7 @@ func main() {
 	router.GET("/pages/:idslug", controllers.PageShow)
 	router.GET("/articles", controllers.ArticlesIndex)
 	router.GET("/articles/:idslug", controllers.ArticleShow)
+	router.GET("/comments/:id", controllers.CommentsIndex)
 	router.GET("/info/:idslug", controllers.InfoShow)
 	router.GET("/reviews", controllers.ReviewsIndex)
 	router.GET("/reviews/:id", controllers.ReviewShow)
