@@ -2,10 +2,14 @@ package helpers
 
 import (
 	"fmt"
+	"math"
+	"net/url"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/denisbakhtin/medical/models"
+	"github.com/gin-gonic/gin"
 )
 
 //MenuItem represents main menu item
@@ -240,4 +244,135 @@ func ArticleIDComments(comments []models.Comment) uint {
 		return 0
 	}
 	return comments[0].ArticleID
+}
+
+//Min returns int minimum of a & b
+func Min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
+
+//Max returns int maximum of a & b
+func Max(a, b int) int {
+	if a < b {
+		return b
+	}
+	return a
+}
+
+//Pagination stores pagination element
+type Pagination struct {
+	Class string
+	URL   string
+	Title string
+	Rel   string
+}
+
+func pageQuery(query *url.Values, page int) string {
+	if page > 1 {
+		query.Set("page", fmt.Sprintf("%d", page))
+	} else {
+		query.Del("page")
+	}
+	return query.Encode()
+}
+
+//CurrentPage retrieves page number query parameter
+func CurrentPage(c *gin.Context) int {
+	currentPage := 1
+	if pageStr := c.Query("page"); pageStr != "" {
+		currentPage, _ = strconv.Atoi(pageStr)
+	}
+	currentPage = int(math.Max(float64(1), float64(currentPage)))
+	return currentPage
+}
+
+//Paginator creates paginator
+func Paginator(currentPage, totalPages int, curURL *url.URL) []Pagination {
+	currentPage = int(Max(1, Min(int(currentPage), int(totalPages))))
+	queryValues, err := url.ParseQuery(curURL.RawQuery)
+	if err != nil {
+		queryValues = url.Values{}
+	}
+	nextID := 5
+	lastID := 6
+	if totalPages < 3 {
+		nextID = 4
+		lastID = 5
+	}
+	//first + last + prev + next + 3 adjusent == 7
+	pagination := make([]Pagination, 7)
+
+	if totalPages > 1 {
+		//prev links
+		if currentPage > 1 {
+			newURL := *curURL
+			newURL.RawQuery = pageQuery(&queryValues, 1)
+			pagination[0] = Pagination{Class: "first_page", URL: newURL.RequestURI(), Title: "Первая"}
+			newURL.RawQuery = pageQuery(&queryValues, currentPage-1)
+			pagination[1] = Pagination{Class: "previous_page", URL: newURL.RequestURI(), Title: "Пред.", Rel: "prev"}
+		} else {
+			pagination[0] = Pagination{Class: "first_page disabled", URL: "", Title: "Первая"}
+			pagination[1] = Pagination{Class: "previous_page disabled", URL: "", Title: "Пред."}
+		}
+
+		//page numbers
+		switch currentPage {
+		case 1:
+			pagination[2] = Pagination{Class: "active", URL: "", Title: "1"}
+			if 2 <= totalPages {
+				newURL := *curURL
+				newURL.RawQuery = pageQuery(&queryValues, 2)
+				pagination[3] = Pagination{Class: "", URL: newURL.RequestURI(), Title: "2"}
+			}
+			if 3 <= totalPages {
+				newURL := *curURL
+				newURL.RawQuery = pageQuery(&queryValues, 3)
+				pagination[4] = Pagination{Class: "", URL: newURL.RequestURI(), Title: "3"}
+			}
+		case totalPages:
+			if 3 <= totalPages {
+				pagination[4] = Pagination{Class: "active", URL: "", Title: fmt.Sprintf("%d", totalPages)}
+				newURL := *curURL
+				newURL.RawQuery = pageQuery(&queryValues, totalPages-1)
+				pagination[3] = Pagination{Class: "", URL: newURL.RequestURI(), Title: fmt.Sprintf("%d", totalPages-1)}
+
+				newURL.RawQuery = pageQuery(&queryValues, totalPages-2)
+				pagination[2] = Pagination{Class: "", URL: newURL.RequestURI(), Title: fmt.Sprintf("%d", totalPages-2)}
+			}
+			if 2 == totalPages {
+				pagination[3] = Pagination{Class: "active", URL: "", Title: fmt.Sprintf("%d", totalPages)}
+
+				newURL := *curURL
+				newURL.RawQuery = pageQuery(&queryValues, totalPages-1)
+				pagination[2] = Pagination{Class: "", URL: newURL.RequestURI(), Title: fmt.Sprintf("%d", totalPages-1)}
+			}
+
+		default:
+			newURL := *curURL
+			newURL.RawQuery = pageQuery(&queryValues, currentPage+1)
+			pagination[4] = Pagination{Class: "", URL: newURL.RequestURI(), Title: fmt.Sprintf("%d", currentPage+1)}
+			pagination[3] = Pagination{Class: "active", URL: "", Title: fmt.Sprintf("%d", currentPage)}
+			newURL.RawQuery = pageQuery(&queryValues, currentPage-1)
+			pagination[2] = Pagination{Class: "", URL: newURL.RequestURI(), Title: fmt.Sprintf("%d", currentPage-1)}
+		}
+
+		//next links
+		if currentPage < totalPages {
+			newURL := *curURL
+			newURL.RawQuery = pageQuery(&queryValues, currentPage+1)
+			pagination[nextID] = Pagination{Class: "next_page", URL: newURL.RequestURI(), Title: "След.", Rel: "next"}
+
+			newURL.RawQuery = pageQuery(&queryValues, totalPages)
+			pagination[lastID] = Pagination{Class: "last_page", URL: newURL.RequestURI(), Title: "Последняя"}
+
+		} else {
+			pagination[lastID] = Pagination{Class: "last_page disabled", URL: "", Title: "Последняя"}
+			pagination[nextID] = Pagination{Class: "next_page disabled", URL: "", Title: "След."}
+		}
+		return pagination
+	}
+	return nil
 }

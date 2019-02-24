@@ -5,7 +5,6 @@ Disallow: /logout
 Disallow: /signin
 Disallow: /signup
 Disallow: /new_review
-Disallow: /comments
 
 Sitemap: http://www.miobalans.ru/public/sitemap/sitemap_index.xml
 Host: www.miobalans.ru

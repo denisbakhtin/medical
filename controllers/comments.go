@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"fmt"
 	"log"
+	"math"
 	"strconv"
 
 	"github.com/denisbakhtin/medical/helpers"
@@ -278,12 +279,21 @@ func CommentsIndex(c *gin.Context) {
 	article := models.Article{}
 	db.First(&article, id)
 
+	totalCount := 0
+	perPage := 15
+	db.Model(models.Comment{}).Where("article_id = ?", id).Count(&totalCount)
+	totalPages := int(math.Ceil(float64(totalCount) / float64(perPage)))
+	currentPage := helpers.CurrentPage(c)
+
 	var list []models.Comment
-	db.Where("article_id = ?", id).Order("answer desc, id desc").Find(&list)
+	db.Model(models.Comment{}).Where("article_id = ?", id).Limit(perPage).Offset((currentPage - 1) * perPage).Order("answer desc, id desc").Find(&list)
+
 	c.HTML(200, "comments/index", gin.H{
-		"Title":   "Вопросы посетителей",
-		"Active":  "comments",
-		"Article": &article,
-		"List":    list,
+		"Title":           "Вопросы посетителей",
+		"Active":          "comments",
+		"Article":         &article,
+		"MetaDescription": fmt.Sprintf("Вопросы и ответы к статье: %s", article.Name),
+		"Pagination":      helpers.Paginator(currentPage, totalPages, c.Request.URL),
+		"List":            list,
 	})
 }
