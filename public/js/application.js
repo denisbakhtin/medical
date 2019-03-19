@@ -102,6 +102,14 @@ $(document).ready(function () {
     });
   }
 
+  if ($('#ckeditor2').length > 0) {
+    CKEDITOR.replace('ckeditor2', {
+      language: 'ru',
+      allowedContent: true,
+      height: 300
+    });
+  }
+
   //captcha-slider
   if ($('#captcha-slider').length > 0) {
     var slider = document.getElementById('captcha-slider');

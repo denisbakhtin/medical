@@ -16,6 +16,7 @@ type Article struct {
 	Excerpt         string `form:"excerpt"`
 	Content         string `form:"content"`
 	SellingPreface  string `form:"selling_preface"`
+	SellingBlock    string `form:"selling_block"`
 	MetaKeywords    string `form:"meta_keywords"`
 	MetaDescription string `form:"meta_description"`
 	Published       bool   `form:"published"`
@@ -28,6 +29,11 @@ type Article struct {
 //HTMLContent returns parsed html content
 func (article *Article) HTMLContent() template.HTML {
 	return template.HTML(article.Content)
+}
+
+//HTMLSellingBlock returns parsed html selling block
+func (article *Article) HTMLSellingBlock() template.HTML {
+	return template.HTML(article.SellingBlock)
 }
 
 //GetCommentCount returns comment count

@@ -16,7 +16,21 @@
 
 {{template "withoutpain" .}}
 {{template "optinform" .}}
-{{template "sellingblock" .}}
+
+<section id="sellingblock">
+  <div class="pull-right" id="rostphoto">
+    <img src="/public/images/rostovtsev.jpg" class="img-responsive" />
+    <p>
+      <a href="/pages/4-vrach-kineziolog">Ростовцев
+        <br/>Евгений Владимирович</a>
+        <small>прикладной кинезиолог,
+        <br/>мануальный терапевт.</small>
+    </p>
+  </div>
+
+  {{replacePromoTill .Article.HTMLSellingBlock}}
+</section>
+
 {{template "testimonials" .}}
 
 <div id="comments">

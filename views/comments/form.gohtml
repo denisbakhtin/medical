@@ -1,8 +1,8 @@
 {{define "comments/form"}}
   <section id="comment-form-wrapper">
+    <h2 class="text-center">Задать вопрос кинезиологу</h2>
     <form method="post" action="/new_comment" data-parsley-validate>
       <fieldset>
-        <legend class="text-center">Задать доктору вопрос</legend>
         {{.csrfField}}
         <input type="hidden" name="article_id" value="{{.Article.ID}}" >
 
@@ -41,8 +41,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <input id="submit-with-captcha-btn" type="submit" class="btn btn-primary" value="Отправить" >
+        <div class="form-group text-center">
+          <input id="submit-with-captcha-btn" type="submit" class="btn btn-primary btn-lg" value="Отправить" >
         </div>
       </fieldset>
     </form>

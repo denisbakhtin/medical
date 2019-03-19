@@ -231,7 +231,7 @@ textarea#textarea-comment {
 
 #rostphoto {
   background: #fff;
-  margin: 0 0 10px 10px;
+  margin: 20px 0 10px 20px;
 
   a {
     display: block;
@@ -322,14 +322,21 @@ textarea#textarea-comment {
   margin-right: 1em;
 }
 
-#comments .author,
-#comment .author {
-  font-weight: bold;
-}
+#comments {
+  padding: 40px 30px;
+  margin-left: -30px;
+  margin-right: -30px;
+  background: #f0e6f0;
 
-#comments .answer .doctor,
-#comment .answer .doctor {
-  font-style: italic;
+  .author,
+  #comment .author {
+    font-weight: bold;
+  }
+
+  .answer .doctor,
+  #comment .answer .doctor {
+    font-style: italic;
+  }
 }
 
 #captcha-wrapper {
@@ -401,10 +408,14 @@ h2.article-title {
   margin-top: 0;
 }
 
-#article .content section {
-  padding: 3em 0;
-  background-position: top center;
-  background-size: cover;
+#article .content {
+  padding-top: 15px;
+
+  section {
+    padding: 3em 0;
+    background-position: top center;
+    background-size: cover;
+  }
 }
 
 #cta-top {
@@ -530,7 +541,8 @@ h1,
   margin-top: 1em;
   margin-bottom: 1em;
   text-align: center;
-  font-size: 30px;
+  font-size: 38px;
+  text-transform: uppercase;
 }
 
 h2,
@@ -538,6 +550,7 @@ h3,
 h4 {
   text-align: center;
   margin-bottom: 0.8em;
+  text-transform: uppercase;
 }
 
 .review-title,
@@ -614,28 +627,32 @@ h4 {
   }
 }
 
-#home .previews a {
-  display: block;
-  overflow: hidden;
-  text-align: center;
-  color: #333;
-  text-decoration: none;
-  font-size: 1.2em;
-  transition: background-color 0.3s;
-}
+#home {
+  .previews {
+    a {
+      display: block;
+      overflow: hidden;
+      text-align: center;
+      color: #333;
+      text-decoration: none;
+      font-size: 1.2em;
+      transition: background-color 0.3s;
 
-#home .previews a:hover {
-  border-color: #1bcbb6;
-  background: #1bcbb6;
-  text-decoration: none;
-}
+      &:hover {
+        border-color: #1bcbb6;
+        background: #1bcbb6;
+        text-decoration: none;
+      }
+    }
 
-#home .previews img {
-  display: block;
-  max-width: 100%;
-  height: auto;
-  margin: auto auto;
-  margin-bottom: 5px;
+    img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: auto auto;
+      margin-bottom: 5px;
+    }
+  }
 }
 
 .strong {
@@ -652,7 +669,6 @@ h4 {
   margin: 1em 70px 1em 20px;
   background: #f5f5f5;
   border-radius: 5px;
-  box-shadow: 1px 2px 7px rgba(0, 0, 0, 0.5);
 }
 
 .comment .answer {
@@ -662,7 +678,6 @@ h4 {
   margin: 1em 20px 1em 70px;
   background: #ffffff;
   border-radius: 5px;
-  box-shadow: 1px 2px 7px rgba(0, 0, 0, 0.5);
 }
 
 .comment .answer img {
@@ -811,28 +826,32 @@ h4 {
 
 #header-bottom {
   margin: 1em 0;
-}
 
-#header-bottom .glyphicon {
-  display: block;
-  float: left;
-  font-size: 50px;
-  margin: 0 15px 0 0;
-  padding: 15px;
-  border: 3px solid;
-  border-radius: 50px;
-  color: #8a6d3b;
-}
+  .glyphicon {
+    display: block;
+    float: left;
+    font-size: 50px;
+    margin: 0 15px 0 0;
+    padding: 15px;
+    border: 3px solid;
+    border-radius: 50px;
+    color: #8a6d3b;
 
-#header-bottom .glyphicon.glyphicon-plus {
-  padding: 15px 12px 15px 18px;
-}
+    &.glyphicon-plus {
+      padding: 15px 12px 15px 18px;
+    }
+  }
 
-#header-bottom p {
-  margin: 0 0 5px 0;
-  padding: 0;
-  font-size: 95%;
-  line-height: 1.2em;
+  p {
+    margin: 0 0 5px 0;
+    padding: 0;
+    font-size: 95%;
+    line-height: 1.2em;
+
+    &.strong {
+      font-size: 110%;
+    }
+  }
 }
 
 .strike-through {
@@ -840,63 +859,71 @@ h4 {
 }
 
 #home-intro {
-  margin-bottom: 1em;
-}
+  img {
+    margin: 0 !important;
+  }
 
-#home-intro img {
-  margin: 0 !important;
-}
-
-#home-intro p {
-  margin: 1em 0;
-  padding: 0;
+  p {
+    margin: 1em 0;
+    padding: 0;
+  }
 }
 
 #home-prices {
-  margin-bottom: 1.5em;
-  padding: 0 0 10px 0;
+  margin-bottom: 50px;
+  padding: 15px 0 15px 0;
+  margin-left: -30px;
+  margin-right: -30px;
   box-shadow: 0 5px 5px rgba(0, 0, 0, 0.3);
-}
 
-#home-prices .glyphicon {
-  display: block;
-  float: left;
-  font-size: 50px;
-  margin: 0 10px 0 0;
-}
+  .glyphicon {
+    display: block;
+    float: left;
+    font-size: 50px;
+    margin: 0 10px 0 0;
+  }
 
-#home-prices p {
-  margin: 0 0 5px 0;
-  padding: 0;
-  font-size: 95%;
-  line-height: 1.2em;
-}
+  p {
+    margin: 0 0 5px 0;
+    padding: 0;
+    font-size: 95%;
+    line-height: 1.2em;
 
-#home-prices p.strong {
-  color: #8a6d3b;
+    &.strong {
+      color: #8a6d3b;
+    }
+
+  }
 }
 
 #disease-list {
   margin-bottom: 1em;
-}
 
-#disease-list a,
-#disease-list span {
-  display: block;
-  margin: 0.3em 0;
+  a,
+  span {
+    display: block;
+    margin: 0.3em 0;
+  }
 }
 
 #withoutpain {
   margin-top: -50px;
-  padding-top: 50px;
+  padding-top: 70px;
+  padding-bottom: 60px;
 }
 
 #withoutpain h2,
-#sellingblock h2,
 #optin-form h2,
 #testimonials h2,
 #google-map h2 {
   clear: both;
+}
+
+#testimonials {
+  padding: 60px 30px;
+  margin-left: -30px;
+  margin-right: -30px;
+  background: #fafefe;
 }
 
 #testimonials-slide iframe {
@@ -906,7 +933,10 @@ h4 {
   margin-right: 0.5em;
 }
 
-#withoutpain-slide,
+#withoutpain-slide {
+  margin: 30px 15px 15px 15px;
+}
+
 #testimonials-slide {
   margin: 15px;
 }
@@ -1082,9 +1112,6 @@ all and (min-width: 768px) and (-webkit-transform-3d) {
 }
 
 @media all and (max-width: 768px) {
-  #testimonials {
-    padding-top: 0.2em;
-  }
 
   #testimonials-slide .carousel-inner>.active.left,
   #testimonials-slide .carousel-inner>.prev {
@@ -1130,9 +1157,6 @@ all and (max-width: 768px) and (-webkit-transform-3d) {
 }
 
 @media all and (min-width: 768px) {
-  #testimonials {
-    padding-top: 0.2em;
-  }
 
   #testimonials-slide .carousel-inner>.active.left,
   #testimonials-slide .carousel-inner>.prev {
@@ -1198,7 +1222,10 @@ all and (min-width: 768px) and (-webkit-transform-3d) {
 }
 
 #sellingblock {
-  padding-top: 0.2em;
+  background: rgb(240, 230, 240);
+  margin-left: -30px;
+  margin-right: -30px;
+  padding: 60px 30px;
 }
 
 #sellingblock .thumbnail {
@@ -1211,7 +1238,7 @@ all and (min-width: 768px) and (-webkit-transform-3d) {
 }
 
 #optin-form {
-  padding-top: 30px;
+  padding-top: 50px;
   padding-bottom: 70px;
   clear: both;
   margin-left: -30px;
@@ -1328,4 +1355,12 @@ all and (min-width: 768px) and (-webkit-transform-3d) {
 .pagination-wrapper {
   text-align: center;
   margin: 0 auto;
+}
+
+#signin,
+#signup {
+  .panel {
+    max-width: 600px;
+    margin: 30px auto;
+  }
 }

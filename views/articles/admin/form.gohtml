@@ -34,6 +34,11 @@
         </div>
 
         <div class="form-group">
+          <label class="control-label" for="selling_block">Продающий блок</label>
+          <textarea id="ckeditor2" name="selling_block">{{.Article.SellingBlock}}</textarea>
+        </div>
+
+        <div class="form-group">
           <label class="control-label" for="selling_preface">Начало продающего блока</label>
           <input id="selling_preface" name="selling_preface" value="{{.Article.SellingPreface}}" class="form-control input-md" >
         </div>

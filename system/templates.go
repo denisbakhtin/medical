@@ -25,6 +25,7 @@ func loadTemplates() {
 		"truncate":          helpers.Truncate,
 		"sellingPreface":    helpers.SellingPreface,
 		"promoTill":         helpers.PromoTill,
+		"replacePromoTill":  helpers.ReplacePromoTill,
 		"cityList":          helpers.CityList,
 		"eqRU":              helpers.EqRU,
 		"allReviews":        helpers.AllReviews,

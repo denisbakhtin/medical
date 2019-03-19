@@ -2,10 +2,12 @@ package helpers
 
 import (
 	"fmt"
+	"html/template"
 	"math"
 	"net/url"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/denisbakhtin/medical/models"
@@ -152,6 +154,11 @@ func PromoTill() string {
 	wday := now.Weekday()
 	endofweek := now.Add(time.Duration(6-int(wday)) * 24 * time.Hour)
 	return fmt.Sprintf("до %d %s", endofweek.Day(), mon(endofweek.Month()))
+}
+
+//ReplacePromoTill replaces {{promoTill}} placeholder with PromoTill() function result
+func ReplacePromoTill(source template.HTML) template.HTML {
+	return template.HTML(strings.Replace(string(source), "{{promoTill}}", PromoTill(), -1))
 }
 
 //CityList returns the list of cities for comments form
