@@ -231,7 +231,7 @@ textarea#textarea-comment {
 
 #rostphoto {
   background: #fff;
-  margin: 20px 0 10px 20px;
+  margin: 0 0 10px 20px;
 
   a {
     display: block;
@@ -549,7 +549,7 @@ h2,
 h3,
 h4 {
   text-align: center;
-  margin-bottom: 0.8em;
+  margin: 25px 0 20px !important;
   text-transform: uppercase;
 }
 
@@ -1363,4 +1363,8 @@ all and (min-width: 768px) and (-webkit-transform-3d) {
     max-width: 600px;
     margin: 30px auto;
   }
+}
+
+.mb-30 {
+  margin-bottom: 30px;
 }

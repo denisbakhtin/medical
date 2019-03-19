@@ -15,7 +15,6 @@ type Article struct {
 	Slug            string `form:"slug"`
 	Excerpt         string `form:"excerpt"`
 	Content         string `form:"content"`
-	SellingPreface  string `form:"selling_preface"`
 	SellingBlock    string `form:"selling_block"`
 	MetaKeywords    string `form:"meta_keywords"`
 	MetaDescription string `form:"meta_description"`
