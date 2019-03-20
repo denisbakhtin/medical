@@ -42,6 +42,11 @@ func Date(t time.Time) string {
 	return fmt.Sprintf("%d-%02d-%02d", t.Year(), t.Month(), t.Day())
 }
 
+//YearNow returns current year
+func YearNow() string {
+	return fmt.Sprintf("%d", time.Now().Year())
+}
+
 //StringInSlice returns true if value is in list slice
 func StringInSlice(value string, list []string) bool {
 	for i := range list {
@@ -96,17 +101,15 @@ func MainMenu() []MenuItem {
 		},
 		MenuItem{
 			URL:   "/articles",
-			Title: "Статьи",
+			Title: "Лечение",
 		},
 		MenuItem{
-			URL:      about.URL(),
-			Title:    "О враче",
-			CSSClass: "small",
+			URL:   about.URL(),
+			Title: "Врач кинезиолог",
 		},
 		MenuItem{
-			URL:      contacts.URL(),
-			Title:    "Контакты",
-			CSSClass: "small",
+			URL:   contacts.URL(),
+			Title: "Контакты",
 		},
 	}
 	return menu

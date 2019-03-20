@@ -19,6 +19,7 @@ func loadTemplates() {
 		"stringInSlice":     helpers.StringInSlice,
 		"dateTime":          helpers.DateTime,
 		"date":              helpers.Date,
+		"yearNow":           helpers.YearNow,
 		"mainMenu":          helpers.MainMenu,
 		"scrollMenu":        helpers.ScrollMenu,
 		"oddEvenClass":      helpers.OddEvenClass,

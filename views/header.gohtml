@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="alternate" type="application/rss+xml" title="Blog rss" href="/rss" />
     <link href="/public/favicon.ico" rel="icon" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500&amp;subset=cyrillic" rel="stylesheet"> 
     <title>
       {{.Title}}
       {{if not .TitleSuffix}}
@@ -50,7 +51,7 @@
     <meta property="og:image" content="{{.Ogimage}}" />
     {{end}}
   </head>
-  <body id="public-body">
+  <body id="public-body" lang="ru">
     {{template "yacounter" .}}
     <div id="main-container" class="container">
 {{end}}
