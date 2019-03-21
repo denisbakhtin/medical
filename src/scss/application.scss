@@ -692,6 +692,10 @@ h4 {
 
     .excerpt {
       padding: 15px;
+      text-align: justify;
+      -webkit-hyphens: auto;
+      -ms-hyphens: auto;
+      hyphens: auto;
     }
 
     &:hover {
@@ -935,7 +939,7 @@ strong {
     color: $secondarydark;
 
     &.glyphicon-plus {
-      padding: 15px 12px 15px 18px;
+      padding: 13px 12px 17px 18px;
     }
   }
 
@@ -1373,6 +1377,9 @@ all and (min-width: 768px) and (-webkit-transform-3d) {
   margin-left: 1em;
   margin-bottom: 1em;
   width: 408px;
+  border: none;
+  border-bottom: 1px solid $secondarylightest;
+  padding: 0;
 
   .caption {
     color: $secondarydarker;
