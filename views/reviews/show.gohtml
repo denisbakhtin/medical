@@ -15,12 +15,12 @@
     {{end}}
   </h1>
   {{if .Review.Video}}
-    <div id="review-content" class="text-center">
+    <div id="review-content">
       <div id="video-wrapper">
         <iframe src="{{.Review.Video}}?rel=0&autoplay=1" frameborder="0" allowfullscreen></iframe>
       </div>
       <h3>Содержание отзыва</h3>
-      <p class="content text-left">{{.Review.Content}}</p>
+      {{.Review.HTMLContent}}
     </div>
   {{else}}
     {{if .Review.Image}}
@@ -28,17 +28,16 @@
       <img class="thumbnail pull-left" src="{{.Review.Image}}" />
     </div>
     {{end}}
-    <p class="content">{{.Review.Content}}</p>
+    {{.Review.HTMLContent}}
   {{end}}
   <p class="text-center">
-    <a class="btn btn-lg btn-success btn-outline" href="/reviews">Просмотреть все отзывы</a>
+    <a class="btn btn-lg btn-success btn-outline" href="/reviews">Просмотреть остальные отзывы</a>
   </p>
 </div>
 
 <div class="clearfix"></div>
 
 {{template "withoutpain" .}}
-{{template "testimonials" .}}
 {{template "sellingblock" .}}
 {{template "optinform" .}}
 {{template "map" .}}

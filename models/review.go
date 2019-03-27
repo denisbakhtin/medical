@@ -2,7 +2,10 @@ package models
 
 import (
 	"fmt"
+	"html/template"
 	"time"
+
+	"github.com/microcosm-cc/bluemonday"
 )
 
 //Review type contains client review
@@ -24,10 +27,16 @@ type Review struct {
 
 //Excerpt returns review excerpt, 100 char long
 func (review *Review) Excerpt() string {
-	return truncate(review.Content, 300)
+	policy := bluemonday.StrictPolicy()
+	return truncate(policy.Sanitize(review.Content), 300)
 }
 
 //URL returns review url
 func (review *Review) URL() string {
 	return fmt.Sprintf("/reviews/%d", review.ID)
+}
+
+//HTMLContent returns parsed html content
+func (review *Review) HTMLContent() template.HTML {
+	return template.HTML(review.Content)
 }

@@ -98,10 +98,6 @@ func MainMenu() []MenuItem {
 	db.First(seans, 10)
 	menu := []MenuItem{
 		MenuItem{
-			URL:   "/reviews",
-			Title: "Отзывы",
-		},
-		MenuItem{
 			URL:   seans.URL(),
 			Title: "Приём",
 		},
@@ -112,6 +108,10 @@ func MainMenu() []MenuItem {
 		MenuItem{
 			URL:   about.URL(),
 			Title: "Врач кинезиолог",
+		},
+		MenuItem{
+			URL:   "/reviews",
+			Title: "Отзывы",
 		},
 		MenuItem{
 			URL:   contacts.URL(),

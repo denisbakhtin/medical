@@ -1306,6 +1306,12 @@ all and (min-width: 768px) and (-webkit-transform-3d) {
   }
 }
 
+@media all and (max-width: 430px) {
+  #header-cta {
+    display: none !important;
+  }
+}
+
 #testimonials-slide .thumbnail {
   height: 210px;
   overflow-y: scroll;

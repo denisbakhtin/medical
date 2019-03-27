@@ -12,6 +12,7 @@ import (
 	"github.com/denisbakhtin/medical/system"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"github.com/microcosm-cc/bluemonday"
 	"gopkg.in/gomail.v2"
 )
 
@@ -91,6 +92,8 @@ func ReviewCreatePost(c *gin.Context) {
 	c.Request.ParseMultipartForm(32 << 20)
 	review := &models.Review{}
 	if c.Bind(review) == nil {
+		policy := bluemonday.StrictPolicy()
+		review.Content = fmt.Sprintf("<p>%s</p>", policy.Sanitize(review.Content))
 		//simple captcha check
 		captcha, err := base64.StdEncoding.DecodeString(review.Captcha)
 		if err != nil {
