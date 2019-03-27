@@ -94,10 +94,16 @@ func MainMenu() []MenuItem {
 	db.First(about, 4)
 	contacts := &models.Page{}
 	db.First(contacts, 7)
+	seans := &models.Page{}
+	db.First(seans, 10)
 	menu := []MenuItem{
 		MenuItem{
 			URL:   "/reviews",
 			Title: "Отзывы",
+		},
+		MenuItem{
+			URL:   seans.URL(),
+			Title: "Приём",
 		},
 		MenuItem{
 			URL:   "/articles",

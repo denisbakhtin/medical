@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/denisbakhtin/medical/helpers"
@@ -33,6 +34,10 @@ func PageShow(c *gin.Context) {
 		"Active":          page.URL(),
 		"MetaDescription": page.MetaDescription,
 		"MetaKeywords":    page.MetaKeywords,
+		"Ogtitle":         page.Name,
+		"Ogurl":           fmt.Sprintf("http://%s%s", c.Request.Host, page.URL()),
+		"Ogtype":          "article",
+		"Ogdescription":   page.MetaDescription,
 		"Authenticated":   (session.Get("user_id") != nil),
 	})
 }
