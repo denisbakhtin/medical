@@ -25,7 +25,7 @@ func InfoShow(c *gin.Context) {
 	}
 	//redirect to canonical url
 	if c.Request.URL.Path != info.URL() {
-		c.Redirect(303, info.URL())
+		c.Redirect(301, info.URL())
 		return
 	}
 	flashes := session.Flashes()

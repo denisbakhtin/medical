@@ -10,29 +10,33 @@
   <div class="review-previews row">
     {{$length := len .List}}
     {{range $i, $a := .List}}
-    <div class="review-preview col-sm-12 col-md-6">
-      <h2 class="review-title"><a href="{{.URL}}">{{.AuthorName}}</a></h2>
-      <div class="excerpt">
-        {{if or .Video .Image}}
+      <div class="review-preview col-sm-12 col-md-6">
+        <h3 class="review-title"><a href="{{.URL}}">{{.Complaint}}</a></h3>
+        <!-- <h2 class="review-title"><a href="{{.URL}}">{{.AuthorName}}</a></h2> -->
+        <div class="excerpt">
           <div class="thumbnail">
-            {{if .Image}}
-              <a href="{{.URL}}">
-                <img class="img-responsive" src="{{.Image}}" />
-              </a>
-            {{else}}
-              {{if .Video}}
+            {{if or .Video .Image}}
+              {{if .Image}}
+                <a href="{{.URL}}">
+                  <img class="img-responsive" src="{{.Image}}" />
+                </a>
+              {{else}}
                 <iframe src="{{.Video}}" frameborder="0" allowfullscreen></iframe>
               {{end}}
+            {{else}}
+              <a href="{{.URL}}">
+                <div class="blank-img">{{truncate .AuthorName 1}}</div>
+              </a>
             {{end}}
           </div>
-        {{end}}
-        {{.Excerpt}}
-        <a href="{{.URL}}">Читать полностью</a>
+          <h4>{{.AuthorName}}</h4>
+          {{.Excerpt}}
+          <a href="{{.URL}}">Читать полностью</a>
+        </div>
       </div>
-    </div>
-    {{if oddEvenClass $i | eq "even"}}
-    <div class="clearfix"></div>
-    {{end}}
+      {{if oddEvenClass $i | eq "even"}}
+        <div class="clearfix"></div>
+      {{end}}
     {{end}}
   </div>
 </div>

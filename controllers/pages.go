@@ -25,7 +25,7 @@ func PageShow(c *gin.Context) {
 	}
 	//redirect to canonical url
 	if c.Request.URL.Path != page.URL() {
-		c.Redirect(303, page.URL())
+		c.Redirect(301, page.URL())
 		return
 	}
 	c.HTML(200, "pages/show", gin.H{

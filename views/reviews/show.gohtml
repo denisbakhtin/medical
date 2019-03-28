@@ -2,7 +2,7 @@
 {{template "header" .}}
 {{template "navbar" .}}
 <div id="review">
-  <h1>
+  <!--<h1>
     {{if .Review.Video}}
       Видео отзыв о работе кинезиолога: {{.Review.AuthorName}}
     {{else}}
@@ -13,13 +13,21 @@
       Редактировать отзыв
     </a>
     {{end}}
+  </h1> -->
+  <h1>
+    {{.Review.Complaint}}
+    {{if .ActiveUser}}
+    <a class="btn btn-primary" href="/admin/edit_review/{{.Review.ID}}">
+      Редактировать
+    </a>
+    {{end}}
   </h1>
   {{if .Review.Video}}
     <div id="review-content">
       <div id="video-wrapper">
         <iframe src="{{.Review.Video}}?rel=0&autoplay=1" frameborder="0" allowfullscreen></iframe>
       </div>
-      <h3>Содержание отзыва</h3>
+      <h3>Отзыв о приеме у кинезиолога: {{.Review.AuthorName}}</h3>
       {{.Review.HTMLContent}}
     </div>
   {{else}}
@@ -28,9 +36,10 @@
       <img class="thumbnail pull-left" src="{{.Review.Image}}" />
     </div>
     {{end}}
+    <h4 class="text-left">{{.Review.AuthorName}}</h4>
     {{.Review.HTMLContent}}
   {{end}}
-  <p class="text-center">
+  <p class="text-center mt-15">
     <a class="btn btn-lg btn-success btn-outline" href="/reviews">Просмотреть остальные отзывы</a>
   </p>
 </div>

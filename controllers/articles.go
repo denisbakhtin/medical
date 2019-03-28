@@ -25,7 +25,7 @@ func ArticleShow(c *gin.Context) {
 	}
 	//redirect to canonical url
 	if c.Request.URL.Path != article.URL() {
-		c.Redirect(303, article.URL())
+		c.Redirect(301, article.URL())
 		return
 	}
 	var testimonials []models.Review

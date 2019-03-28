@@ -53,7 +53,7 @@ func main() {
 	router.GET("/comments/:id", controllers.CommentsIndex)
 	router.GET("/info/:idslug", controllers.InfoShow)
 	router.GET("/reviews", controllers.ReviewsIndex)
-	router.GET("/reviews/:id", controllers.ReviewShow)
+	router.GET("/reviews/:idslug", controllers.ReviewShow)
 	router.POST("/new_request", controllers.RequestCreatePost)
 	router.POST("/new_comment", controllers.CommentCreatePost)
 	//http.Handle("/edit_comment", Default(controllers.CommentPublicUpdate))

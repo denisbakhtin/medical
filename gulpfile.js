@@ -50,6 +50,7 @@ gulp.task("js", function () {
             "src/js/select2.min.js",
             "src/js/nouislider.min.js",
             "src/js/lightbox.min.js",
+            "src/js/siema.min.js",
             "src/js/application.js",
         ])
         .pipe(concat("application.js"))

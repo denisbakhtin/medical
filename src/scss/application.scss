@@ -654,13 +654,7 @@ h4 {
   text-align: left;
 }
 
-.review-title {
-  height: 1.2em;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  color: #337ab7;
-}
+
 
 .article-previews .row {
   display: flex;
@@ -1406,10 +1400,6 @@ all and (min-width: 768px) and (-webkit-transform-3d) {
   clear: both;
 }
 
-.review-previews .thumbnail {
-  float: left;
-  margin-right: 0.5em;
-}
 
 .diplom-lone {
   max-width: 200px;
@@ -1496,4 +1486,146 @@ label {
 
 .text-success {
   color: $secondarydarker;
+}
+
+.mt-15 {
+  margin-top: 15px;
+}
+
+#withoutpain-slider-wrapper {
+  position: relative;
+  margin-top: 20px;
+
+  #withoutpain-slider {
+    padding: 5px 0;
+
+    &>div {
+      display: flex;
+    }
+  }
+
+  .item {
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    padding: 0 12px;
+
+    h3 {
+      padding: 0 15px;
+    }
+
+    p {
+      padding: 0 15px;
+    }
+
+    ul {
+      margin: 0 15px 15px 0;
+    }
+  }
+
+
+  .siema-controls {
+
+    .withoutpain-prev,
+    .withoutpain-next {
+      position: absolute;
+      top: 50%;
+      margin-top: -10px;
+      color: $secondary;
+      font-size: 30px;
+      width: auto;
+      padding: 10px 5px;
+      cursor: pointer;
+
+      &:hover {
+        color: darken($secondary, 10%);
+      }
+    }
+
+    .withoutpain-prev {
+      left: -25px;
+    }
+
+    .withoutpain-next {
+      right: -25px;
+    }
+  }
+}
+
+.btn-success {
+  background: $secondarydark;
+  border-color: darken($secondarydark, 5%);
+
+  &:hover {
+    background: darken($secondarydark, 5%);
+    border-color: darken($secondarydark, 10%);
+  }
+
+  &.btn-outline:hover {
+    background: darken($secondarydark, 5%);
+    border-color: darken($secondarydark, 10%);
+    color: #fff;
+  }
+}
+
+.review-previews {
+  .clearfix {
+    border-top: 1px solid #eee;
+  }
+
+  .review-preview {
+    .review-title {
+      font-size: 20px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      color: #337ab7;
+      margin: 25px 0 10px 0 !important;
+    }
+
+    .excerpt {
+      .thumbnail {
+        float: left;
+        margin-right: 0.5em;
+
+        img {
+          max-width: 150px;
+          max-height: 150px;
+        }
+
+        a {
+          text-decoration: none;
+        }
+
+        .blank-img {
+          width: 150px;
+          height: 150px;
+          background: #eee;
+          color: #999;
+          line-height: 150px;
+          text-align: center;
+          font-size: 120px;
+        }
+      }
+
+      h4 {
+        margin: 0 0 10px 0 !important;
+        text-align: left;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        font-size: 16px;
+        color: #999;
+        text-transform: none;
+      }
+
+      a {
+        text-decoration: underline;
+
+        &:hover {
+          text-decoration: none;
+        }
+      }
+    }
+  }
 }

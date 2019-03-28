@@ -34,6 +34,9 @@ func GetDB() *gorm.DB {
 func truncate(s string, n int) string {
 	runes := []rune(s)
 	if len(runes) > n {
+		if n > 3 {
+			return string(runes[:n-3]) + "..."
+		}
 		return string(runes[:n])
 	}
 	return s

@@ -1,4 +1,29 @@
 $(document).ready(function () {
+  //siema slider
+  if ($('#withoutpain-slider').length > 0) {
+    const withoutPainSiema = new Siema({
+      selector: '#withoutpain-slider',
+      duration: 200,
+      easing: 'ease-out',
+      perPage: {
+        100: 1,
+        576: 2,
+        992: 3,
+      },
+      startIndex: 0,
+      draggable: true,
+      multipleDrag: true,
+      threshold: 20,
+      loop: false,
+      rtl: false,
+      onInit: () => {},
+      onChange: () => {},
+    });
+    document.querySelector('.withoutpain-prev').addEventListener('click', () => withoutPainSiema.prev());
+    document.querySelector('.withoutpain-next').addEventListener('click', () => withoutPainSiema.next());
+    //setInterval(() => withoutPainSiema.next(), 4000);
+  }
+
   //wow animation init
   if (typeof WOW != 'undefined') {
     new WOW().init();

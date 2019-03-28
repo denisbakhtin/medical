@@ -13,6 +13,12 @@
         {{end}}
         {{.csrfField}}
         <input type="hidden" name="id" value="{{.Review.ID}}" >
+
+        <div class="form-group">
+          <label class="control-label" for="video">Жалоба</label>
+          <input id="complaint" name="complaint" value="{{.Review.Complaint}}" placeholder="Описание жалобы - пойдет вместо заголовка" class="form-control input-md" >
+        </div>
+        
         <div class="form-group">
           <label class="control-label" for="author_name">Автор</label>
           <input id="author_name" name="author_name" value="{{.Review.AuthorName}}" placeholder="Укажите имя автора" class="form-control input-md" required="">

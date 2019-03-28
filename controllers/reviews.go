@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"strconv"
+	"strings"
 
 	"github.com/denisbakhtin/medical/helpers"
 	"github.com/denisbakhtin/medical/models"
@@ -21,11 +22,17 @@ func ReviewShow(c *gin.Context) {
 	db := models.GetDB()
 	session := sessions.Default(c)
 
-	id := c.Param("id")
+	idslug := c.Param("idslug")
+	id := helpers.Atouint(strings.Split(idslug, "-")[0])
 	review := &models.Review{}
 	db.First(review, id)
 	if review.ID == 0 || !review.Published {
 		c.HTML(404, "errors/404", nil)
+		return
+	}
+	//redirect to canonical url
+	if c.Request.URL.Path != review.URL() {
+		c.Redirect(301, review.URL())
 		return
 	}
 	c.HTML(200, "reviews/show", gin.H{
@@ -48,7 +55,7 @@ func ReviewsIndex(c *gin.Context) {
 	var list []models.Review
 	db.Where("published = ?", true).Order("id desc").Find(&list)
 	c.HTML(200, "reviews/index", gin.H{
-		"Title":           "Кинезиология - отзывы пациентов",
+		"Title":           "Кинезиология - отзывы",
 		"Active":          c.Request.RequestURI,
 		"List":            list,
 		"Flash":           flashes,

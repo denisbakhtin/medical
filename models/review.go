@@ -12,6 +12,7 @@ import (
 type Review struct {
 	ID              uint   `json:"id" form:"id"`
 	ArticleID       *uint  `json:"article_id"`
+	Complaint       string `json:"complaint" form:"complaint"`
 	AuthorName      string `json:"author_name" form:"author_name"`
 	AuthorEmail     string `json:"author_email" form:"author_email"`
 	Content         string `json:"content" form:"content"`
@@ -28,12 +29,12 @@ type Review struct {
 //Excerpt returns review excerpt, 100 char long
 func (review *Review) Excerpt() string {
 	policy := bluemonday.StrictPolicy()
-	return truncate(policy.Sanitize(review.Content), 300)
+	return truncate(policy.Sanitize(review.Content), 150)
 }
 
 //URL returns review url
 func (review *Review) URL() string {
-	return fmt.Sprintf("/reviews/%d", review.ID)
+	return fmt.Sprintf("/reviews/%d-%s", review.ID, createSlug(review.Complaint))
 }
 
 //HTMLContent returns parsed html content
