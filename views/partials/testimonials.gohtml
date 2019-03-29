@@ -11,35 +11,29 @@
 {{define "reviews"}}
   <section id="testimonials">
     <h2 class="text-center">Отзывы пациентов</h2>
-    <p>Эффективность и качество применяемых на практике кинезиологических методик подтверждено многочисленными положительными отзывами наших пациентов.</p>
+    <p>Эффективность и качество применяемых на практике врачом кинезиологом методик подтверждено многочисленными положительными отзывами.</p>
 
-    {{$len := len .}}
-    <div class="carousel slide" id="testimonials-slide" data-interval="false">
-      <div class="carousel-inner">
+    <div id="testimonials-slider-wrapper">
+      <div id="testimonials-slider">
         {{range $i, $v := .}}
-          <div class="item {{if eq $i 0}}active{{end}}">
-            <div class="col-xs-12 {{if gt $len 1}}col-sm-6{{end}}">
-              <div class="thumbnail">
-                {{if .Image}}
-                  <a href="{{.URL}}">
-                    <img class="img-responsive" src="{{.Image}}" />
-                  </a>
-                {{else}}
-                  {{if .Video}}
-                    <iframe src="{{.Video}}" frameborder="0" allowfullscreen></iframe>
-                  {{end}}
-                {{end}}
-                <p class="strong"><a href="{{.URL}}">{{.AuthorName}}</a></p>
-                <p class="excerpt">{{.HTMLContent}}</p>
-              </div>
-            </div>
+          <div class="item">
+            <a class="thumbnail" href="{{.URL}}">
+              {{if .Image}}
+                <img class="img img-responsive" src="{{.Image}}" />
+              {{else}}
+                <div class="img blank-review-img">{{truncate .AuthorName 1}}</div>
+              {{end}}
+              <h4>{{.Complaint}}</h4>
+              <p class="strong">{{.AuthorName}}</p>
+              <p class="excerpt">{{.Excerpt}}</p>
+            </a>
           </div>
         {{end}}
       </div>
-      {{if gt $len 1}}
-        <a class="left carousel-control" href="#testimonials-slide" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
-        <a class="right carousel-control" href="#testimonials-slide" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
-      {{end}}
+      <div class="siema-controls">
+        <span class="testimonials-prev"><i class="glyphicon glyphicon-chevron-left"></i></span>
+        <span class="testimonials-next"><i class="glyphicon glyphicon-chevron-right"></i></span>
+      </div>
     </div>
   </section>
 {{end}}

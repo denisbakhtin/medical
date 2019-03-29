@@ -237,7 +237,7 @@ func mon(m time.Month) string {
 
 //AllReviews returns a slice of all published reviews
 func AllReviews() (reviews []models.Review) {
-	models.GetDB().Where("published = ?", true).Order("id desc").Find(&reviews)
+	models.GetDB().Where("published = ?", true).Order("id desc").Limit(5).Find(&reviews)
 	return
 }
 

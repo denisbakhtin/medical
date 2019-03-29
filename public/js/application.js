@@ -105,6 +105,29 @@ $(document).ready(function () {
     //setInterval(() => withoutPainSiema.next(), 4000);
   }
 
+  if ($('#testimonials-slider').length > 0) {
+    const testimonialsSiema = new Siema({
+      selector: '#testimonials-slider',
+      duration: 200,
+      easing: 'ease-out',
+      perPage: {
+        100: 1,
+        850: 2,
+      },
+      startIndex: 0,
+      draggable: true,
+      multipleDrag: true,
+      threshold: 20,
+      loop: true,
+      rtl: false,
+      onInit: () => {},
+      onChange: () => {},
+    });
+    document.querySelector('.testimonials-prev').addEventListener('click', () => testimonialsSiema.prev());
+    document.querySelector('.testimonials-next').addEventListener('click', () => testimonialsSiema.next());
+    //setInterval(() => withoutPainSiema.next(), 4000);
+  }
+
   //wow animation init
   if (typeof WOW != 'undefined') {
     new WOW().init();

@@ -15,17 +15,13 @@
         <!-- <h2 class="review-title"><a href="{{.URL}}">{{.AuthorName}}</a></h2> -->
         <div class="excerpt">
           <div class="thumbnail">
-            {{if or .Video .Image}}
-              {{if .Image}}
-                <a href="{{.URL}}">
-                  <img class="img-responsive" src="{{.Image}}" />
-                </a>
-              {{else}}
-                <iframe src="{{.Video}}" frameborder="0" allowfullscreen></iframe>
-              {{end}}
+            {{if .Image}}
+              <a href="{{.URL}}">
+                <img class="img-responsive" src="{{.Image}}" />
+              </a>
             {{else}}
               <a href="{{.URL}}">
-                <div class="blank-img">{{truncate .AuthorName 1}}</div>
+                <div class="blank-review-img">{{truncate .AuthorName 1}}</div>
               </a>
             {{end}}
           </div>
