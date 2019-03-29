@@ -31,8 +31,14 @@ func ArticleShow(c *gin.Context) {
 	var testimonials []models.Review
 	db.Where("published = ? and article_id = ?", true, article.ID).Order("created_at desc").Find(&testimonials)
 	topComments := models.GetTopComments(article.ID)
-	comments := models.GetComments(article.ID)
-	article.Comments = append(topComments, comments...)
+	//comments := models.GetComments(article.ID)
+	//article.Comments = append(topComments, comments...)
+	if len(topComments) > 0 {
+		article.Comments = topComments
+	} else {
+		article.Comments = models.GetComments(article.ID)
+	}
+
 	imageurl := ""
 	if img := article.GetImage(); len(img) > 0 {
 		imageurl = fmt.Sprintf("http://%s%s", c.Request.Host, img)
