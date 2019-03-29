@@ -282,11 +282,6 @@ textarea#textarea-comment {
 }
 
 @media (max-width: 480px) {
-  #testimonials-slide .thumbnail img {
-    max-width: 100px !important;
-    height: auto;
-  }
-
   #header-phone {
     display: none;
   }
@@ -1022,7 +1017,7 @@ strong {
   padding: 60px 30px;
   margin-left: -30px;
   margin-right: -30px;
-  background: #fafefe;
+  background: #f8fafa;
 }
 
 @media all and (max-width: 430px) {
