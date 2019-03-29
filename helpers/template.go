@@ -241,8 +241,8 @@ func AllReviews() (reviews []models.Review) {
 	return
 }
 
-//CSSVersion - a closure returning css version function
-func CSSVersion(path string) func() string {
+//FileVersion - a closure returning the file timestamp
+func FileVersion(path string) func() string {
 	return func() string {
 		file, err := os.Stat(path)
 		if err != nil {

@@ -429,35 +429,40 @@ textarea#textarea-comment {
   }
 }
 
-#captcha-wrapper {
+#captcha-wrapper,
+#captcha-comments-wrapper {
   position: relative;
   padding: 5px 50px 5px 15px;
   max-width: 20em;
   width: 100%;
+
+  #ok-sign,
+  .ok-sign {
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-size: 28px;
+    color: #1abc9c;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+
+    &.visible {
+      opacity: 1;
+    }
+  }
 }
 
-#captcha-wrapper #ok-sign {
-  position: absolute;
-  right: 0;
-  top: 0;
-  font-size: 28px;
-  color: #1abc9c;
-  opacity: 0;
-  transition: opacity 0.5s ease;
-}
+#captcha-slider,
+#captcha-comments-slider {
+  .noUi-handle {
+    cursor: pointer;
+    transition: background-color 0.5s ease;
 
-#captcha-wrapper #ok-sign.visible {
-  opacity: 1;
-}
-
-#captcha-slider .noUi-handle {
-  cursor: pointer;
-  transition: background-color 0.5s ease;
-}
-
-#captcha-slider .noUi-handle.ok {
-  background: #1abc9c;
-  box-shadow: none;
+    &.ok {
+      background: #1abc9c;
+      box-shadow: none;
+    }
+  }
 }
 
 #submit {

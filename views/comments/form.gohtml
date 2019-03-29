@@ -11,38 +11,40 @@
         </div>
 
         <div id="comment-hidden">
-          <div class="form-group">
-            <label class="control-label" for="author_city">Ваш город</label>
-            <select id="author_city" name="author_city" required="" class="form-control input-md" data-parsley-required-message="Необходимо выбрать город из списка">
-              <option value="">Выберите город</option>
-              {{range cityList}}
-              <option value="{{.}}">{{.}}</option>
-              {{end}}
-            </select>
-          </div>
+          <div class="row">
+            <div class="form-group col-xs-12 col-sm-4">
+              <label class="control-label" for="author_city">Ваш город</label>
+              <select id="author_city" name="author_city" required="" class="form-control input-md" data-parsley-required-message="Необходимо выбрать город из списка">
+                <option value="">Выберите город</option>
+                {{range cityList}}
+                <option value="{{.}}">{{.}}</option>
+                {{end}}
+              </select>
+            </div>
 
-          <div class="form-group">
-            <label class="control-label" for="author_name">Представьтесь</label>
-            <input id="author_name" name="author_name" placeholder="Укажите ваше имя" required="" class="form-control input-md" data-parsley-required-message="Необходимо указать свое имя">
-          </div>
+            <div class="form-group col-xs-12 col-sm-4">
+              <label class="control-label" for="author_name">Представьтесь</label>
+              <input id="author_name" name="author_name" placeholder="Укажите ваше имя" required="" class="form-control input-md" data-parsley-required-message="Необходимо указать свое имя">
+            </div>
 
-          <div class="form-group">
-            <label class="control-label" for="author_email">Адрес эл. почты</label>
-            <input type="email" id="author_email" name="author_email" placeholder="Укажите свою эл. почту (останется в тайне)" class="form-control input-md" >
+            <div class="form-group col-xs-12 col-sm-4">
+              <label class="control-label" for="author_email">Адрес эл. почты</label>
+              <input type="email" id="author_email" name="author_email" placeholder="(останется в тайне)" class="form-control input-md" data-parsley-error-message="Необходим корректный адрес эл. почты">
+            </div>
           </div>
 
           <div id="captcha-form-group" class="form-group">
             <label class="control-label" for="captcha-slider">Подтвердите, что Вы не робот: передвиньте ползунок вправо до упора</label>
-            <div id="captcha-wrapper">
-              <div id="captcha-slider"></div>
-              <i id="ok-sign" class="glyphicon glyphicon-ok-circle"></i>
-              <input type="hidden" id="captcha" name="captcha" />
+            <div id="captcha-comments-wrapper">
+              <div id="captcha-comments-slider"></div>
+              <i class="ok-sign glyphicon glyphicon-ok-circle"></i>
+              <input type="hidden" id="captcha-comments" name="captcha" />
             </div>
           </div>
         </div>
 
         <div class="form-group text-center">
-          <input id="submit-with-captcha-btn" type="submit" class="btn btn-primary btn-lg" value="Отправить" >
+          <input id="submit-with-captcha-comments-btn" type="submit" class="btn btn-primary btn-lg" value="Отправить" >
         </div>
       </fieldset>
     </form>

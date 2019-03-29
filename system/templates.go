@@ -33,7 +33,8 @@ func loadTemplates() {
 		"isFirstInTheRow":   helpers.IsFirstInTheRow,
 		"isLastInTheRow":    helpers.IsLastInTheRow,
 		"isLast":            helpers.IsLast,
-		"cssVersion":        helpers.CSSVersion(path.Join(GetConfig().Public, "css", "application.css")),
+		"cssVersion":        helpers.FileVersion(path.Join(GetConfig().Public, "css", "application.css")),
+		"jsVersion":         helpers.FileVersion(path.Join(GetConfig().Public, "js", "application.js")),
 		"articleIdComments": helpers.ArticleIDComments,
 	})
 
