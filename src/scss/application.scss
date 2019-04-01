@@ -1464,3 +1464,94 @@ label {
 .text-link {
   color: #337ab7;
 }
+
+.home_scheme_wrapper {
+  position: relative;
+  text-align: center;
+  padding-top: 30px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+
+  a {
+    text-decoration: underline;
+    font-weight: 400;
+    font-size: 20px;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  img {
+    max-height: 500px;
+    max-width: 100%;
+    height: auto;
+  }
+
+  #head_ache {
+    position: absolute;
+    left: 50%;
+    top: 5px;
+    text-align: left;
+    margin-left: -115px;
+  }
+
+  #shoulder_ache {
+    position: absolute;
+    left: 50%;
+    top: 80px;
+    margin-left: -300px;
+    text-align: right;
+  }
+
+  #wrist_ache {
+    position: absolute;
+    left: 50%;
+    top: 260px;
+    margin-left: -370px;
+    text-align: right;
+  }
+
+  #spine_ache {
+    position: absolute;
+    left: 50%;
+    top: 460px;
+    margin-left: -390px;
+    text-align: right;
+  }
+
+  #coccyx_ache {
+    position: absolute;
+    left: 50%;
+    margin-left: 180px;
+    top: 80px;
+    text-align: left;
+  }
+
+  #knee_ache {
+    position: absolute;
+    left: 50%;
+    top: 260px;
+    margin-left: 240px;
+    text-align: left;
+  }
+
+  #foot_ache {
+    position: absolute;
+    left: 50%;
+    top: 460px;
+    margin-left: 150px;
+    text-align: left;
+  }
+}
+
+@media (max-width: 800px) {
+  .home_scheme_wrapper {
+    a {
+      position: initial !important;
+      margin-left: 0 !important;
+      text-align: center !important;
+      display: block;
+    }
+  }
+}
