@@ -20,6 +20,7 @@ type MenuItem struct {
 	Title    string
 	CSSClass string
 	IsActive bool
+	Children []MenuItem
 }
 
 //IsActive checks uri against currently active (uri, or nil) and returns "active" if they are equal
@@ -96,14 +97,21 @@ func MainMenu() []MenuItem {
 	db.First(contacts, 7)
 	seans := &models.Page{}
 	db.First(seans, 10)
+	var articles []models.Article
+	db.Where("published = ?", true).Order("id desc").Find(&articles)
+	submenu := make([]MenuItem, 0, 10)
+	for i := range articles {
+		submenu = append(submenu, MenuItem{URL: articles[i].URL(), Title: articles[i].Name})
+	}
 	menu := []MenuItem{
 		MenuItem{
 			URL:   seans.URL(),
 			Title: "Приём",
 		},
 		MenuItem{
-			URL:   "/articles",
-			Title: "Лечение",
+			URL:      "/articles",
+			Title:    "Лечение",
+			Children: submenu,
 		},
 		MenuItem{
 			URL:   about.URL(),
