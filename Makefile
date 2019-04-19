@@ -30,3 +30,14 @@ vet:
 
 clean:
 	@rm -f ./miobalans-go
+
+stop: 
+	@sudo systemctl stop medical
+
+start:
+	@sudo systemctl start medical
+
+pull:
+	@git pull origin master
+
+pull_restart: stop pull clean build start
