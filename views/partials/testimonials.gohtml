@@ -19,7 +19,7 @@
           <div class="item">
             <a class="thumbnail" href="{{.URL}}">
               {{if .Image}}
-                <img class="img img-responsive" src="{{.Image}}" />
+                <img class="img img-responsive" src="{{.Image}}" alt="{{.Complaint}}"/>
               {{else}}
                 <div class="img blank-review-img">{{truncate .AuthorName 1}}</div>
               {{end}}
