@@ -3,6 +3,7 @@
 default: build
 
 build: clean vet
+	@echo "Building application"
 	@go build -o miobalans-go
 
 doc:
@@ -29,15 +30,19 @@ vet:
 	@go vet ./...
 
 clean:
+	@echo "Cleaning binary"
 	@rm -f ./miobalans-go
 
 stop: 
+	@echo "Stopping medical service"
 	@sudo systemctl stop medical
 
 start:
+	@echo "Starting medical service"
 	@sudo systemctl start medical
 
 pull:
+	@echo "Pulling origin"
 	@git pull origin master
 
 pull_restart: stop pull clean build start
