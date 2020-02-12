@@ -48,6 +48,8 @@ func main() {
 	}
 
 	router.GET("/pages/:idslug", controllers.PageShow)
+	router.GET("/exercises", controllers.ExercisesIndex)
+	router.GET("/exercises/:idslug", controllers.ExerciseShow)
 	router.GET("/articles", controllers.ArticlesIndex)
 	router.GET("/articles/:idslug", controllers.ArticleShow)
 	router.GET("/comments/:id", controllers.CommentsIndex)
@@ -78,6 +80,13 @@ func main() {
 		authorized.GET("/edit_page/:id", controllers.PageAdminUpdateGet)
 		authorized.POST("/edit_page/:id", controllers.PageAdminUpdatePost)
 		authorized.POST("/delete_page", controllers.PageAdminDelete)
+
+		authorized.GET("/exercises", controllers.ExercisesAdminIndex)
+		authorized.GET("/new_exercise", controllers.ExerciseAdminCreateGet)
+		authorized.POST("/new_exercise", controllers.ExerciseAdminCreatePost)
+		authorized.GET("/edit_exercise/:id", controllers.ExerciseAdminUpdateGet)
+		authorized.POST("/edit_exercise/:id", controllers.ExerciseAdminUpdatePost)
+		authorized.POST("/delete_exercise", controllers.ExerciseAdminDelete)
 
 		authorized.GET("/articles", controllers.ArticlesAdminIndex)
 		authorized.GET("/new_article", controllers.ArticleAdminCreateGet)

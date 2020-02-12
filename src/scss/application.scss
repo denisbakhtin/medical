@@ -1601,3 +1601,38 @@ label {
 .navbar-default .navbar-collapse.collapse.in .navbar-nav .open .dropdown-menu>li>a {
   color: #fff;
 }
+
+.dashboard-body {
+  .panel-default {
+    border-top-color: transparent;
+    border-bottom-color: transparent;
+    border-radius: 0; 
+    box-shadow: none;
+  }
+}
+
+#exercise {
+  .content {
+    p {
+      text-align: center;
+    }
+  }
+  video {
+    text-align: center;
+    max-width: 400px;
+    height: auto;
+    width: 100%;
+  }
+}
+
+.exercise-previews {
+  .exercise-preview {
+    .exercise-title {
+      margin: 15px 0 20px !important;
+      line-height: 1.1em;
+      height: 3em;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}

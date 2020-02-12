@@ -1,0 +1,76 @@
+{{define "exercises/admin/form"}}
+{{template "dashboard/header" .}}
+{{template "dashboard/navbar" .}}
+{{template "dashboard/sidebar" .}}
+<div id="main-column" class="container-fluid" role="main">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <form method="post" data-parsley-validate enctype="multipart/form-data">
+      <fieldset>
+        <legend>{{.Title}}</legend>
+        {{range .Flash}}
+          <div class="alert alert-danger">{{.}}</div><p>
+        {{end}}
+        {{.csrfField}}
+        <input type="hidden" name="id" value="{{.Exercise.ID}}" >
+        <div class="form-group">
+          <label class="control-label" for="name">Название</label>
+          <input id="name" name="name" value="{{.Exercise.Name}}" placeholder="Введите название упражнения" class="form-control input-md" required="" data-parsley-required-message="Название является обязательным">
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="slug">SEO адрес</label>
+          <input id="slug" name="slug" pattern="[a-z\\-]*" value="{{.Exercise.Slug}}" placeholder="Можно оставить пустым" class="form-control input-md" >
+        </div>
+
+        <input type="hidden" name="image" value="{{.Exercise.Image}}" >
+        <div class="form-group">
+          <label class="control-label" for="image">Изображение</label>
+          <input id="image" class="form-control" type="file" name="imagefile" value="{{.Exercise.Image}}" />
+          {{if len .Exercise.Image | lt 0}}
+            <p class="text-muted">{{.Exercise.Image}}</p>
+          {{end}}
+        </div>
+
+        <input type="hidden" name="video" value="{{.Exercise.Video}}" >
+        <div class="form-group">
+          <label class="control-label" for="video">Видео</label>
+          <input id="video" class="form-control" type="file" name="videofile" value="{{.Exercise.Video}}" />
+          {{if len .Exercise.Video | lt 0}}
+            <p class="text-muted">{{.Exercise.Video}}</p>
+          {{end}}
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="content">Описание</label>
+          <textarea id="ckeditor" name="content">{{.Exercise.Content}}</textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="published">
+            <input id="published" name="published" type="checkbox" value="true" {{if .Exercise.Published}}checked{{end}} >
+            Опубликовать
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="meta_keywords">Мета ключевики</label>
+          <input class="form-control" name="meta_keywords" value="{{.Exercise.MetaKeywords}}"/>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="meta_description">Мета описание</label>
+          <input class="form-control" name="meta_description" value="{{.Exercise.MetaDescription}}" />
+        </div>
+
+        <div class="form-group">
+          <input type="submit" class="btn btn-primary" formnovalidate value="Сохранить">
+          <input type="button" class="btn btn-default" formnovalidate onclick="window.history.back();" value="Отмена">
+        </div>
+      </fieldset>
+      </form>
+    </div>
+  </div>
+</div>
+{{template "dashboard/footer" .}}
+{{end}}

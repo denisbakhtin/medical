@@ -20,7 +20,7 @@ func InitDB(connection string) {
 		log.Fatal(err)
 	}
 	//automigrate
-	db.AutoMigrate(&Article{}, &Comment{}, &Page{}, &Review{}, &User{}, &Info{})
+	db.AutoMigrate(&Article{}, &Comment{}, &Page{}, &Review{}, &User{}, &Info{}, &Exercise{})
 }
 
 //GetDB returns database handler

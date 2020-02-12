@@ -125,6 +125,10 @@ func MainMenu() []MenuItem {
 			URL:   contacts.URL(),
 			Title: "Контакты",
 		},
+		MenuItem{
+			URL:   "/exercises",
+			Title: "Упражнения",
+		},
 	}
 	return menu
 }
