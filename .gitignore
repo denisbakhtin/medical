@@ -1,6 +1,9 @@
 config/config.json
 public/uploads/*.jpg
 public/uploads/*.png
+public/uploads/*.jpeg
+public/uploads/*.mov
+public/uploads/*.mp4
 public/fonts/*
 public/images/*
 public/sitemap/*
