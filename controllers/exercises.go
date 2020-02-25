@@ -54,7 +54,7 @@ func ExercisesIndex(c *gin.Context) {
 	session := sessions.Default(c)
 
 	var list []models.Exercise
-	if err := db.Where("published = ?", true).Order("id asc").Find(&list).Error; err != nil {
+	if err := db.Where("published = ?", true).Order("sort_ord asc").Find(&list).Error; err != nil {
 		c.HTML(500, "errors/500", helpers.ErrorData(err))
 		return
 	}
@@ -74,7 +74,7 @@ func ExercisesAdminIndex(c *gin.Context) {
 	db := models.GetDB()
 
 	var list []models.Exercise
-	if err := db.Order("published desc, id desc").Find(&list).Error; err != nil {
+	if err := db.Order("sort_ord asc").Find(&list).Error; err != nil {
 		c.HTML(500, "errors/500", helpers.ErrorData(err))
 		return
 	}

@@ -10,15 +10,16 @@ import (
 
 //Exercise type contains exercise info
 type Exercise struct {
-	ID              uint   `form:"id"`
-	Name            string `form:"name"`
-	Slug            string `form:"slug"`
-	Content         string `form:"content"`
-	Image           string `form:"image"`
-	Video           string `form:"video"`
-	MetaKeywords    string `form:"meta_keywords"`
-	MetaDescription string `form:"meta_description"`
-	Published       bool   `form:"published"`
+	ID              uint    `form:"id"`
+	Name            string  `form:"name"`
+	Slug            string  `form:"slug"`
+	Content         string  `form:"content"`
+	Image           string  `form:"image"`
+	SortOrd         float32 `form:"sort_ord"`
+	Video           string  `form:"video"`
+	MetaKeywords    string  `form:"meta_keywords"`
+	MetaDescription string  `form:"meta_description"`
+	Published       bool    `form:"published"`
 	CreatedAt       time.Time
 	UpdatedAt       time.Time
 }

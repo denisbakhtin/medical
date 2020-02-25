@@ -42,6 +42,11 @@
         </div>
 
         <div class="form-group">
+          <label class="control-label" for="name">Порядковый номер</label>
+          <input id="sort_ord" name="sort_ord" value="{{.Exercise.SortOrd}}" class="form-control input-md" required="" data-parsley-required-message="Порядковый номер является обязательным">
+        </div>
+
+        <div class="form-group">
           <label class="control-label" for="content">Описание</label>
           <textarea id="ckeditor" name="content">{{.Exercise.Content}}</textarea>
         </div>
