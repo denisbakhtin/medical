@@ -4,6 +4,7 @@ import (
 	"flag"
 	"log"
 	"net/http"
+	"path"
 
 	"github.com/claudiu/gocron"
 	"github.com/denisbakhtin/medical/controllers"
@@ -38,6 +39,7 @@ func main() {
 	router.SetHTMLTemplate(system.GetTemplates())
 	router.NoRoute(controllers.Error404)
 	router.StaticFS("/public", http.Dir("public"))
+	router.StaticFile("/robots.txt", path.Join(system.GetConfig().Public, "robots.txt"))
 	router.GET("/", controllers.Home)
 	router.GET("/signin", controllers.SignInGet)
 	router.POST("/signin", controllers.SignInPost)
