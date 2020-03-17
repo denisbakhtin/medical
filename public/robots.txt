@@ -41,6 +41,7 @@ Disallow: /remarkables/7-okazyvaetsya-nasekomye-mogut-ispolzovatsya-pri-porezah-
 Disallow: /remarkables/8-kakovo-obschee-kolichestvo-myshts-v-chelovecheskom-organizme
 Disallow: /remarkables/9-greypfrutovyy-sok-ne-rekomenduetsya-pit-vmeste-s-lekarstvami
 Disallow: /remarkables
+Disallow: /new_review
 
 Sitemap: http://www.miobalans.ru/public/sitemap/sitemap_index.xml
 Host: www.miobalans.ru
