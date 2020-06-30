@@ -9,7 +9,8 @@ WorkingDirectory=/home/tabula/go/src/github.com/denisbakhtin/medical
 ExecStart=/home/tabula/go/src/github.com/denisbakhtin/medical/miobalans-go -mode=release
 ExecReload=/bin/kill -HUP $MAINPID
 KillMode=process
-Restart=always
+Restart=on-failure
+RestartSec=10s
 
 [Install]
 WantedBy=multi-user.target
