@@ -20,28 +20,28 @@
 
     - name: Copy config directory
       copy:
-        src:"{{ playbook_dir }}/config/"
-        dest:/home/tabula/medical
+        src: "{{ playbook_dir }}/config/"
+        dest: /home/tabula/medical
       
     - name: Copy css directory
       copy:
-        src:"{{ playbook_dir }}/public/css/"
-        dest:/home/tabula/medical/public
+        src: "{{ playbook_dir }}/public/css/"
+        dest: /home/tabula/medical/public
 
     - name: Copy js directory
       copy:
-        src:"{{ playbook_dir }}/public/js/"
-        dest:/home/tabula/medical/public
+        src: "{{ playbook_dir }}/public/js/"
+        dest: /home/tabula/medical/public
 
     - name: Copy views directory
       copy:
-        src:"{{ playbook_dir }}/views/"
-        dest:/home/tabula/medical
+        src: "{{ playbook_dir }}/views/"
+        dest: /home/tabula/medical
 
     - name: Copy binary directory
       copy:
-        src:"{{ playbook_dir }}/miobalans-go"
-        dest:/home/tabula/medical
+        src: "{{ playbook_dir }}/miobalans-go"
+        dest: /home/tabula/medical
 
     - name: restart service
       shell: systemctl restart medical
