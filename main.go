@@ -119,5 +119,6 @@ func main() {
 		authorized.POST("/ckupload", controllers.CkUpload)
 	}
 
+	log.Printf("INFO: Starting http server in %s mode, port: 8010\n", *mode)
 	log.Fatal(router.Run(":8010"))
 }
