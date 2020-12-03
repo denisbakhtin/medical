@@ -21,22 +21,22 @@
     - name: Copy config directory
       copy:
         src: "{{ playbook_dir }}/config/"
-        dest: /home/tabula/medical
+        dest: /home/tabula/medical/config/
       
     - name: Copy css directory
       copy:
         src: "{{ playbook_dir }}/public/css/"
-        dest: /home/tabula/medical/public
+        dest: /home/tabula/medical/public/css/
 
     - name: Copy js directory
       copy:
         src: "{{ playbook_dir }}/public/js/"
-        dest: /home/tabula/medical/public
+        dest: /home/tabula/medical/public/js/
 
     - name: Copy views directory
       copy:
         src: "{{ playbook_dir }}/views/"
-        dest: /home/tabula/medical
+        dest: /home/tabula/medical/views/
 
     - name: Copy binary directory
       copy:
