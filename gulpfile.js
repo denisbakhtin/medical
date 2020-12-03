@@ -39,20 +39,20 @@ gulp.task("images", function () {
 gulp.task("js", function () {
     //del(["public/js/**/*"])
     gulp.src("src/js/ckeditor/**/*")
-        .pipe(gulp.dest("public/js/ckeditor"))
+        .pipe(gulp.dest("public/ckeditor"))
     gulp.src([
-            "src/js/jquery-2.1.4.min.js",
-            "src/js/jquery.actual.min.js",
-            "src/js/parsley.min.js",
-            "src/js/bootstrap.min.js",
-            "src/js/jquery.slimscroll.min.js",
-            "src/js/jquery.maskedinput.min.js",
-            "src/js/select2.min.js",
-            "src/js/nouislider.min.js",
-            "src/js/lightbox.min.js",
-            "src/js/siema.min.js",
-            "src/js/application.js",
-        ])
+        "src/js/jquery-2.1.4.min.js",
+        "src/js/jquery.actual.min.js",
+        "src/js/parsley.min.js",
+        "src/js/bootstrap.min.js",
+        "src/js/jquery.slimscroll.min.js",
+        "src/js/jquery.maskedinput.min.js",
+        "src/js/select2.min.js",
+        "src/js/nouislider.min.js",
+        "src/js/lightbox.min.js",
+        "src/js/siema.min.js",
+        "src/js/application.js",
+    ])
         .pipe(concat("application.js"))
         .pipe(gulp.dest("public/js"))
 })
