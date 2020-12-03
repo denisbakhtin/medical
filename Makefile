@@ -2,9 +2,14 @@
 
 default: build
 
+deploy:
+	ansible-playbook deploy.yml -K
+
 build: clean vet
+	@echo "Building assets"
+	@gulp
 	@echo "Building application"
-	@go build -o miobalans-go
+	CGO_ENABLED=0 go build -o miobalans-go
 
 doc:
 	@godoc -http=:6060 -index

@@ -1,0 +1,48 @@
+---
+- name: Deploy web-site
+  hosts: aghost
+  gather_facts: no
+  vars:
+    ansible_python_interpreter: /usr/bin/python
+  vars_prompt:
+    - name: commit
+      prompt: "What is the commit name?"
+      private: no
+
+  tasks:
+    - name: build assets & binary for production
+      delegate_to: localhost
+      shell: make build
+
+    - name: git push
+      delegate_to: localhost
+      shell: git add -A && git commit -m "{{ commit }}" ; git push origin master
+
+    - name: Copy config directory
+      copy:
+        src:"{{ playbook_dir }}/config/"
+        dest:/home/tabula/medical
+      
+    - name: Copy css directory
+      copy:
+        src:"{{ playbook_dir }}/public/css/"
+        dest:/home/tabula/medical/public
+
+    - name: Copy js directory
+      copy:
+        src:"{{ playbook_dir }}/public/js/"
+        dest:/home/tabula/medical/public
+
+    - name: Copy views directory
+      copy:
+        src:"{{ playbook_dir }}/views/"
+        dest:/home/tabula/medical
+
+    - name: Copy binary directory
+      copy:
+        src:"{{ playbook_dir }}/miobalans-go"
+        dest:/home/tabula/medical
+
+    - name: restart service
+      shell: systemctl restart medical
+      become: yes
