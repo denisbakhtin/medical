@@ -1,4 +1,5 @@
 ---
+  # this is not an installation script. It assumes the db, as well as public dir & service already exists and running
 - name: Deploy web-site
   hosts: aghost
   gather_facts: no
@@ -38,11 +39,12 @@
         src: "{{ playbook_dir }}/views/"
         dest: /home/tabula/medical/views/
 
-    - name: Copy binary directory
+    - name: Copy binary
       copy:
         src: "{{ playbook_dir }}/miobalans-go"
         dest: /home/tabula/medical
-
+        mode: 0755
+    
     - name: restart service
       shell: systemctl restart medical
       become: yes
