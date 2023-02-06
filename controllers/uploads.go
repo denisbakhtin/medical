@@ -14,7 +14,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-//CkUpload handles POST /admin/ckupload route
+// CkUpload handles POST /admin/ckupload route
 func CkUpload(c *gin.Context) {
 
 	err := c.Request.ParseMultipartForm(32 << 20)
@@ -38,7 +38,7 @@ func CkUpload(c *gin.Context) {
 	fmt.Fprintln(c.Writer, "<script>window.parent.CKEDITOR.tools.callFunction("+CKEdFunc+", \""+uri+"\");</script>")
 }
 
-//saveFile saves file to disc and returns its relative uri
+// saveFile saves file to disc and returns its relative uri
 func saveFile(fh *multipart.FileHeader, f multipart.File) (string, error) {
 	fileExt := strings.ToLower(filepath.Ext(fh.Filename))
 	if !regexp.MustCompile("^\\.(jpe?g|bmp|gif|png|mp4)$").MatchString(fileExt) {

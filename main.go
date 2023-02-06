@@ -2,8 +2,10 @@ package main
 
 import (
 	"flag"
+	"io"
 	"log"
 	"net/http"
+	"os"
 	"path"
 
 	"github.com/claudiu/gocron"
@@ -33,6 +35,10 @@ func main() {
 	gocron.Start()
 
 	gin.SetMode(system.GetMode())
+	gin.DisableConsoleColor()
+	f, _ := os.Create("logs/gin.txt")
+	gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
+
 	router := gin.Default()
 	store := cookie.NewStore([]byte(system.GetConfig().SessionSecret))
 	router.Use(sessions.Sessions("gin-session", store))

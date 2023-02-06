@@ -8,6 +8,7 @@
     <thead>
       <tr>
         <th class="id">№</th>
+        <th class="order">Сорт.</th>
         <th class="name">Название</th>
         <th class="published">Опубликовано</th>
         <th class="actions">Действия</th>
@@ -18,6 +19,7 @@
       {{range .List}}
         <tr>
           <td class="id">{{.ID}}</td>
+          <td class="id">{{.SortOrd}}</td>
           <td class="name">{{.Name}}</td>
           <td class="published">
             {{if .Published}}
