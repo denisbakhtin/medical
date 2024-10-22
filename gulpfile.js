@@ -1,85 +1,76 @@
-var gulp = require("gulp"),
-    sass = require("gulp-sass"),
-    autoprefixer = require("gulp-autoprefixer"),
-    notify = require("gulp-notify"),
-    concat = require("gulp-concat"),
-    gzip = require("gulp-gzip"),
-    del = require("del")
+const { series, parallel, src, dest, watch } = require('gulp');
+const sass = require('gulp-sass')(require('sass'));
+const notify = require("gulp-notify");
+const del = require("del");
+const autoprefixer = require("gulp-autoprefixer");
+const concat = require("gulp-concat");
+const gzip = require("gulp-gzip");
 
+function fonts() {
+  del(["public/fonts/**/*"])
+  return src('src/fonts/**.*', { encoding: false })
+    .pipe(dest('public/fonts'));
+}
 
-// Compile SCSS files to CSS
-gulp.task("scss", function () {
-    //Delete our old css files
-    del(["public/css/**/*"])
+function scss() {
+  return src("src/scss/**/*.scss")
+    .pipe(sass({
+      outputStyle: "compressed",
+      includePaths: [
+        "src/scss",
+      ]
+    }).on("error", notify.onError(function(error) {
+      return "Error: " + error.message;
+    })))
+    .pipe(autoprefixer())
+    .pipe(dest("public/css"))
+}
 
-    //compile hashed css files
-    gulp.src("src/scss/**/*.scss")
-        .pipe(sass({
-            outputStyle: "compressed",
-            includePaths: [
-                "src/scss",
-            ]
-        }).on("error", notify.onError(function (error) {
-            return "Error: " + error.message;
-        })))
-        .pipe(autoprefixer({
-            browsers: ["last 20 versions"]
-        }))
-        .pipe(gulp.dest("public/css"))
-})
+function images() {
+  del(["public/images/**/*"])
+  return src("src/images/**/*", { encoding: false })
+    .pipe(dest("public/images"))
+}
 
-// images
-gulp.task("images", function () {
-    del(["public/images/**/*"])
-    gulp.src("src/images/**/*")
-        .pipe(gulp.dest("public/images"))
-})
+function js() {
+  //del(["public/js/**/*"])
+  return src([
+    "src/js/jquery-2.1.4.min.js",
+    "src/js/jquery.actual.min.js",
+    "src/js/parsley.min.js",
+    "src/js/bootstrap.min.js",
+    "src/js/jquery.slimscroll.min.js",
+    "src/js/jquery.maskedinput.min.js",
+    "src/js/select2.min.js",
+    "src/js/nouislider.min.js",
+    "src/js/lightbox.min.js",
+    "src/js/siema.min.js",
+    "src/js/application.js"])
+    .pipe(concat("application.js"))
+    .pipe(dest("public/js"))
+}
 
-// javascript
-gulp.task("js", function () {
-    //del(["public/js/**/*"])
-    gulp.src("src/js/ckeditor/**/*")
-        .pipe(gulp.dest("public/ckeditor"))
-    gulp.src([
-        "src/js/jquery-2.1.4.min.js",
-        "src/js/jquery.actual.min.js",
-        "src/js/parsley.min.js",
-        "src/js/bootstrap.min.js",
-        "src/js/jquery.slimscroll.min.js",
-        "src/js/jquery.maskedinput.min.js",
-        "src/js/select2.min.js",
-        "src/js/nouislider.min.js",
-        "src/js/lightbox.min.js",
-        "src/js/siema.min.js",
-        "src/js/application.js",
-    ])
-        .pipe(concat("application.js"))
-        .pipe(gulp.dest("public/js"))
-})
+function ckEditor() {
+  return src("src/js/ckeditor/**/*")
+    .pipe(dest("public/ckeditor"));
+}
 
-// fonts
-gulp.task('icons', function () {
-    del(["public/fonts/**/*"])
-    gulp.src('src/fonts/**.*')
-        .pipe(gulp.dest('public/fonts'));
-});
+function gzipJs() {
+  return src('public/js/*.js')
+    .pipe(gzip())
+    .pipe(dest('public/js'));
+}
 
-// gzip
-gulp.task('gzip', function () {
-    gulp.src('public/js/*.js')
-        .pipe(gzip())
-        .pipe(gulp.dest('public/js'));
-    gulp.src('public/css/*.css')
-        .pipe(gzip())
-        .pipe(gulp.dest('public/css'));
-});
+function gzipCss() {
+  return src('public/css/*.css')
+    .pipe(gzip())
+    .pipe(dest('public/css'));
+}
 
-// Watch asset folder for changes
-gulp.task("watch", ["scss", "images", "js"], function () {
-    gulp.watch("src/scss/**/*", ["scss"])
-    gulp.watch("src/images/**/*", ["images"])
-    gulp.watch("src/js/**/*", ["js"])
-})
+exports.watch = function() {
+  watch(["src/scss/**/*.scss"], scss);
+  watch(["src/js/**/*.js"], js);
+  watch(["src/images/**/*"], images);
+};
 
-// Set watch as default task
-gulp.task("default", ["icons", "scss", "images", "js", "gzip"])
+exports.default = series(parallel(fonts, scss, images, js, ckEditor), parallel(gzipJs, gzipCss));

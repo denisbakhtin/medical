@@ -13,15 +13,20 @@
         </a>
       </div>
     {{end}}
-    
+
     <div class="article-preview infos">
       {{$length2 := len $.Infos}}
       {{if gt $length2 0}}
-        <h4 class="text-left">Дополнительные материалы</h4>
-        {{range $ii, $aa := $.Infos}}
-          <a href="{{.URL}}">{{.Name}}</a>
-        {{end}}
-      {{end}}            
+        <h2>Дополнительные материалы</h2>
+        <div class="row">
+            {{range $ii, $aa := $.Infos}}
+              <a class="col-md-6" href="{{.URL}}">
+                  <img src="{{.GetImage}}" alt="{{.Name}}" />
+                  <span class="title">{{.Name}}</span>
+              </a>
+            {{end}}
+        </div>
+      {{end}}
     </div>
 
   </div>
