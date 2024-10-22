@@ -6,12 +6,23 @@ import (
 	"path"
 	"time"
 
+	"github.com/claudiu/gocron"
 	"github.com/denisbakhtin/medical/models"
 	"github.com/denisbakhtin/sitemap"
 )
 
-//CreateXMLSitemap creates xml sitemap for search engines, and saves in public/sitemap folder
-func CreateXMLSitemap() {
+// SetupPeriodicTasks initializes periodic tasks
+func SetupPeriodicTasks(mode string) {
+	// Periodic tasks
+	if mode == ReleaseMode {
+		createXMLSitemap() // refresh sitemap now
+	}
+	gocron.Every(1).Day().Do(createXMLSitemap) // refresh daily
+	gocron.Start()
+}
+
+// createXMLSitemap creates xml sitemap for search engines, and saves in public/sitemap folder
+func createXMLSitemap() {
 	log.Printf("INFO: Starting XML sitemap generation\n")
 	db := models.GetDB()
 	folder := path.Join(GetConfig().Public, "sitemap")
@@ -19,15 +30,15 @@ func CreateXMLSitemap() {
 	now := time.Now()
 	items := make([]sitemap.Item, 0, 500)
 
-	//Home page
+	// Home page
 	items = append(items, sitemap.Item{
-		Loc:        fmt.Sprintf("%s", domain),
+		Loc:        domain,
 		LastMod:    now,
 		Changefreq: "daily",
 		Priority:   1,
 	})
 
-	//Articles
+	// Articles
 	items = append(items, sitemap.Item{
 		Loc:        fmt.Sprintf("%s%s", domain, "/articles"),
 		LastMod:    now,
@@ -70,7 +81,7 @@ func CreateXMLSitemap() {
 		}
 	*/
 
-	//Static pages
+	// Static pages
 	var pages []models.Page
 	db.Where("published = ?", true).Order("id desc").Find(&pages)
 	for i := range pages {
@@ -82,7 +93,7 @@ func CreateXMLSitemap() {
 		})
 	}
 
-	//Reviews
+	// Reviews
 	items = append(items, sitemap.Item{
 		Loc:        fmt.Sprintf("%s%s", domain, "/reviews"),
 		LastMod:    now,

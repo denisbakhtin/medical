@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-//SignInGet handles /signin get request
+// SignInGet handles /signin get request
 func SignInGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
@@ -20,7 +20,7 @@ func SignInGet(c *gin.Context) {
 	})
 }
 
-//SignInPost handles /signin post request
+// SignInPost handles /signin post request
 func SignInPost(c *gin.Context) {
 	db := models.GetDB()
 	session := sessions.Default(c)
@@ -36,7 +36,7 @@ func SignInPost(c *gin.Context) {
 			c.Redirect(303, "/signin")
 			return
 		}
-		//create user
+		// create user
 		if err := user.ComparePassword(login.Password); err != nil {
 			log.Printf("ERROR: Login failed, IP: %s, Email: %s\n", c.ClientIP(), login.Email)
 			session.AddFlash("Эл. адрес или пароль указаны неверно")
@@ -51,7 +51,7 @@ func SignInPost(c *gin.Context) {
 	}
 }
 
-//LogOut handles logout request
+// LogOut handles logout request
 func LogOut(c *gin.Context) {
 	session := sessions.Default(c)
 	session.Delete("user_id")
@@ -59,7 +59,7 @@ func LogOut(c *gin.Context) {
 	c.Redirect(303, "/")
 }
 
-//SignUpGet handles /signup get request
+// SignUpGet handles /signup get request
 func SignUpGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
@@ -71,7 +71,7 @@ func SignUpGet(c *gin.Context) {
 	})
 }
 
-//SignUpPost handles /signup post request
+// SignUpPost handles /signup post request
 func SignUpPost(c *gin.Context) {
 	session := sessions.Default(c)
 	db := models.GetDB()
@@ -86,7 +86,7 @@ func SignUpPost(c *gin.Context) {
 			c.Redirect(303, "/signup")
 			return
 		}
-		//create user
+		// create user
 		user.Email = register.Email
 		user.Password = register.Password
 		if err := db.Create(user).Error; err != nil {

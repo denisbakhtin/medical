@@ -2,43 +2,32 @@ package system
 
 import (
 	"fmt"
-	"log"
+	"io"
+	"os"
 
 	"github.com/denisbakhtin/medical/models"
+	"github.com/gin-gonic/gin"
 )
 
-//Application mode
+// Application mode
 const (
 	DebugMode   = "debug"
 	ReleaseMode = "release"
 	TestMode    = "test"
 )
 
-var mode string //application mode: debug, release, test
-
-//Init initializes core system elements (DB, sessions, templates, et al)
-func Init() {
-	loadConfig()
+// Init initializes core system elements (DB, sessions, templates, et al)
+func Init(mode string) {
+	loadConfig(mode)
 	loadTemplates()
 	connection := fmt.Sprintf("host=%s user=%s password=%s dbname=%s sslmode=disable", config.Database.Host, config.Database.User, config.Database.Password, config.Database.Name)
 	models.InitDB(connection)
+	setupGin(mode)
 }
 
-//SetMode sets application mode
-func SetMode(flagmode *string) {
-	switch *flagmode {
-	case DebugMode:
-		mode = DebugMode
-	case ReleaseMode:
-		mode = ReleaseMode
-	case TestMode:
-		mode = TestMode
-	default:
-		log.Fatalf("Unknown application mode: %q\n", *flagmode)
-	}
-}
-
-//GetMode returns application mode
-func GetMode() string {
-	return mode
+func setupGin(mode string) {
+	gin.SetMode(mode)
+	gin.DisableConsoleColor()
+	f, _ := os.Create("logs/gin.txt")
+	gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
 }
