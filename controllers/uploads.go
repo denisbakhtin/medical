@@ -10,13 +10,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/denisbakhtin/medical/system"
+	"github.com/denisbakhtin/medical/config"
 	"github.com/gin-gonic/gin"
 )
 
 // CkUpload handles POST /admin/ckupload route
 func CkUpload(c *gin.Context) {
-
 	err := c.Request.ParseMultipartForm(32 << 20)
 	if err != nil {
 		c.String(500, err.Error())
@@ -41,12 +40,12 @@ func CkUpload(c *gin.Context) {
 // saveFile saves file to disc and returns its relative uri
 func saveFile(fh *multipart.FileHeader, f multipart.File) (string, error) {
 	fileExt := strings.ToLower(filepath.Ext(fh.Filename))
-	if !regexp.MustCompile("^\\.(jpe?g|bmp|gif|png|mp4)$").MatchString(fileExt) {
+	if !regexp.MustCompile(`^\\.(jpe?g|bmp|gif|png|mp4)$`).MatchString(fileExt) {
 		return "", fmt.Errorf("File is not an image or .mp4 video")
 	}
-	newName := fmt.Sprint(time.Now().Unix()) + fileExt //unique file name ;D
+	newName := fmt.Sprint(time.Now().Unix()) + fileExt // unique file name ;D
 	uri := "/public/uploads/" + newName
-	fullName := filepath.Join(system.GetConfig().Uploads, newName)
+	fullName := filepath.Join(config.GetConfig().Uploads, newName)
 
 	file, err := os.OpenFile(fullName, os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {

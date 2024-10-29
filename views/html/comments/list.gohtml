@@ -1,0 +1,26 @@
+{{define "comments/list"}}
+  {{if len . | lt 0}}
+    <h3>Вопросы посетителей. <small><a href="/comments/{{articleIdComments .}}">Просмотреть все</a></small>.</h3>
+  {{end}}
+  {{range $i, $v := .}}
+    <div id="comment-{{.ID}}" class="comment {{if gt $i 1}}extra hide{{end}}">
+      <div class="question">
+        <p class="author">{{.AuthorName}}</p>
+        {{.Content}}
+      </div>
+      {{if .Answer}}
+      <div class="answer">
+        <img alt="Ростовцев Е.В." src="/public/images/rostovtsev.jpg" />
+        <p class="author">Ростовцев Евгений Владимирович, кинезиолог, врач мануальный терапевт</p>
+        {{.Answer}}
+      </div>
+      {{end}}
+    </div>
+  {{end}}
+  {{if len . | lt 2}}
+  <div class="text-center mb-25">
+    <a class="btn btn-primary" id="comments-more-btn"><span class="glyphicon glyphicon-chevron-down"></span> Показать еще</a>
+    <a class="btn btn-default hide" id="comments-less-btn"><span class="glyphicon glyphicon-chevron-up"></span> Скрыть</a>
+  </div>
+  {{end}}
+{{end}}

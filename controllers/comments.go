@@ -8,15 +8,16 @@ import (
 	"math"
 	"strconv"
 
+	"github.com/denisbakhtin/medical/config"
 	"github.com/denisbakhtin/medical/helpers"
 	"github.com/denisbakhtin/medical/models"
-	"github.com/denisbakhtin/medical/system"
+	"github.com/denisbakhtin/medical/views"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"gopkg.in/gomail.v2"
 )
 
-//CommentsAdminIndex handles GET /admin/comments route
+// CommentsAdminIndex handles GET /admin/comments route
 func CommentsAdminIndex(c *gin.Context) {
 	db := models.GetDB()
 
@@ -29,7 +30,7 @@ func CommentsAdminIndex(c *gin.Context) {
 	})
 }
 
-//CommentCreatePost handles /new_comment route
+// CommentCreatePost handles /new_comment route
 func CommentCreatePost(c *gin.Context) {
 	session := sessions.Default(c)
 	db := models.GetDB()
@@ -62,7 +63,7 @@ func CommentCreatePost(c *gin.Context) {
 	}
 }
 
-//CommentAdminUpdateGet handles /admin/edit_comment/:id get request
+// CommentAdminUpdateGet handles /admin/edit_comment/:id get request
 func CommentAdminUpdateGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
@@ -85,7 +86,7 @@ func CommentAdminUpdateGet(c *gin.Context) {
 	})
 }
 
-//CommentAdminUpdatePost handles /admin/edit_comment/:id post request
+// CommentAdminUpdatePost handles /admin/edit_comment/:id post request
 func CommentAdminUpdatePost(c *gin.Context) {
 	session := sessions.Default(c)
 	db := models.GetDB()
@@ -169,7 +170,7 @@ func CommentPublicUpdate(w http.ResponseWriter, r *http.Request) {
 }
 */
 
-//CommentAdminDelete handles /admin/delete_comment route
+// CommentAdminDelete handles /admin/delete_comment route
 func CommentAdminDelete(c *gin.Context) {
 	db := models.GetDB()
 
@@ -189,7 +190,7 @@ func CommentAdminDelete(c *gin.Context) {
 
 func notifyAdminOfComment(comment *models.Comment) {
 	//closure is needed here, as r may be released by the time func finishes
-	tmpl := system.GetTemplates()
+	tmpl := views.GetTemplates()
 	go func() {
 		data := map[string]interface{}{
 			"Comment": comment,
@@ -201,7 +202,7 @@ func notifyAdminOfComment(comment *models.Comment) {
 			return
 		}
 
-		smtp := system.GetConfig().SMTP
+		smtp := config.GetConfig().SMTP
 		msg := gomail.NewMessage()
 		msg.SetHeader("From", smtp.From)
 		msg.SetHeader("To", smtp.To)
@@ -231,12 +232,12 @@ func notifyAdminOfComment(comment *models.Comment) {
 	}()
 }
 
-//notifyClientOfComment sends notification email to comment(question) author
+// notifyClientOfComment sends notification email to comment(question) author
 func notifyClientOfComment(comment *models.Comment) {
 	if len(comment.AuthorEmail) == 0 {
 		return
 	}
-	tmpl := system.GetTemplates()
+	tmpl := views.GetTemplates()
 	go func() {
 		data := map[string]interface{}{
 			"Comment": comment,
@@ -247,7 +248,7 @@ func notifyClientOfComment(comment *models.Comment) {
 			return
 		}
 
-		smtp := system.GetConfig().SMTP
+		smtp := config.GetConfig().SMTP
 		msg := gomail.NewMessage()
 		msg.SetHeader("From", smtp.From)
 		msg.SetHeader("To", comment.AuthorEmail)
@@ -271,7 +272,7 @@ func notifyClientOfComment(comment *models.Comment) {
 	}()
 }
 
-//CommentsIndex handles GET /comments/:id route, where :id is the article id
+// CommentsIndex handles GET /comments/:id route, where :id is the article id
 func CommentsIndex(c *gin.Context) {
 	db := models.GetDB()
 	id := c.Param("id")

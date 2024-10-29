@@ -1,0 +1,14 @@
+{{define "errors/405"}}
+{{template "header" .}}
+{{template "navbar" .}}
+<div role="main">
+  <div class="jumbotron">
+    <h1>Ошибка 405</h1>
+    <div class="description">
+      <i class="glyphicon glyphicon-exclamation-sign indent"></i>
+      Метод запроса недопустим! {{.Error}}
+    </div>
+  </div>
+</div>
+{{template "footer" .}}
+{{end}}

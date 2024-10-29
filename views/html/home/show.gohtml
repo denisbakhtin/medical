@@ -1,0 +1,15 @@
+{{define "home/show"}}
+{{template "header" .}}
+{{template "navbar" .}}
+<div id="home" role="main">
+  <h1>{{.Page.Name}}</h1>
+  {{range .Flash}}
+    <div class="alert alert-danger">{{.}}</div><p>
+  {{end}}
+  <div class="content">{{.Page.HTMLContent}}</div>
+</div>
+{{template "withoutpain" .}}
+{{template "testimonials" .}}
+{{template "optinform" .}}
+{{template "footer" .}}
+{{end}}

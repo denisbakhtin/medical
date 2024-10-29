@@ -1,0 +1,58 @@
+{{define "pages/admin/form"}}
+{{template "dashboard/header" .}}
+{{template "dashboard/navbar" .}}
+{{template "dashboard/sidebar" .}}
+<div id="main-column" class="container-fluid" role="main">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <form method="post" data-parsley-validate>
+      <fieldset>
+        <legend>{{.Title}}</legend>
+        {{range .Flash}}
+          <div class="alert alert-danger">{{.}}</div><p>
+        {{end}}
+        {{.csrfField}}
+        <input type="hidden" name="id" value="{{.Page.ID}}" >
+        <div class="form-group">
+          <label class="control-label" for="name">Название</label>
+          <input id="name" name="name" value="{{.Page.Name}}" placeholder="Введите название страницы" class="form-control input-md" required=""  data-parsley-required-message="Название обязательно">
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="slug">SEO адрес</label>
+          <input id="slug" name="slug" pattern="[a-z\\-]*" value="{{.Page.Slug}}" placeholder="Можно оставить пустым" class="form-control input-md" >
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="content">Содержание</label>
+          <textarea id="ckeditor" name="content">{{.Page.Content}}</textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="published">
+            <input id="published" name="published" type="checkbox" value="true" {{if .Page.Published}}checked{{end}} >
+            Опубликовать
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="meta_keywords">Мета ключевики</label>
+          <input class="form-control" name="meta_keywords" value="{{.Page.MetaKeywords}}"/>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="meta_description">Мета описание</label>
+          <input class="form-control" name="meta_description" value="{{.Page.MetaDescription}}" />
+        </div>
+
+        <div class="form-group">
+          <input type="submit" class="btn btn-primary" value="Сохранить">
+          <input type="button" class="btn btn-default" formnovalidate onclick="window.history.back();" value="Отмена">
+        </div>
+      </fieldset>
+      </form>
+    </div>
+  </div>
+</div>
+{{template "dashboard/footer" .}}
+{{end}}

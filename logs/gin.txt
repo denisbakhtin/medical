@@ -6,8 +6,8 @@
 
 [GIN-debug] GET    /public/*filepath         --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (4 handlers)
 [GIN-debug] HEAD   /public/*filepath         --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (4 handlers)
-[GIN-debug] GET    /robots.txt               --> github.com/denisbakhtin/medical/controllers.SetupRouter.(*RouterGroup).StaticFile.func2 (4 handlers)
-[GIN-debug] HEAD   /robots.txt               --> github.com/denisbakhtin/medical/controllers.SetupRouter.(*RouterGroup).StaticFile.func2 (4 handlers)
+[GIN-debug] GET    /robots.txt               --> github.com/gin-gonic/gin.(*RouterGroup).StaticFile.func1 (4 handlers)
+[GIN-debug] HEAD   /robots.txt               --> github.com/gin-gonic/gin.(*RouterGroup).StaticFile.func1 (4 handlers)
 [GIN-debug] GET    /                         --> github.com/denisbakhtin/medical/controllers.Home (4 handlers)
 [GIN-debug] GET    /signin                   --> github.com/denisbakhtin/medical/controllers.SignInGet (4 handlers)
 [GIN-debug] POST   /signin                   --> github.com/denisbakhtin/medical/controllers.SignInPost (4 handlers)
@@ -74,3 +74,25 @@
 [GIN-debug] [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
 Please check https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies for details.
 [GIN-debug] Listening and serving HTTP on :8010
+[GIN] 2024/10/30 - 02:33:21 | 200 |     5.42287ms |       127.0.0.1 | GET      "/pages/10-priiom-vracha-kineziologa"
+[GIN] 2024/10/30 - 02:33:22 | 200 |    4.866896ms |       127.0.0.1 | GET      "/public/favicon.ico"
+[GIN] 2024/10/30 - 02:33:25 | 200 |   13.250753ms |       127.0.0.1 | GET      "/articles"
+[GIN] 2024/10/30 - 02:33:25 | 200 |     163.673µs |       127.0.0.1 | GET      "/public/uploads/1458580811.jpg"
+[GIN] 2024/10/30 - 02:33:25 | 200 |     151.931µs |       127.0.0.1 | GET      "/public/uploads/1458691084.jpg"
+[GIN] 2024/10/30 - 02:33:25 | 200 |     111.934µs |       127.0.0.1 | GET      "/public/uploads/1458676135.jpg"
+[GIN] 2024/10/30 - 02:33:25 | 200 |      87.167µs |       127.0.0.1 | GET      "/public/uploads/1458688796.jpg"
+[GIN] 2024/10/30 - 02:33:25 | 200 |     117.705µs |       127.0.0.1 | GET      "/public/uploads/1458690128.jpg"
+[GIN] 2024/10/30 - 02:33:25 | 200 |     161.269µs |       127.0.0.1 | GET      "/public/uploads/1729590639.jpg"
+[GIN] 2024/10/30 - 02:33:25 | 200 |     129.668µs |       127.0.0.1 | GET      "/public/uploads/1729589113.jpg"
+[GIN] 2024/10/30 - 02:33:25 | 200 |     114.329µs |       127.0.0.1 | GET      "/public/uploads/1729587792.jpg"
+[GIN] 2024/10/30 - 02:33:25 | 200 |     165.076µs |       127.0.0.1 | GET      "/public/uploads/1579800225.jpg"
+[GIN] 2024/10/30 - 02:33:25 | 200 |     117.845µs |       127.0.0.1 | GET      "/public/uploads/1448494144.jpg"
+[GIN] 2024/10/30 - 02:33:25 | 200 |     122.004µs |       127.0.0.1 | GET      "/public/uploads/1448974160.jpg"
+[GIN] 2024/10/30 - 02:33:25 | 200 |     346.313µs |       127.0.0.1 | GET      "/public/uploads/1448422067.jpg"
+[GIN] 2024/10/30 - 02:33:25 | 200 |     173.072µs |       127.0.0.1 | GET      "/public/uploads/1448491747.jpg"
+[GIN] 2024/10/30 - 02:33:25 | 200 |     169.705µs |       127.0.0.1 | GET      "/public/uploads/1448489968.jpg"
+[GIN] 2024/10/30 - 02:33:25 | 200 |     227.455µs |       127.0.0.1 | GET      "/public/uploads/1448490659.jpg"
+[GIN] 2024/10/30 - 02:33:25 | 200 |     460.742µs |       127.0.0.1 | GET      "/public/uploads/1531208789.jpg"
+[GIN] 2024/10/30 - 02:33:25 | 200 |      172.77µs |       127.0.0.1 | GET      "/public/uploads/1448487470.jpg"
+[GIN] 2024/10/30 - 02:33:25 | 200 |      229.94µs |       127.0.0.1 | GET      "/public/uploads/1448488975.jpg"
+[GIN] 2024/10/30 - 02:33:25 | 200 |     101.585µs |       127.0.0.1 | GET      "/public/favicon.ico"

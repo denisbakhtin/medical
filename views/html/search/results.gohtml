@@ -1,0 +1,16 @@
+{{define "search/results"}}
+{{template "header" .}}
+{{template "navbar" .}}
+<div role="main">
+  <div id="main-column">
+    <h1>{{.Title}}</h1>
+    {{range .Articles}}
+      <h2>{{.Name}}</h2>
+      <div class="content">{{.Excerpt}}</div>
+    {{else}}
+    <p>Статьи не найдены.</p>
+    {{end}}
+  </div>
+</div>
+{{template "footer" .}}
+{{end}}

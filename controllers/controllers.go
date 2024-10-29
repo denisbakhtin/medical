@@ -4,7 +4,8 @@ import (
 	"net/http"
 	"path"
 
-	"github.com/denisbakhtin/medical/system"
+	"github.com/denisbakhtin/medical/config"
+	"github.com/denisbakhtin/medical/views"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
@@ -13,17 +14,17 @@ import (
 // SetupRouter establishes web routes
 func SetupRouter() (router *gin.Engine) {
 	router = gin.Default()
-	store := cookie.NewStore([]byte(system.GetConfig().SessionSecret))
+	store := cookie.NewStore([]byte(config.GetConfig().SessionSecret))
 	router.Use(sessions.Sessions("gin-session", store))
-	router.SetHTMLTemplate(system.GetTemplates())
+	router.SetHTMLTemplate(views.GetTemplates())
 	router.NoRoute(Error404)
 	router.StaticFS("/public", http.Dir("public"))
-	router.StaticFile("/robots.txt", path.Join(system.GetConfig().Public, "robots.txt"))
+	router.StaticFile("/robots.txt", path.Join(config.GetConfig().Public, "robots.txt"))
 	router.GET("/", Home)
 	router.GET("/signin", SignInGet)
 	router.POST("/signin", SignInPost)
 	router.GET("/logout", LogOut)
-	if system.GetConfig().SignupEnabled {
+	if config.GetConfig().SignupEnabled {
 		router.GET("/signup", SignUpGet)
 		router.POST("/signup", SignUpPost)
 	}

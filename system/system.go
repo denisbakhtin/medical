@@ -5,22 +5,21 @@ import (
 	"io"
 	"os"
 
+	"github.com/denisbakhtin/medical/config"
 	"github.com/denisbakhtin/medical/models"
+	"github.com/denisbakhtin/medical/views"
 	"github.com/gin-gonic/gin"
-)
-
-// Application mode
-const (
-	DebugMode   = "debug"
-	ReleaseMode = "release"
-	TestMode    = "test"
 )
 
 // Init initializes core system elements (DB, sessions, templates, et al)
 func Init(mode string) {
-	loadConfig(mode)
-	loadTemplates()
-	connection := fmt.Sprintf("host=%s user=%s password=%s dbname=%s sslmode=disable", config.Database.Host, config.Database.User, config.Database.Password, config.Database.Name)
+	conf := config.LoadConfig(mode)
+	views.Load()
+	connection := fmt.Sprintf("host=%s user=%s password=%s dbname=%s sslmode=disable",
+		conf.Database.Host,
+		conf.Database.User,
+		conf.Database.Password,
+		conf.Database.Name)
 	models.InitDB(connection)
 	setupGin(mode)
 }

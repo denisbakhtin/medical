@@ -1,0 +1,17 @@
+{{define "comments/top-list"}}
+  {{range $i, $v := .}}
+    <div id="comment-{{.ID}}" class="comment">
+      <div class="question">
+        <p class="author">{{.AuthorName}}</p>
+        {{.Content}}
+      </div>
+      {{if .Answer}}
+      <div class="answer">
+        <img alt="Ростовцев Е.В." src="/public/images/rostovtsev.jpg" />
+        <p class="author">Ростовцев Евгений Владимирович, кинезиолог, врач мануальный терапевт</p>
+        {{.Answer}}
+      </div>
+      {{end}}
+    </div>
+  {{end}}
+{{end}}

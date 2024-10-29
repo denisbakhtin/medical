@@ -8,16 +8,17 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/denisbakhtin/medical/config"
 	"github.com/denisbakhtin/medical/helpers"
 	"github.com/denisbakhtin/medical/models"
-	"github.com/denisbakhtin/medical/system"
+	"github.com/denisbakhtin/medical/views"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/microcosm-cc/bluemonday"
 	"gopkg.in/gomail.v2"
 )
 
-//ReviewShow handles /reviews/:id route
+// ReviewShow handles /reviews/:id route
 func ReviewShow(c *gin.Context) {
 	db := models.GetDB()
 	session := sessions.Default(c)
@@ -30,7 +31,7 @@ func ReviewShow(c *gin.Context) {
 		c.HTML(404, "errors/404", nil)
 		return
 	}
-	//redirect to canonical url
+	// redirect to canonical url
 	if c.Request.URL.Path != review.URL() {
 		c.Redirect(301, review.URL())
 		return
@@ -45,7 +46,7 @@ func ReviewShow(c *gin.Context) {
 	})
 }
 
-//ReviewsIndex handles GET /reviews route
+// ReviewsIndex handles GET /reviews route
 func ReviewsIndex(c *gin.Context) {
 	session := sessions.Default(c)
 	db := models.GetDB()
@@ -65,7 +66,7 @@ func ReviewsIndex(c *gin.Context) {
 	})
 }
 
-//ReviewsAdminIndex handles GET /admin/reviews route
+// ReviewsAdminIndex handles GET /admin/reviews route
 func ReviewsAdminIndex(c *gin.Context) {
 	db := models.GetDB()
 
@@ -78,7 +79,7 @@ func ReviewsAdminIndex(c *gin.Context) {
 	})
 }
 
-//ReviewCreateGet handles /new_review get request
+// ReviewCreateGet handles /new_review get request
 func ReviewCreateGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
@@ -91,7 +92,7 @@ func ReviewCreateGet(c *gin.Context) {
 	})
 }
 
-//ReviewCreatePost handles /new_review post request
+// ReviewCreatePost handles /new_review post request
 func ReviewCreatePost(c *gin.Context) {
 	db := models.GetDB()
 	session := sessions.Default(c)
@@ -101,7 +102,7 @@ func ReviewCreatePost(c *gin.Context) {
 	if c.Bind(review) == nil {
 		policy := bluemonday.StrictPolicy()
 		review.Content = fmt.Sprintf("<p>%s</p>", policy.Sanitize(review.Content))
-		//simple captcha check
+		// simple captcha check
 		captcha, err := base64.StdEncoding.DecodeString(review.Captcha)
 		if err != nil {
 			c.HTML(500, "errors/500", helpers.ErrorData(err))
@@ -135,7 +136,7 @@ func ReviewCreatePost(c *gin.Context) {
 	c.Redirect(303, "/reviews")
 }
 
-//ReviewAdminCreateGet handles /admin/new_review get request
+// ReviewAdminCreateGet handles /admin/new_review get request
 func ReviewAdminCreateGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
@@ -152,7 +153,7 @@ func ReviewAdminCreateGet(c *gin.Context) {
 	})
 }
 
-//ReviewAdminCreatePost handles /admin/new_review post request
+// ReviewAdminCreatePost handles /admin/new_review post request
 func ReviewAdminCreatePost(c *gin.Context) {
 	session := sessions.Default(c)
 	db := models.GetDB()
@@ -182,7 +183,7 @@ func ReviewAdminCreatePost(c *gin.Context) {
 	}
 }
 
-//ReviewAdminUpdateGet handles /admin/edit_review/:id get request
+// ReviewAdminUpdateGet handles /admin/edit_review/:id get request
 func ReviewAdminUpdateGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
@@ -208,7 +209,7 @@ func ReviewAdminUpdateGet(c *gin.Context) {
 	})
 }
 
-//ReviewAdminUpdatePost handles /admin/edit_review/:id post request
+// ReviewAdminUpdatePost handles /admin/edit_review/:id post request
 func ReviewAdminUpdatePost(c *gin.Context) {
 	session := sessions.Default(c)
 	db := models.GetDB()
@@ -240,7 +241,7 @@ func ReviewAdminUpdatePost(c *gin.Context) {
 	}
 }
 
-//ReviewUpdateGet handles /edit_review?token=:secure_token get request
+// ReviewUpdateGet handles /edit_review?token=:secure_token get request
 func ReviewUpdateGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
@@ -258,7 +259,7 @@ func ReviewUpdateGet(c *gin.Context) {
 
 	var articles []models.Article
 	db.Where("published = ?", true).Find(&articles)
-	review.Published = true //set default to true
+	review.Published = true // set default to true
 	c.HTML(200, "reviews/form", gin.H{
 		"Title":      "Редактировать отзыв",
 		"Articles":   articles,
@@ -269,7 +270,7 @@ func ReviewUpdateGet(c *gin.Context) {
 	})
 }
 
-//ReviewUpdatePost handles /edit_review post request
+// ReviewUpdatePost handles /edit_review post request
 func ReviewUpdatePost(c *gin.Context) {
 	session := sessions.Default(c)
 	db := models.GetDB()
@@ -302,7 +303,7 @@ func ReviewUpdatePost(c *gin.Context) {
 	c.Redirect(303, "/reviews")
 }
 
-//ReviewAdminDelete handles /admin/delete_review route
+// ReviewAdminDelete handles /admin/delete_review route
 func ReviewAdminDelete(c *gin.Context) {
 	db := models.GetDB()
 
@@ -320,7 +321,7 @@ func ReviewAdminDelete(c *gin.Context) {
 }
 
 func notifyAdminOfReview(review *models.Review) {
-	tmpl := system.GetTemplates()
+	tmpl := views.GetTemplates()
 	go func() {
 		data := map[string]interface{}{
 			"Review": review,
@@ -332,7 +333,7 @@ func notifyAdminOfReview(review *models.Review) {
 			return
 		}
 
-		smtp := system.GetConfig().SMTP
+		smtp := config.GetConfig().SMTP
 		msg := gomail.NewMessage()
 		msg.SetHeader("From", smtp.From)
 		msg.SetHeader("To", smtp.To)

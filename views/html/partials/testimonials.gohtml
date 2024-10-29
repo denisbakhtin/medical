@@ -1,0 +1,39 @@
+{{define "testimonials"}}
+
+  {{if .Testimonials}}
+    {{template "reviews" .Testimonials}}
+  {{else}}
+    {{template "reviews" allReviews}}
+  {{end}}
+
+{{end}}
+
+{{define "reviews"}}
+  <section id="testimonials">
+    <h2 class="text-center">Отзывы пациентов</h2>
+    <p>Эффективность и качество применяемых на практике врачом кинезиологом методик подтверждено многочисленными положительными отзывами.</p>
+
+    <div id="testimonials-slider-wrapper">
+      <div id="testimonials-slider">
+        {{range $i, $v := .}}
+          <div class="item">
+            <a class="thumbnail" href="{{.URL}}">
+              {{if .Image}}
+                <img class="img img-responsive" src="{{.Image}}" alt="{{.Complaint}}"/>
+              {{else}}
+                <div class="img blank-review-img">{{truncate .AuthorName 1}}</div>
+              {{end}}
+              <h4>{{.Complaint}}</h4>
+              <p class="strong">{{.AuthorName}}</p>
+              <p class="excerpt">{{.Excerpt}}</p>
+            </a>
+          </div>
+        {{end}}
+      </div>
+      <div class="siema-controls">
+        <span class="testimonials-prev"><i class="glyphicon glyphicon-chevron-left"></i></span>
+        <span class="testimonials-next"><i class="glyphicon glyphicon-chevron-right"></i></span>
+      </div>
+    </div>
+  </section>
+{{end}}

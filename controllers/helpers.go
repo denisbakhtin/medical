@@ -6,12 +6,12 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/denisbakhtin/medical/system"
+	"github.com/denisbakhtin/medical/config"
 )
 
 // createTokenFromId creates secure token for id
 func createTokenFromID(ID uint) string {
-	digest := sha1.New().Sum([]byte(fmt.Sprintf("%d-%s", ID, system.GetConfig().Salt)))
+	digest := sha1.New().Sum([]byte(fmt.Sprintf("%d-%s", ID, config.GetConfig().Salt)))
 	return base64.URLEncoding.EncodeToString(
 		[]byte(fmt.Sprintf("%d-%x", ID, digest)),
 	)
@@ -24,7 +24,7 @@ func getIDFromToken(token string) string {
 		return ""
 	}
 	if sl := strings.Split(string(idDigest), "-"); len(sl) == 2 {
-		digest := sha1.New().Sum([]byte(fmt.Sprintf("%s-%s", sl[0], system.GetConfig().Salt)))
+		digest := sha1.New().Sum([]byte(fmt.Sprintf("%s-%s", sl[0], config.GetConfig().Salt)))
 		if fmt.Sprintf("%x", digest) == sl[1] {
 			return sl[0]
 		}

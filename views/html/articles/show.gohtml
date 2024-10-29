@@ -1,0 +1,45 @@
+{{define "articles/show"}}
+{{template "header" .}}
+{{template "navbar" .}}
+
+<div id="article" role="main">
+  <div class="content">
+    <h1>
+      {{.Article.Name}} 
+      {{if .Authenticated}}
+        <a class="btn btn-primary" href="/admin/edit_article/{{.Article.ID}}">Редактировать статью</a>
+      {{end}}
+    </h1>
+    {{.Article.HTMLContent}}
+  </div>
+</div>
+
+{{template "withoutpain" .}}
+{{template "optinform" .}}
+
+<section id="sellingblock">
+  <div class="pull-right" id="rostphoto">
+    <img src="/public/images/rostovtsev.jpg" alt="Ростовцев Евгений Владимирович, врач кинезиолог, мануальный терапевт" class="img-responsive" />
+    <p>
+      <a href="/pages/4-vrach-kineziolog">Ростовцев
+        <br/>Евгений Владимирович</a>
+        <small>прикладной кинезиолог,
+        <br/>мануальный терапевт.</small>
+    </p>
+  </div>
+
+  {{replacePromoTill .Article.HTMLSellingBlock}}
+</section>
+
+{{template "testimonials" .}}
+
+<div id="comments">
+  {{template "comments/form" .}}
+  {{range .Flash}}
+    <div class="alert alert-info">{{.}}</div><p>
+  {{end}}
+  {{template "comments/list" .Article.Comments}}
+</div>
+
+{{template "footer" .}}
+{{end}}

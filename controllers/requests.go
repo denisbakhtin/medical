@@ -8,15 +8,16 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/denisbakhtin/medical/config"
 	"github.com/denisbakhtin/medical/helpers"
 	"github.com/denisbakhtin/medical/models"
-	"github.com/denisbakhtin/medical/system"
+	"github.com/denisbakhtin/medical/views"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"gopkg.in/gomail.v2"
 )
 
-//RequestCreatePost handles /new_request route
+// RequestCreatePost handles /new_request route
 func RequestCreatePost(c *gin.Context) {
 	session := sessions.Default(c)
 
@@ -43,8 +44,8 @@ func RequestCreatePost(c *gin.Context) {
 }
 
 func notifyAdminOfRequest(request *models.Request) {
-	//closure is needed here, as r may be released by the time func finishes
-	tmpl := system.GetTemplates()
+	// closure is needed here, as r may be released by the time func finishes
+	tmpl := views.GetTemplates()
 	go func() {
 		data := map[string]interface{}{
 			"Request": request,
@@ -55,7 +56,7 @@ func notifyAdminOfRequest(request *models.Request) {
 			return
 		}
 
-		smtp := system.GetConfig().SMTP
+		smtp := config.GetConfig().SMTP
 		msg := gomail.NewMessage()
 		msg.SetHeader("From", smtp.From)
 		msg.SetHeader("To", smtp.To)

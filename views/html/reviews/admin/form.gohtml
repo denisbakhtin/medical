@@ -1,0 +1,85 @@
+{{define "reviews/admin/form"}}
+{{template "dashboard/header" .}}
+{{template "dashboard/navbar" .}}
+{{template "dashboard/sidebar" .}}
+<div id="main-column" class="container-fluid" role="main">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <form method="post" enctype="multipart/form-data">
+      <fieldset>
+        <legend>{{.Title}}</legend>
+        {{range .Flash}}
+          <div class="alert alert-danger">{{.}}</div><p>
+        {{end}}
+        {{.csrfField}}
+        <input type="hidden" name="id" value="{{.Review.ID}}" >
+
+        <div class="form-group">
+          <label class="control-label" for="video">Жалоба</label>
+          <input id="complaint" name="complaint" value="{{.Review.Complaint}}" placeholder="Описание жалобы - пойдет вместо заголовка" class="form-control input-md" >
+        </div>
+        
+        <div class="form-group">
+          <label class="control-label" for="author_name">Автор</label>
+          <input id="author_name" name="author_name" value="{{.Review.AuthorName}}" placeholder="Укажите имя автора" class="form-control input-md" required="">
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="author_email">Адрес эл. почты</label>
+          <input id="author_email" type="email" name="author_email" value="{{.Review.AuthorEmail}}" placeholder="Укажите адрес эл. почты" class="form-control input-md" >
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="video">Видео YouTube</label>
+          <input id="video" name="video" value="{{.Review.Video}}" placeholder="Ссылка на видео Youtube из раздела Поделиться - HTML-код" class="form-control input-md" >
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="article_id">К статье</label>
+          {{$aid := .Review.ArticleID}}
+          <select id="article_id" name="article_id" class="form-control">
+            <option value="" {{if eqRU $aid 0}}selected{{end}}>Не выбрана</option>
+            {{range .Articles}}
+            <option value="{{.ID}}" {{if eqRU $aid .ID}}selected{{end}}>{{.Name}}</option>
+            {{end}}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="content">Содержание</label>
+          <textarea id="ckeditor" required="" name="content">{{.Review.Content}}</textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="image">Фото</label>
+          <input type="file" id="image" name="image" accept="image/*">
+        </div>
+
+        <div class="form-group">
+          <label for="published">
+            <input id="published" name="published" type="checkbox" value="true" {{if .Review.Published}}checked{{end}} >
+            Опубликовать
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="meta_keywords">Мета ключевики</label>
+          <input class="form-control" name="meta_keywords" value="{{.Review.MetaKeywords}}"/>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="meta_description">Мета описание</label>
+          <input class="form-control" name="meta_description" value="{{.Review.MetaDescription}}" />
+        </div>
+
+        <div class="form-group">
+          <input type="submit" class="btn btn-primary" value="Сохранить" >
+          <input type="button" class="btn btn-default" formnovalidate onclick="window.history.back();" value="Отмена">
+        </div>
+      </fieldset>
+      </form>
+    </div>
+  </div>
+</div>
+{{template "dashboard/footer" .}}
+{{end}}

@@ -1,0 +1,22 @@
+{{define "requests/request"}}
+<html>
+  <head>
+  </head>
+  <body>
+
+    <p>Здравствуйте, Евгений Владимирович!</p>
+
+    <p>
+    На сайте www.miobalans.ru пользователь <strong>{{.Request.Name}}</strong> оставил(а) заявку на приём.<br/>
+    Контактный телефон: <strong>{{.Request.Phone}}</strong>.<br/>
+    {{if .Request.Comment}}
+    Комментарий посетителя:<br/>
+      <i>{{.Request.Comment}}</i>
+    {{end}}
+    </p>
+
+    <p>Данное письмо было отправлено автоматически, отвечать на него не нужно.</p>
+
+  </body>
+</html>
+{{end}}

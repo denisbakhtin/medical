@@ -1,0 +1,14 @@
+{{define "errors/404"}}
+{{template "header" .}}
+{{template "navbar" .}}
+<div role="main">
+  <div class="jumbotron">
+    <h1>Ошибка 404</h1>
+    <div class="description">
+      <i class="glyphicon glyphicon-exclamation-sign indent"></i>
+      К сожалению, страница не найдена! {{.Error}}
+    </div>
+  </div>
+</div>
+{{template "footer" .}}
+{{end}}

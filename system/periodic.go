@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/claudiu/gocron"
+	"github.com/denisbakhtin/medical/config"
 	"github.com/denisbakhtin/medical/models"
 	"github.com/denisbakhtin/sitemap"
 )
@@ -14,7 +15,7 @@ import (
 // SetupPeriodicTasks initializes periodic tasks
 func SetupPeriodicTasks(mode string) {
 	// Periodic tasks
-	if mode == ReleaseMode {
+	if mode == config.ReleaseMode {
 		createXMLSitemap() // refresh sitemap now
 	}
 	gocron.Every(1).Day().Do(createXMLSitemap) // refresh daily
@@ -25,34 +26,34 @@ func SetupPeriodicTasks(mode string) {
 func createXMLSitemap() {
 	log.Printf("INFO: Starting XML sitemap generation\n")
 	db := models.GetDB()
-	folder := path.Join(GetConfig().Public, "sitemap")
-	domain := "http://www." + GetConfig().Domain
+	folder := path.Join(config.GetConfig().Public, "sitemap")
+	domain := "http://www." + config.GetConfig().Domain
 	now := time.Now()
-	items := make([]sitemap.Item, 0, 500)
+	items := make([]sitemap.Page, 0, 500)
 
 	// Home page
-	items = append(items, sitemap.Item{
+	items = append(items, sitemap.Page{
 		Loc:        domain,
 		LastMod:    now,
-		Changefreq: "daily",
+		Changefreq: sitemap.Daily,
 		Priority:   1,
 	})
 
 	// Articles
-	items = append(items, sitemap.Item{
+	items = append(items, sitemap.Page{
 		Loc:        fmt.Sprintf("%s%s", domain, "/articles"),
 		LastMod:    now,
-		Changefreq: "monthly",
+		Changefreq: sitemap.Monthly,
 		Priority:   0.9,
 	})
 
 	var articles []models.Article
 	db.Where("published = ?", true).Order("id desc").Find(&articles)
 	for i := range articles {
-		items = append(items, sitemap.Item{
+		items = append(items, sitemap.Page{
 			Loc:        fmt.Sprintf("%s%s", domain, articles[i].URL()),
 			LastMod:    articles[i].UpdatedAt,
-			Changefreq: "weekly",
+			Changefreq: sitemap.Weekly,
 			Priority:   0.9,
 		})
 	}
@@ -60,10 +61,10 @@ func createXMLSitemap() {
 	var infos []models.Info
 	db.Where("published = ?", true).Order("id desc").Find(&infos)
 	for i := range infos {
-		items = append(items, sitemap.Item{
+		items = append(items, sitemap.Page{
 			Loc:        fmt.Sprintf("%s%s", domain, infos[i].URL()),
 			LastMod:    infos[i].UpdatedAt,
-			Changefreq: "weekly",
+			Changefreq: sitemap.Weekly,
 			Priority:   0.9,
 		})
 	}
@@ -72,7 +73,7 @@ func createXMLSitemap() {
 		var exercises []models.Exercise
 		db.Where("published = ?", true).Order("id desc").Find(&exercises)
 		for i := range exercises {
-			items = append(items, sitemap.Item{
+			items = append(items, sitemap.Page{
 				Loc:        fmt.Sprintf("%s%s", domain, exercises[i].URL()),
 				LastMod:    infos[i].UpdatedAt,
 				Changefreq: "weekly",
@@ -85,29 +86,29 @@ func createXMLSitemap() {
 	var pages []models.Page
 	db.Where("published = ?", true).Order("id desc").Find(&pages)
 	for i := range pages {
-		items = append(items, sitemap.Item{
+		items = append(items, sitemap.Page{
 			Loc:        fmt.Sprintf("%s%s", domain, pages[i].URL()),
 			LastMod:    pages[i].UpdatedAt,
-			Changefreq: "monthly",
+			Changefreq: sitemap.Monthly,
 			Priority:   0.8,
 		})
 	}
 
 	// Reviews
-	items = append(items, sitemap.Item{
+	items = append(items, sitemap.Page{
 		Loc:        fmt.Sprintf("%s%s", domain, "/reviews"),
 		LastMod:    now,
-		Changefreq: "monthly",
+		Changefreq: sitemap.Monthly,
 		Priority:   0.7,
 	})
 
 	var reviews []models.Review
 	db.Where("published = ?", true).Order("id desc").Find(&reviews)
 	for i := range reviews {
-		items = append(items, sitemap.Item{
+		items = append(items, sitemap.Page{
 			Loc:        fmt.Sprintf("%s%s", domain, reviews[i].URL()),
 			LastMod:    reviews[i].UpdatedAt,
-			Changefreq: "monthly",
+			Changefreq: sitemap.Monthly,
 			Priority:   0.7,
 		})
 	}

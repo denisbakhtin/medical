@@ -1,0 +1,65 @@
+{{define "comments/admin/form"}}
+{{template "dashboard/header" .}}
+{{template "dashboard/navbar" .}}
+{{template "dashboard/sidebar" .}}
+<div id="main-column" class="container-fluid" role="main">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <form method="post">
+      <fieldset>
+        <legend>{{.Title}}</legend>
+        {{range .Flash}}
+          <div class="alert alert-danger">{{.}}</div><p>
+        {{end}}
+        {{.csrfField}}
+        <input type="hidden" name="id" value="{{.Comment.ID}}" >
+        <input type="hidden" name="article_id" value="{{.Comment.ArticleID}}" >
+        <div class="form-group">
+          <label class="control-label" for="author_name">Автор</label>
+          <input id="author_name" name="author_name" value="{{.Comment.AuthorName}}" placeholder="Укажите автора" class="form-control input-md" >
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="author_email">Эл. почта</label>
+          <input id="author_email" name="author_email" value="{{.Comment.AuthorEmail}}" placeholder="Укажите адрес эл. почты" class="form-control input-md" >
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="author_city">Город</label>
+          <select id="author_city" name="author_city" class="form-control input-md">
+            <option value="">Выберите город</option>
+            {{$city := .Comment.AuthorCity}}
+            {{range cityList}}
+            <option value="{{.}}" {{if eq $city .}}selected{{end}}>{{.}}</option>
+            {{end}}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="content">Вопрос</label>
+          <textarea class="form-control" name="content" id="content">{{.Comment.Content}}</textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="answer">Ответ</label>
+          <textarea class="form-control" name="answer" id="answer">{{.Comment.Answer}}</textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="published">
+            <input id="published" name="published" type="checkbox" value="true" {{if .Comment.Published}}checked{{end}} >
+            Опубликовать
+          </label>
+        </div>
+
+        <div class="form-group">
+          <input type="submit" class="btn btn-primary" value="Сохранить" >
+          <input type="button" class="btn btn-default" formnovalidate onclick="window.history.back();" value="Отмена">
+        </div>
+      </fieldset>
+      </form>
+    </div>
+  </div>
+</div>
+{{template "dashboard/footer" .}}
+{{end}}
