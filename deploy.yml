@@ -31,6 +31,7 @@
         dest: /home/tabula/medical/public/css/
         force: yes
         owner: tabula
+        group: tabula
 
     - name: Copy js directory
       copy:
