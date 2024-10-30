@@ -30,6 +30,7 @@
         src: "{{ playbook_dir }}/public/css/"
         dest: /home/tabula/medical/public/css/
         force: yes
+        owner: tabula
 
     - name: Copy js directory
       copy:
