@@ -2,6 +2,7 @@
   # this is not an installation script. It assumes the db, as well as public dir & service already exists and running
 - name: Deploy web-site
   hosts: aghost
+  remote_user: tabula
   gather_facts: no
   vars:
     ansible_python_interpreter: /usr/bin/python
