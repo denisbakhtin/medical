@@ -19,10 +19,10 @@
       delegate_to: localhost
       shell: git add -A && git commit -m "{{ commit }}" ; git push origin master
 
-    - name: Copy config directory
-      copy:
-        src: "{{ playbook_dir }}/config/"
-        dest: /home/tabula/medical/config/
+    # - name: Copy config directory
+    #   copy:
+    #     src: "{{ playbook_dir }}/config/"
+    #     dest: /home/tabula/medical/config/
       
     - name: Copy css directory
       copy:
@@ -34,10 +34,10 @@
         src: "{{ playbook_dir }}/public/js/"
         dest: /home/tabula/medical/public/js/
 
-    - name: Copy views directory
-      copy:
-        src: "{{ playbook_dir }}/views/"
-        dest: /home/tabula/medical/views/
+    # - name: Copy views directory
+    #   copy:
+    #     src: "{{ playbook_dir }}/views/"
+    #     dest: /home/tabula/medical/views/
 
     - name: Copy binary
       copy:
