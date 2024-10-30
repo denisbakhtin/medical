@@ -29,6 +29,7 @@
       copy:
         src: "{{ playbook_dir }}/public/css/"
         dest: /home/tabula/medical/public/css/
+        force: yes
 
     - name: Copy js directory
       copy:
