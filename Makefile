@@ -7,7 +7,7 @@ deploy:
 
 build: clean vet
 	@echo "Building application"
-	CGO_ENABLED=0 go build -o miobalans-go
+	CGO_ENABLED=0 go build -o miobalans-go cmd/main.go
 
 build_assets:
 	@echo "Building assets"
