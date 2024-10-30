@@ -24,6 +24,10 @@
     #   copy:
     #     src: "{{ playbook_dir }}/config/"
     #     dest: /home/tabula/medical/config/
+    - name: Clear old css
+      ansible.builtin.file:
+        state: absent
+        path: /home/tabula/medical/public/css/
       
     - name: Copy css directory
       copy:
