@@ -12,18 +12,18 @@ then
     git add -A && git commit -m "$REPLY" ; git push origin master
 fi
 
-# echo 'Copying css files to remote'
-# rsync -avh public/css/ aghost:/home/tabula/medical/public/css/
-# echo 'Done'
-#
-# echo 'Copying js files to remote'
-# rsync -avh public/js/ aghost:/home/tabula/medical/public/js/
-# echo 'Done'
-#
-# echo 'Copying binary to remote'
-# rsync -avh miobalans-go aghost:/home/tabula/medical/miobalans-go
-# echo 'Done'
-#
-# echo 'Restarting remote medical service'
-# ssh -t aghost "sudo systemctl restart medical"
-# echo 'Done'
+echo 'Copying css files to remote'
+rsync -avh public/css/ aghost:/home/tabula/medical/public/css/
+echo 'Done'
+
+echo 'Copying js files to remote'
+rsync -avh public/js/ aghost:/home/tabula/medical/public/js/
+echo 'Done'
+
+echo 'Copying binary to remote'
+rsync -avh miobalans-go aghost:/home/tabula/medical/miobalans-go
+echo 'Done'
+
+echo 'Restarting remote medical service'
+ssh -t aghost "sudo systemctl restart medical"
+echo 'Done'

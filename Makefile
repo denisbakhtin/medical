@@ -2,8 +2,8 @@
 
 default: build build_assets
 
-deploy:
-	ansible-playbook deploy.yml -K -i ~/.ansible/inventory
+deploy: build
+	./deploy.sh
 
 build: clean vet
 	@echo "Building application"
