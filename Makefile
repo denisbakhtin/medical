@@ -5,7 +5,7 @@ default: build build_assets
 deploy: build
 	./deploy.sh
 
-build: clean vet
+build: clean vet lint
 	@echo "Building application"
 	CGO_ENABLED=0 go build -o miobalans-go cmd/main.go
 
@@ -21,6 +21,9 @@ watch_assets:
 
 vet:
 	@go vet ./...
+
+lint:
+	@golangci-lint run
 
 clean:
 	@echo "Cleaning binary"

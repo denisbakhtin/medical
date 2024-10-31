@@ -12,7 +12,7 @@ import (
 func SignInGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
-	session.Save()
+	_ = session.Save()
 	c.HTML(200, "auth/signin", gin.H{
 		"Title":  "Вход в систему",
 		"Active": "signin",
@@ -32,7 +32,7 @@ func SignInPost(c *gin.Context) {
 		if user.ID == 0 {
 			log.Printf("ERROR: Login failed, IP: %s, Email: %s\n", c.ClientIP(), login.Email)
 			session.AddFlash("Эл. адрес или пароль указаны неверно")
-			session.Save()
+			_ = session.Save()
 			c.Redirect(303, "/signin")
 			return
 		}
@@ -40,13 +40,13 @@ func SignInPost(c *gin.Context) {
 		if err := user.ComparePassword(login.Password); err != nil {
 			log.Printf("ERROR: Login failed, IP: %s, Email: %s\n", c.ClientIP(), login.Email)
 			session.AddFlash("Эл. адрес или пароль указаны неверно")
-			session.Save()
+			_ = session.Save()
 			c.Redirect(303, "/signin")
 			return
 		}
 
 		session.Set("user_id", user.ID)
-		session.Save()
+		_ = session.Save()
 		c.Redirect(303, "/")
 	}
 }
@@ -55,7 +55,7 @@ func SignInPost(c *gin.Context) {
 func LogOut(c *gin.Context) {
 	session := sessions.Default(c)
 	session.Delete("user_id")
-	session.Save()
+	_ = session.Save()
 	c.Redirect(303, "/")
 }
 
@@ -63,7 +63,7 @@ func LogOut(c *gin.Context) {
 func SignUpGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
-	session.Save()
+	_ = session.Save()
 	c.HTML(200, "auth/signup", gin.H{
 		"Title":  "Регистрация в системе",
 		"Active": "signup",
@@ -82,7 +82,7 @@ func SignUpPost(c *gin.Context) {
 		db.Where("lower(email) = lower(?)", register.Email).First(user)
 		if user.ID != 0 {
 			session.AddFlash("Пользователь с таким эл. адресом уже существует")
-			session.Save()
+			_ = session.Save()
 			c.Redirect(303, "/signup")
 			return
 		}
@@ -91,13 +91,13 @@ func SignUpPost(c *gin.Context) {
 		user.Password = register.Password
 		if err := db.Create(user).Error; err != nil {
 			session.AddFlash("Ошибка регистрации пользователя")
-			session.Save()
+			_ = session.Save()
 			log.Printf("ERROR: ошибка регистрации пользователя: %v", err)
 			c.Redirect(303, "/signup")
 			return
 		}
 		session.Set("user_id", user.ID)
-		session.Save()
+		_ = session.Save()
 		c.Redirect(303, "/")
 	}
 }

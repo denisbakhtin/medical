@@ -10,7 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-//PageShow handles /pages/:id route
+// PageShow handles /pages/:id route
 func PageShow(c *gin.Context) {
 	db := models.GetDB()
 	session := sessions.Default(c)
@@ -23,7 +23,7 @@ func PageShow(c *gin.Context) {
 		c.HTML(404, "errors/404", nil)
 		return
 	}
-	//redirect to canonical url
+	// redirect to canonical url
 	if c.Request.URL.Path != page.URL() {
 		c.Redirect(301, page.URL())
 		return
@@ -42,7 +42,7 @@ func PageShow(c *gin.Context) {
 	})
 }
 
-//PagesAdminIndex handles GET /admin/pages route
+// PagesAdminIndex handles GET /admin/pages route
 func PagesAdminIndex(c *gin.Context) {
 	db := models.GetDB()
 
@@ -55,11 +55,11 @@ func PagesAdminIndex(c *gin.Context) {
 	})
 }
 
-//PageAdminCreateGet handles /admin/new_page get request
+// PageAdminCreateGet handles /admin/new_page get request
 func PageAdminCreateGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
-	session.Save()
+	_ = session.Save()
 
 	c.HTML(200, "pages/admin/form", gin.H{
 		"Title":  "Новая страница",
@@ -68,7 +68,7 @@ func PageAdminCreateGet(c *gin.Context) {
 	})
 }
 
-//PageAdminCreatePost handles /admin/new_page post request
+// PageAdminCreatePost handles /admin/new_page post request
 func PageAdminCreatePost(c *gin.Context) {
 	session := sessions.Default(c)
 	db := models.GetDB()
@@ -77,23 +77,23 @@ func PageAdminCreatePost(c *gin.Context) {
 	if c.Bind(page) == nil {
 		if err := db.Create(page).Error; err != nil {
 			session.AddFlash(err.Error())
-			session.Save()
+			_ = session.Save()
 			c.Redirect(303, "/admin/new_page")
 			return
 		}
 		c.Redirect(303, "/admin/pages")
 	} else {
 		session.AddFlash("Ошибка! Проверьте заполнение всех полей!")
-		session.Save()
+		_ = session.Save()
 		c.Redirect(303, "/admin/new_page")
 	}
 }
 
-//PageAdminUpdateGet handles /admin/edit_page/:id get request
+// PageAdminUpdateGet handles /admin/edit_page/:id get request
 func PageAdminUpdateGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
-	session.Save()
+	_ = session.Save()
 	db := models.GetDB()
 
 	id := c.Param("id")
@@ -112,7 +112,7 @@ func PageAdminUpdateGet(c *gin.Context) {
 	})
 }
 
-//PageAdminUpdatePost handles /admin/edit_page/:id post request
+// PageAdminUpdatePost handles /admin/edit_page/:id post request
 func PageAdminUpdatePost(c *gin.Context) {
 	session := sessions.Default(c)
 	db := models.GetDB()
@@ -122,19 +122,19 @@ func PageAdminUpdatePost(c *gin.Context) {
 
 		if err := db.Save(page).Error; err != nil {
 			session.AddFlash(err.Error())
-			session.Save()
+			_ = session.Save()
 			c.Redirect(303, c.Request.RequestURI)
 			return
 		}
 		c.Redirect(303, "/admin/pages")
 	} else {
 		session.AddFlash("Ошибка! Проверьте внимательно заполнение всех полей!")
-		session.Save()
+		_ = session.Save()
 		c.Redirect(303, c.Request.RequestURI)
 	}
 }
 
-//PageAdminDelete handles /admin/delete_page route
+// PageAdminDelete handles /admin/delete_page route
 func PageAdminDelete(c *gin.Context) {
 	db := models.GetDB()
 

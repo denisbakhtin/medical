@@ -39,7 +39,7 @@ func RequestCreatePost(c *gin.Context) {
 	} else {
 		session.AddFlash("Ошибка! Проверьте внимательно заполнение всех полей!")
 	}
-	session.Save()
+	_ = session.Save()
 	c.Redirect(303, "/")
 }
 
@@ -70,7 +70,7 @@ func notifyAdminOfRequest(request *models.Request) {
 		)
 
 		port, _ := strconv.Atoi(smtp.Port)
-		dialer := gomail.NewPlainDialer(smtp.SMTP, port, smtp.User, smtp.Password)
+		dialer := gomail.NewDialer(smtp.SMTP, port, smtp.User, smtp.Password)
 		sender, err := dialer.Dial()
 		if err != nil {
 			log.Printf("ERROR: %s\n", err)

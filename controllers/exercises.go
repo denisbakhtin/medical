@@ -10,7 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-//ExerciseShow handles GET /exercises/:id-slug route
+// ExerciseShow handles GET /exercises/:id-slug route
 func ExerciseShow(c *gin.Context) {
 	db := models.GetDB()
 	session := sessions.Default(c)
@@ -23,14 +23,14 @@ func ExerciseShow(c *gin.Context) {
 		c.HTML(404, "errors/404", nil)
 		return
 	}
-	//redirect to canonical url
+	// redirect to canonical url
 	if c.Request.URL.Path != exercise.URL() {
 		c.Redirect(301, exercise.URL())
 		return
 	}
 
 	flashes := session.Flashes()
-	session.Save()
+	_ = session.Save()
 	c.HTML(200, "exercises/show", gin.H{
 		"Exercise":        exercise,
 		"Title":           exercise.Name,
@@ -48,7 +48,7 @@ func ExerciseShow(c *gin.Context) {
 	})
 }
 
-//ExercisesIndex handles GET /exercises route
+// ExercisesIndex handles GET /exercises route
 func ExercisesIndex(c *gin.Context) {
 	db := models.GetDB()
 	session := sessions.Default(c)
@@ -69,7 +69,7 @@ func ExercisesIndex(c *gin.Context) {
 	})
 }
 
-//ExercisesAdminIndex handles GET /admin/exercises route
+// ExercisesAdminIndex handles GET /admin/exercises route
 func ExercisesAdminIndex(c *gin.Context) {
 	db := models.GetDB()
 
@@ -85,11 +85,11 @@ func ExercisesAdminIndex(c *gin.Context) {
 	})
 }
 
-//ExerciseAdminCreateGet handles /admin/new_exercise route
+// ExerciseAdminCreateGet handles /admin/new_exercise route
 func ExerciseAdminCreateGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
-	session.Save()
+	_ = session.Save()
 
 	c.HTML(200, "exercises/admin/form", gin.H{
 		"Title":    "Новое упражнение",
@@ -99,7 +99,7 @@ func ExerciseAdminCreateGet(c *gin.Context) {
 	})
 }
 
-//ExerciseAdminCreatePost handles /admin/new_exercise post request
+// ExerciseAdminCreatePost handles /admin/new_exercise post request
 func ExerciseAdminCreatePost(c *gin.Context) {
 	session := sessions.Default(c)
 	db := models.GetDB()
@@ -140,23 +140,23 @@ func ExerciseAdminCreatePost(c *gin.Context) {
 		exercise.Image = iuri
 		if err := db.Create(exercise).Error; err != nil {
 			session.AddFlash(err.Error())
-			session.Save()
+			_ = session.Save()
 			c.Redirect(303, "/admin/new_exercise")
 			return
 		}
 		c.Redirect(303, "/admin/exercises")
 	} else {
 		session.AddFlash("Ошибка! Проверьте внимательно заполнение всех полей!")
-		session.Save()
+		_ = session.Save()
 		c.Redirect(303, "/admin/new_exercise")
 	}
 }
 
-//ExerciseAdminUpdateGet handles /admin/edit_exercise/:id get request
+// ExerciseAdminUpdateGet handles /admin/edit_exercise/:id get request
 func ExerciseAdminUpdateGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
-	session.Save()
+	_ = session.Save()
 	db := models.GetDB()
 
 	id := c.Param("id")
@@ -175,7 +175,7 @@ func ExerciseAdminUpdateGet(c *gin.Context) {
 	})
 }
 
-//ExerciseAdminUpdatePost handles /admin/edit_exercise/:id post request
+// ExerciseAdminUpdatePost handles /admin/edit_exercise/:id post request
 func ExerciseAdminUpdatePost(c *gin.Context) {
 	session := sessions.Default(c)
 	db := models.GetDB()
@@ -220,19 +220,19 @@ func ExerciseAdminUpdatePost(c *gin.Context) {
 		}
 		if err := db.Save(exercise).Error; err != nil {
 			session.AddFlash(err.Error())
-			session.Save()
+			_ = session.Save()
 			c.Redirect(303, c.Request.RequestURI)
 			return
 		}
 		c.Redirect(303, "/admin/exercises")
 	} else {
 		session.AddFlash("Ошибка! Проверьте внимательно заполнение всех полей!")
-		session.Save()
+		_ = session.Save()
 		c.Redirect(303, c.Request.RequestURI)
 	}
 }
 
-//ExerciseAdminDelete handles /admin/delete_exercise route
+// ExerciseAdminDelete handles /admin/delete_exercise route
 func ExerciseAdminDelete(c *gin.Context) {
 	db := models.GetDB()
 

@@ -10,7 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-//InfoShow handles GET /info/:id-slug route
+// InfoShow handles GET /info/:id-slug route
 func InfoShow(c *gin.Context) {
 	db := models.GetDB()
 	session := sessions.Default(c)
@@ -23,13 +23,13 @@ func InfoShow(c *gin.Context) {
 		c.HTML(404, "errors/404", nil)
 		return
 	}
-	//redirect to canonical url
+	// redirect to canonical url
 	if c.Request.URL.Path != info.URL() {
 		c.Redirect(301, info.URL())
 		return
 	}
 	flashes := session.Flashes()
-	session.Save()
+	_ = session.Save()
 	c.HTML(200, "info/show", gin.H{
 		"Info":            info,
 		"Title":           info.Name,
@@ -45,7 +45,7 @@ func InfoShow(c *gin.Context) {
 	})
 }
 
-//InfoAdminIndex handles GET /admin/info route
+// InfoAdminIndex handles GET /admin/info route
 func InfoAdminIndex(c *gin.Context) {
 	db := models.GetDB()
 
@@ -61,11 +61,11 @@ func InfoAdminIndex(c *gin.Context) {
 	})
 }
 
-//InfoAdminCreateGet handles /admin/new_info get request
+// InfoAdminCreateGet handles /admin/new_info get request
 func InfoAdminCreateGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
-	session.Save()
+	_ = session.Save()
 
 	c.HTML(200, "info/admin/form", gin.H{
 		"Title":  "Новый материал",
@@ -74,7 +74,7 @@ func InfoAdminCreateGet(c *gin.Context) {
 	})
 }
 
-//InfoAdminCreatePost handles /admin/new_info post request
+// InfoAdminCreatePost handles /admin/new_info post request
 func InfoAdminCreatePost(c *gin.Context) {
 	session := sessions.Default(c)
 	db := models.GetDB()
@@ -83,23 +83,23 @@ func InfoAdminCreatePost(c *gin.Context) {
 	if c.Bind(info) == nil {
 		if err := db.Create(info).Error; err != nil {
 			session.AddFlash(err.Error())
-			session.Save()
+			_ = session.Save()
 			c.Redirect(303, "/admin/new_info")
 			return
 		}
 		c.Redirect(303, "/admin/info")
 	} else {
 		session.AddFlash("Ошибка! Проверьте внимательно заполнение всех полей!")
-		session.Save()
+		_ = session.Save()
 		c.Redirect(303, "/admin/new_info")
 	}
 }
 
-//InfoAdminUpdateGet handles /admin/edit_info/:id get request
+// InfoAdminUpdateGet handles /admin/edit_info/:id get request
 func InfoAdminUpdateGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
-	session.Save()
+	_ = session.Save()
 	db := models.GetDB()
 
 	id := c.Param("id")
@@ -118,7 +118,7 @@ func InfoAdminUpdateGet(c *gin.Context) {
 	})
 }
 
-//InfoAdminUpdatePost handles /admin/edit_info/:id post request
+// InfoAdminUpdatePost handles /admin/edit_info/:id post request
 func InfoAdminUpdatePost(c *gin.Context) {
 	session := sessions.Default(c)
 	db := models.GetDB()
@@ -127,19 +127,19 @@ func InfoAdminUpdatePost(c *gin.Context) {
 	if c.Bind(info) == nil {
 		if err := db.Save(info).Error; err != nil {
 			session.AddFlash(err.Error())
-			session.Save()
+			_ = session.Save()
 			c.Redirect(303, c.Request.RequestURI)
 			return
 		}
 		c.Redirect(303, "/admin/info")
 	} else {
 		session.AddFlash("Ошибка! Проверьте внимательно заполнение всех полей!")
-		session.Save()
+		_ = session.Save()
 		c.Redirect(303, c.Request.RequestURI)
 	}
 }
 
-//InfoAdminDelete handles /admin/delete_info route
+// InfoAdminDelete handles /admin/delete_info route
 func InfoAdminDelete(c *gin.Context) {
 	db := models.GetDB()
 

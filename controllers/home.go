@@ -6,14 +6,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-//Home handles GET / route
+// Home handles GET / route
 func Home(c *gin.Context) {
 	db := models.GetDB()
 	page := &models.Page{}
 	db.First(page, 1)
 	session := sessions.Default(c)
 	flashes := session.Flashes()
-	session.Save()
+	_ = session.Save()
 
 	c.HTML(200, "home/show", gin.H{
 		"Title":           "Кинезиология Миобаланс",
@@ -24,5 +24,4 @@ func Home(c *gin.Context) {
 		"MetaDescription": "Прикладная кинезиология МиоБаланс - восстановление баланса обмена веществ, опорно-двигательного аппарата и нервной системы...",
 		"Authenticated":   (session.Get("user_id") != nil),
 	})
-
 }

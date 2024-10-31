@@ -37,7 +37,7 @@ func CommentCreatePost(c *gin.Context) {
 
 	comment := &models.Comment{}
 	if c.Bind(comment) == nil {
-		//simple captcha check
+		// simple captcha check
 		captcha, err := base64.StdEncoding.DecodeString(comment.Captcha)
 		if err != nil {
 			c.HTML(500, "errors/500", helpers.ErrorData(err))
@@ -47,18 +47,18 @@ func CommentCreatePost(c *gin.Context) {
 			c.HTML(400, "errors/400", nil)
 			return
 		}
-		comment.Published = false //leave unpublished
+		comment.Published = false // leave unpublished
 		if err := db.Create(comment).Error; err != nil {
 			c.HTML(400, "errors/400", helpers.ErrorData(err))
 			return
 		}
 		notifyAdminOfComment(comment)
 		session.AddFlash("Спасибо! Ваш вопрос будет опубликован после проверки.")
-		session.Save()
+		_ = session.Save()
 		c.Redirect(303, fmt.Sprintf("/articles/%d#comments", comment.ArticleID))
 	} else {
 		session.AddFlash("Ошибка! Внимательно проверьте заполнение всех полей!")
-		session.Save()
+		_ = session.Save()
 		c.Redirect(303, "/")
 	}
 }
@@ -67,7 +67,7 @@ func CommentCreatePost(c *gin.Context) {
 func CommentAdminUpdateGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
-	session.Save()
+	_ = session.Save()
 	db := models.GetDB()
 
 	id := c.Param("id")
@@ -95,14 +95,14 @@ func CommentAdminUpdatePost(c *gin.Context) {
 	if c.Bind(comment) == nil {
 		if err := db.Save(comment).Error; err != nil {
 			session.AddFlash(err.Error())
-			session.Save()
+			_ = session.Save()
 			c.Redirect(303, c.Request.RequestURI)
 			return
 		}
 		c.Redirect(303, "/admin/comments")
 	} else {
 		session.AddFlash("Ошибка! Внимательно проверьте заполнение полей!")
-		session.Save()
+		_ = session.Save()
 		c.Redirect(303, c.Request.RequestURI)
 	}
 }
@@ -185,11 +185,10 @@ func CommentAdminDelete(c *gin.Context) {
 		return
 	}
 	c.Redirect(303, "/admin/comments")
-
 }
 
 func notifyAdminOfComment(comment *models.Comment) {
-	//closure is needed here, as r may be released by the time func finishes
+	// closure is needed here, as r may be released by the time func finishes
 	tmpl := views.GetTemplates()
 	go func() {
 		data := map[string]interface{}{
@@ -219,7 +218,7 @@ func notifyAdminOfComment(comment *models.Comment) {
 		)
 
 		port, _ := strconv.Atoi(smtp.Port)
-		dialer := gomail.NewPlainDialer(smtp.SMTP, port, smtp.User, smtp.Password)
+		dialer := gomail.NewDialer(smtp.SMTP, port, smtp.User, smtp.Password)
 		sender, err := dialer.Dial()
 		if err != nil {
 			log.Printf("ERROR: %s\n", err)
@@ -233,44 +232,44 @@ func notifyAdminOfComment(comment *models.Comment) {
 }
 
 // notifyClientOfComment sends notification email to comment(question) author
-func notifyClientOfComment(comment *models.Comment) {
-	if len(comment.AuthorEmail) == 0 {
-		return
-	}
-	tmpl := views.GetTemplates()
-	go func() {
-		data := map[string]interface{}{
-			"Comment": comment,
-		}
-		var b bytes.Buffer
-		if err := tmpl.Lookup("emails/answer").Execute(&b, data); err != nil {
-			log.Printf("ERROR: %s\n", err)
-			return
-		}
-
-		smtp := config.GetConfig().SMTP
-		msg := gomail.NewMessage()
-		msg.SetHeader("From", smtp.From)
-		msg.SetHeader("To", comment.AuthorEmail)
-		msg.SetHeader("Subject", "Врач ответил на ваш вопрос на сайте www.miobalans.ru")
-		msg.SetBody(
-			"text/html",
-			b.String(),
-		)
-
-		port, _ := strconv.Atoi(smtp.Port)
-		dialer := gomail.NewPlainDialer(smtp.SMTP, port, smtp.User, smtp.Password)
-		sender, err := dialer.Dial()
-		if err != nil {
-			log.Printf("ERROR: %s\n", err)
-			return
-		}
-		if err := gomail.Send(sender, msg); err != nil {
-			log.Printf("ERROR: %s\n", err)
-			return
-		}
-	}()
-}
+// func notifyClientOfComment(comment *models.Comment) {
+// 	if len(comment.AuthorEmail) == 0 {
+// 		return
+// 	}
+// 	tmpl := views.GetTemplates()
+// 	go func() {
+// 		data := map[string]interface{}{
+// 			"Comment": comment,
+// 		}
+// 		var b bytes.Buffer
+// 		if err := tmpl.Lookup("emails/answer").Execute(&b, data); err != nil {
+// 			log.Printf("ERROR: %s\n", err)
+// 			return
+// 		}
+//
+// 		smtp := config.GetConfig().SMTP
+// 		msg := gomail.NewMessage()
+// 		msg.SetHeader("From", smtp.From)
+// 		msg.SetHeader("To", comment.AuthorEmail)
+// 		msg.SetHeader("Subject", "Врач ответил на ваш вопрос на сайте www.miobalans.ru")
+// 		msg.SetBody(
+// 			"text/html",
+// 			b.String(),
+// 		)
+//
+// 		port, _ := strconv.Atoi(smtp.Port)
+// 		dialer := gomail.NewDialer(smtp.SMTP, port, smtp.User, smtp.Password)
+// 		sender, err := dialer.Dial()
+// 		if err != nil {
+// 			log.Printf("ERROR: %s\n", err)
+// 			return
+// 		}
+// 		if err := gomail.Send(sender, msg); err != nil {
+// 			log.Printf("ERROR: %s\n", err)
+// 			return
+// 		}
+// 	}()
+// }
 
 // CommentsIndex handles GET /comments/:id route, where :id is the article id
 func CommentsIndex(c *gin.Context) {

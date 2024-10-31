@@ -14,7 +14,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-//MenuItem represents main menu item
+// MenuItem represents main menu item
 type MenuItem struct {
 	URL      string
 	Title    string
@@ -23,7 +23,7 @@ type MenuItem struct {
 	Children []MenuItem
 }
 
-//IsActive checks uri against currently active (uri, or nil) and returns "active" if they are equal
+// IsActive checks uri against currently active (uri, or nil) and returns "active" if they are equal
 func IsActive(active interface{}, uri string) string {
 	if s, ok := active.(string); ok {
 		if s == uri {
@@ -33,22 +33,22 @@ func IsActive(active interface{}, uri string) string {
 	return ""
 }
 
-//DateTime prints timestamp in human format
+// DateTime prints timestamp in human format
 func DateTime(t time.Time) string {
 	return fmt.Sprintf("%d-%02d-%02d %02d:%02d:%02d", t.Year(), t.Month(), t.Day(), t.Hour(), t.Minute(), t.Second())
 }
 
-//Date prints date part of timestamp
+// Date prints date part of timestamp
 func Date(t time.Time) string {
 	return fmt.Sprintf("%d-%02d-%02d", t.Year(), t.Month(), t.Day())
 }
 
-//YearNow returns current year
+// YearNow returns current year
 func YearNow() string {
 	return fmt.Sprintf("%d", time.Now().Year())
 }
 
-//StringInSlice returns true if value is in list slice
+// StringInSlice returns true if value is in list slice
 func StringInSlice(value string, list []string) bool {
 	for i := range list {
 		if value == list[i] {
@@ -58,16 +58,16 @@ func StringInSlice(value string, list []string) bool {
 	return false
 }
 
-//OddEvenClass returns odd or even class depending on the index
+// OddEvenClass returns odd or even class depending on the index
 func OddEvenClass(index int) string {
-	//range indexes start with zero %)
+	// range indexes start with zero %)
 	if (index+1)%2 == 1 {
 		return "odd"
 	}
 	return "even"
 }
 
-//IsFirstInTheRow checks if index element is the first one in the row of inrow elements
+// IsFirstInTheRow checks if index element is the first one in the row of inrow elements
 func IsFirstInTheRow(index int, inrow int) bool {
 	if inrow == 0 || index%inrow == 0 {
 		return true
@@ -75,7 +75,7 @@ func IsFirstInTheRow(index int, inrow int) bool {
 	return false
 }
 
-//IsLastInTheRow checks if index element is the last one in the row of inrow elements, or the last in sequence
+// IsLastInTheRow checks if index element is the last one in the row of inrow elements, or the last in sequence
 func IsLastInTheRow(index int, inrow int, length int) bool {
 	if inrow == 0 || index%inrow == inrow-1 || index == length-1 {
 		return true
@@ -83,12 +83,12 @@ func IsLastInTheRow(index int, inrow int, length int) bool {
 	return false
 }
 
-//IsLast checks if index element is the last in sequence
+// IsLast checks if index element is the last in sequence
 func IsLast(index int, length int) bool {
 	return index == length-1
 }
 
-//MainMenu returns the list of main menu items
+// MainMenu returns the list of main menu items
 func MainMenu() []MenuItem {
 	db := models.GetDB()
 	about := &models.Page{}
@@ -104,28 +104,28 @@ func MainMenu() []MenuItem {
 		submenu = append(submenu, MenuItem{URL: articles[i].URL(), Title: articles[i].Name})
 	}
 	menu := []MenuItem{
-		MenuItem{
+		{
 			URL:   seans.URL(),
 			Title: "Приём",
 		},
-		MenuItem{
+		{
 			URL:      "/articles",
 			Title:    "Лечение",
 			Children: submenu,
 		},
-		MenuItem{
+		{
 			URL:   about.URL(),
 			Title: "Врач кинезиолог",
 		},
-		MenuItem{
+		{
 			URL:   "/reviews",
 			Title: "Отзывы",
 		},
-		MenuItem{
+		{
 			URL:   contacts.URL(),
 			Title: "Контакты",
 		},
-		MenuItem{
+		{
 			URL:   "/exercises",
 			Title: "Упражнения",
 		},
@@ -133,21 +133,21 @@ func MainMenu() []MenuItem {
 	return menu
 }
 
-//ScrollMenu returns the list of scroll menu items
+// ScrollMenu returns the list of scroll menu items
 func ScrollMenu() []MenuItem {
 	db := models.GetDB()
 	about := &models.Page{}
 	db.First(about, 4)
 	menu := []MenuItem{
-		MenuItem{
+		{
 			URL:   about.URL(),
 			Title: "О враче",
 		},
-		MenuItem{
+		{
 			URL:   "#withoutpain",
 			Title: "Этапы лечения",
 		},
-		MenuItem{
+		{
 			URL:   "/reviews",
 			Title: "Отзывы",
 		},
@@ -155,7 +155,7 @@ func ScrollMenu() []MenuItem {
 	return menu
 }
 
-//Truncate truncates string to n chars
+// Truncate truncates string to n chars
 func Truncate(s string, n int) string {
 	runes := []rune(s)
 	if len(runes) > n {
@@ -167,12 +167,12 @@ func Truncate(s string, n int) string {
 	return s
 }
 
-//SellingPreface is the beginning of the selling block partial
+// SellingPreface is the beginning of the selling block partial
 func SellingPreface() string {
 	return "Выяснить причины возникновения жалоб и пройти кинезиологическое тестирование можно во время:"
 }
 
-//PromoTill returns promotion text
+// PromoTill returns promotion text
 func PromoTill() string {
 	now := time.Now()
 	wday := now.Weekday()
@@ -180,12 +180,12 @@ func PromoTill() string {
 	return fmt.Sprintf("до %d %s", endofweek.Day(), mon(endofweek.Month()))
 }
 
-//ReplacePromoTill replaces {{promoTill}} placeholder with PromoTill() function result
+// ReplacePromoTill replaces {{promoTill}} placeholder with PromoTill() function result
 func ReplacePromoTill(source template.HTML) template.HTML {
-	return template.HTML(strings.Replace(string(source), "{{promoTill}}", PromoTill(), -1))
+	return template.HTML(strings.ReplaceAll(string(source), "{{promoTill}}", PromoTill()))
 }
 
-//CityList returns the list of cities for comments form
+// CityList returns the list of cities for comments form
 func CityList() []string {
 	return []string{
 		"Москва",
@@ -205,13 +205,10 @@ func CityList() []string {
 	}
 }
 
-//EqRU compares *uint to uint
+// EqRU compares *uint to uint
 func EqRU(r *uint, i uint) bool {
 	if r == nil {
-		if i == 0 {
-			return true
-		}
-		return false
+		return i == 0
 	}
 	return (*r == i)
 }
@@ -247,13 +244,13 @@ func mon(m time.Month) string {
 	}
 }
 
-//AllReviews returns a slice of all published reviews
+// AllReviews returns a slice of all published reviews
 func AllReviews() (reviews []models.Review) {
 	models.GetDB().Where("published = ?", true).Order("id desc").Limit(5).Find(&reviews)
 	return
 }
 
-//FileVersion - a closure returning the file timestamp
+// FileVersion - a closure returning the file timestamp
 func FileVersion(path string) func() string {
 	return func() string {
 		file, err := os.Stat(path)
@@ -269,7 +266,7 @@ func timeToString(t time.Time) string {
 	return fmt.Sprintf("%04d%02d%02d-%02d%02d", t.Year(), t.Month(), t.Day(), t.Hour(), t.Minute())
 }
 
-//ArticleIDComments retrieves article id from a list of comments
+// ArticleIDComments retrieves article id from a list of comments
 func ArticleIDComments(comments []models.Comment) uint {
 	if len(comments) == 0 {
 		return 0
@@ -277,7 +274,7 @@ func ArticleIDComments(comments []models.Comment) uint {
 	return comments[0].ArticleID
 }
 
-//Min returns int minimum of a & b
+// Min returns int minimum of a & b
 func Min(a, b int) int {
 	if a < b {
 		return a
@@ -285,7 +282,7 @@ func Min(a, b int) int {
 	return b
 }
 
-//Max returns int maximum of a & b
+// Max returns int maximum of a & b
 func Max(a, b int) int {
 	if a < b {
 		return b
@@ -293,7 +290,7 @@ func Max(a, b int) int {
 	return a
 }
 
-//Pagination stores pagination element
+// Pagination stores pagination element
 type Pagination struct {
 	Class string
 	URL   string
@@ -310,7 +307,7 @@ func pageQuery(query *url.Values, page int) string {
 	return query.Encode()
 }
 
-//CurrentPage retrieves page number query parameter
+// CurrentPage retrieves page number query parameter
 func CurrentPage(c *gin.Context) int {
 	currentPage := 1
 	if pageStr := c.Query("page"); pageStr != "" {
@@ -320,7 +317,7 @@ func CurrentPage(c *gin.Context) int {
 	return currentPage
 }
 
-//Paginator creates paginator
+// Paginator creates paginator
 func Paginator(currentPage, totalPages int, curURL *url.URL) []Pagination {
 	currentPage = int(Max(1, Min(int(currentPage), int(totalPages))))
 	queryValues, err := url.ParseQuery(curURL.RawQuery)
@@ -333,11 +330,11 @@ func Paginator(currentPage, totalPages int, curURL *url.URL) []Pagination {
 		nextID = 4
 		lastID = 5
 	}
-	//first + last + prev + next + 3 adjusent == 7
+	// first + last + prev + next + 3 adjusent == 7
 	pagination := make([]Pagination, 7)
 
 	if totalPages > 1 {
-		//prev links
+		// prev links
 		if currentPage > 1 {
 			newURL := *curURL
 			newURL.RawQuery = pageQuery(&queryValues, 1)
@@ -349,7 +346,7 @@ func Paginator(currentPage, totalPages int, curURL *url.URL) []Pagination {
 			pagination[1] = Pagination{Class: "previous_page disabled", URL: "", Title: "Пред."}
 		}
 
-		//page numbers
+		// page numbers
 		switch currentPage {
 		case 1:
 			pagination[2] = Pagination{Class: "active", URL: "", Title: "1"}
@@ -364,7 +361,7 @@ func Paginator(currentPage, totalPages int, curURL *url.URL) []Pagination {
 				pagination[4] = Pagination{Class: "", URL: newURL.RequestURI(), Title: "3"}
 			}
 		case totalPages:
-			if 3 <= totalPages {
+			if totalPages >= 3 {
 				pagination[4] = Pagination{Class: "active", URL: "", Title: fmt.Sprintf("%d", totalPages)}
 				newURL := *curURL
 				newURL.RawQuery = pageQuery(&queryValues, totalPages-1)
@@ -373,7 +370,7 @@ func Paginator(currentPage, totalPages int, curURL *url.URL) []Pagination {
 				newURL.RawQuery = pageQuery(&queryValues, totalPages-2)
 				pagination[2] = Pagination{Class: "", URL: newURL.RequestURI(), Title: fmt.Sprintf("%d", totalPages-2)}
 			}
-			if 2 == totalPages {
+			if totalPages == 2 {
 				pagination[3] = Pagination{Class: "active", URL: "", Title: fmt.Sprintf("%d", totalPages)}
 
 				newURL := *curURL
@@ -390,7 +387,7 @@ func Paginator(currentPage, totalPages int, curURL *url.URL) []Pagination {
 			pagination[2] = Pagination{Class: "", URL: newURL.RequestURI(), Title: fmt.Sprintf("%d", currentPage-1)}
 		}
 
-		//next links
+		// next links
 		if currentPage < totalPages {
 			newURL := *curURL
 			newURL.RawQuery = pageQuery(&queryValues, currentPage+1)

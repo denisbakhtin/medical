@@ -51,7 +51,7 @@ func ReviewsIndex(c *gin.Context) {
 	session := sessions.Default(c)
 	db := models.GetDB()
 	flashes := session.Flashes()
-	session.Save()
+	_ = session.Save()
 
 	var list []models.Review
 	db.Where("published = ?", true).Order("id desc").Find(&list)
@@ -83,7 +83,7 @@ func ReviewsAdminIndex(c *gin.Context) {
 func ReviewCreateGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
-	session.Save()
+	_ = session.Save()
 
 	c.HTML(200, "reviews/form", gin.H{
 		"Title":  "Новый отзыв",
@@ -97,7 +97,10 @@ func ReviewCreatePost(c *gin.Context) {
 	db := models.GetDB()
 	session := sessions.Default(c)
 
-	c.Request.ParseMultipartForm(32 << 20)
+	if err := c.Request.ParseMultipartForm(32 << 20); err != nil {
+		c.HTML(500, "errors/500", helpers.ErrorData(err))
+		return
+	}
 	review := &models.Review{}
 	if c.Bind(review) == nil {
 		policy := bluemonday.StrictPolicy()
@@ -132,7 +135,7 @@ func ReviewCreatePost(c *gin.Context) {
 	} else {
 		session.AddFlash("Ошибка! Внимательно проверьте заполнение всех полей!")
 	}
-	session.Save()
+	_ = session.Save()
 	c.Redirect(303, "/reviews")
 }
 
@@ -140,7 +143,7 @@ func ReviewCreatePost(c *gin.Context) {
 func ReviewAdminCreateGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
-	session.Save()
+	_ = session.Save()
 	db := models.GetDB()
 
 	var articles []models.Article
@@ -158,7 +161,10 @@ func ReviewAdminCreatePost(c *gin.Context) {
 	session := sessions.Default(c)
 	db := models.GetDB()
 
-	c.Request.ParseMultipartForm(32 << 20)
+	if err := c.Request.ParseMultipartForm(32 << 20); err != nil {
+		c.HTML(500, "errors/500", helpers.ErrorData(err))
+		return
+	}
 	review := &models.Review{}
 	if c.Bind(review) == nil {
 		review.ArticleID = helpers.Atouintr(c.Request.FormValue("article_id"))
@@ -178,7 +184,7 @@ func ReviewAdminCreatePost(c *gin.Context) {
 		c.Redirect(303, "/admin/reviews")
 	} else {
 		session.AddFlash("Ошибка! Проверьте внимательно заполнение всех полей!")
-		session.Save()
+		_ = session.Save()
 		c.Redirect(303, "/admin/new_review")
 	}
 }
@@ -187,7 +193,7 @@ func ReviewAdminCreatePost(c *gin.Context) {
 func ReviewAdminUpdateGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
-	session.Save()
+	_ = session.Save()
 	db := models.GetDB()
 
 	id := c.Param("id")
@@ -214,7 +220,10 @@ func ReviewAdminUpdatePost(c *gin.Context) {
 	session := sessions.Default(c)
 	db := models.GetDB()
 
-	c.Request.ParseMultipartForm(32 << 20)
+	if err := c.Request.ParseMultipartForm(32 << 20); err != nil {
+		c.HTML(500, "errors/500", helpers.ErrorData(err))
+		return
+	}
 	review := &models.Review{}
 	if c.Bind(review) == nil {
 		review.ArticleID = helpers.Atouintr(c.Request.FormValue("article_id"))
@@ -229,14 +238,14 @@ func ReviewAdminUpdatePost(c *gin.Context) {
 
 		if err := db.Model(&models.Review{}).Updates(review).Error; err != nil {
 			session.AddFlash(err.Error())
-			session.Save()
+			_ = session.Save()
 			c.Redirect(303, c.Request.RequestURI)
 			return
 		}
 		c.Redirect(303, "/admin/reviews")
 	} else {
 		session.AddFlash("Ошибка! Проверьте внимательно заполнение всех полей!")
-		session.Save()
+		_ = session.Save()
 		c.Redirect(303, c.Request.RequestURI)
 	}
 }
@@ -245,7 +254,7 @@ func ReviewAdminUpdatePost(c *gin.Context) {
 func ReviewUpdateGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
-	session.Save()
+	_ = session.Save()
 	db := models.GetDB()
 
 	id := getIDFromToken(c.Request.FormValue("token"))
@@ -275,7 +284,10 @@ func ReviewUpdatePost(c *gin.Context) {
 	session := sessions.Default(c)
 	db := models.GetDB()
 
-	c.Request.ParseMultipartForm(32 << 20)
+	if err := c.Request.ParseMultipartForm(32 << 20); err != nil {
+		c.HTML(500, "errors/500", helpers.ErrorData(err))
+		return
+	}
 	review := &models.Review{}
 	if err := c.Bind(review); err == nil {
 
@@ -290,7 +302,7 @@ func ReviewUpdatePost(c *gin.Context) {
 
 		if err := db.Model(&models.Review{}).Updates(review).Error; err != nil {
 			session.AddFlash(err.Error())
-			session.Save()
+			_ = session.Save()
 			c.Redirect(303, c.Request.RequestURI)
 			return
 		}
@@ -299,7 +311,7 @@ func ReviewUpdatePost(c *gin.Context) {
 		log.Println(err)
 		session.AddFlash("Ошибка! Внимательно проверьте заполнение всех полей")
 	}
-	session.Save()
+	_ = session.Save()
 	c.Redirect(303, "/reviews")
 }
 
@@ -347,7 +359,7 @@ func notifyAdminOfReview(review *models.Review) {
 		)
 
 		port, _ := strconv.Atoi(smtp.Port)
-		dialer := gomail.NewPlainDialer(smtp.SMTP, port, smtp.User, smtp.Password)
+		dialer := gomail.NewDialer(smtp.SMTP, port, smtp.User, smtp.Password)
 		sender, err := dialer.Dial()
 		if err != nil {
 			log.Printf("ERROR: %s\n", err)

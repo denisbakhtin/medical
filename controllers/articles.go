@@ -10,7 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-//ArticleShow handles GET /articles/:id-slug route
+// ArticleShow handles GET /articles/:id-slug route
 func ArticleShow(c *gin.Context) {
 	db := models.GetDB()
 	session := sessions.Default(c)
@@ -23,7 +23,7 @@ func ArticleShow(c *gin.Context) {
 		c.HTML(404, "errors/404", nil)
 		return
 	}
-	//redirect to canonical url
+	// redirect to canonical url
 	if c.Request.URL.Path != article.URL() {
 		c.Redirect(301, article.URL())
 		return
@@ -31,8 +31,8 @@ func ArticleShow(c *gin.Context) {
 	var testimonials []models.Review
 	db.Where("published = ? and article_id = ?", true, article.ID).Order("created_at desc").Find(&testimonials)
 	topComments := models.GetTopComments(article.ID)
-	//comments := models.GetComments(article.ID)
-	//article.Comments = append(topComments, comments...)
+	// comments := models.GetComments(article.ID)
+	// article.Comments = append(topComments, comments...)
 	if len(topComments) > 0 {
 		article.Comments = topComments
 	} else {
@@ -44,7 +44,7 @@ func ArticleShow(c *gin.Context) {
 		imageurl = fmt.Sprintf("http://%s%s", c.Request.Host, img)
 	}
 	flashes := session.Flashes()
-	session.Save()
+	_ = session.Save()
 	c.HTML(200, "articles/show", gin.H{
 		"Article":         article,
 		"Testimonials":    testimonials,
@@ -63,7 +63,7 @@ func ArticleShow(c *gin.Context) {
 	})
 }
 
-//ArticlesIndex handles GET /articles route
+// ArticlesIndex handles GET /articles route
 func ArticlesIndex(c *gin.Context) {
 	db := models.GetDB()
 	session := sessions.Default(c)
@@ -90,7 +90,7 @@ func ArticlesIndex(c *gin.Context) {
 	})
 }
 
-//ArticlesAdminIndex handles GET /admin/articles route
+// ArticlesAdminIndex handles GET /admin/articles route
 func ArticlesAdminIndex(c *gin.Context) {
 	db := models.GetDB()
 
@@ -106,11 +106,11 @@ func ArticlesAdminIndex(c *gin.Context) {
 	})
 }
 
-//ArticleAdminCreateGet handles /admin/new_article route
+// ArticleAdminCreateGet handles /admin/new_article route
 func ArticleAdminCreateGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
-	session.Save()
+	_ = session.Save()
 
 	c.HTML(200, "articles/admin/form", gin.H{
 		"Title":  "Новая статья",
@@ -119,7 +119,7 @@ func ArticleAdminCreateGet(c *gin.Context) {
 	})
 }
 
-//ArticleAdminCreatePost handles /admin/new_article post request
+// ArticleAdminCreatePost handles /admin/new_article post request
 func ArticleAdminCreatePost(c *gin.Context) {
 	session := sessions.Default(c)
 	db := models.GetDB()
@@ -128,23 +128,23 @@ func ArticleAdminCreatePost(c *gin.Context) {
 	if c.Bind(article) == nil {
 		if err := db.Create(article).Error; err != nil {
 			session.AddFlash(err.Error())
-			session.Save()
+			_ = session.Save()
 			c.Redirect(303, "/admin/new_article")
 			return
 		}
 		c.Redirect(303, "/admin/articles")
 	} else {
 		session.AddFlash("Ошибка! Проверьте внимательно заполнение всех полей!")
-		session.Save()
+		_ = session.Save()
 		c.Redirect(303, "/admin/new_article")
 	}
 }
 
-//ArticleAdminUpdateGet handles /admin/edit_article/:id get request
+// ArticleAdminUpdateGet handles /admin/edit_article/:id get request
 func ArticleAdminUpdateGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
-	session.Save()
+	_ = session.Save()
 	db := models.GetDB()
 
 	id := c.Param("id")
@@ -163,7 +163,7 @@ func ArticleAdminUpdateGet(c *gin.Context) {
 	})
 }
 
-//ArticleAdminUpdatePost handles /admin/edit_article/:id post request
+// ArticleAdminUpdatePost handles /admin/edit_article/:id post request
 func ArticleAdminUpdatePost(c *gin.Context) {
 	session := sessions.Default(c)
 	db := models.GetDB()
@@ -172,19 +172,19 @@ func ArticleAdminUpdatePost(c *gin.Context) {
 	if c.Bind(article) == nil {
 		if err := db.Save(article).Error; err != nil {
 			session.AddFlash(err.Error())
-			session.Save()
+			_ = session.Save()
 			c.Redirect(303, c.Request.RequestURI)
 			return
 		}
 		c.Redirect(303, "/admin/articles")
 	} else {
 		session.AddFlash("Ошибка! Проверьте внимательно заполнение всех полей!")
-		session.Save()
+		_ = session.Save()
 		c.Redirect(303, c.Request.RequestURI)
 	}
 }
 
-//ArticleAdminDelete handles /admin/delete_article route
+// ArticleAdminDelete handles /admin/delete_article route
 func ArticleAdminDelete(c *gin.Context) {
 	db := models.GetDB()
 

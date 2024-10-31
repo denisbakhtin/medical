@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-//UsersAdminIndex handles GET /admin/users route
+// UsersAdminIndex handles GET /admin/users route
 func UsersAdminIndex(c *gin.Context) {
 	db := models.GetDB()
 
@@ -22,11 +22,11 @@ func UsersAdminIndex(c *gin.Context) {
 	})
 }
 
-//UserAdminCreateGet handles /admin/new_user get request
+// UserAdminCreateGet handles /admin/new_user get request
 func UserAdminCreateGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
-	session.Save()
+	_ = session.Save()
 
 	c.HTML(200, "users/admin/form", gin.H{
 		"Title":  "Новый пользователь",
@@ -35,35 +35,34 @@ func UserAdminCreateGet(c *gin.Context) {
 	})
 }
 
-//UserAdminCreatePost handles /admin/new_user post request
+// UserAdminCreatePost handles /admin/new_user post request
 func UserAdminCreatePost(c *gin.Context) {
 	db := models.GetDB()
 	session := sessions.Default(c)
 
 	user := &models.User{}
 	if c.Bind(user) == nil {
-
 		if err := db.Create(user).Error; err != nil {
 			session.AddFlash(err.Error())
-			session.Save()
+			_ = session.Save()
 			c.Redirect(303, "/admin/new_user")
 			return
 		}
 	} else {
 		session.AddFlash("Ошибка! Проверьте заполнение всех полей!")
-		session.Save()
+		_ = session.Save()
 		c.Redirect(303, "/admin/new_user")
 		return
 	}
 	c.Redirect(303, "/admin/users")
 }
 
-//UserAdminUpdateGet handles /admin/edit_user/:id get request
+// UserAdminUpdateGet handles /admin/edit_user/:id get request
 func UserAdminUpdateGet(c *gin.Context) {
 	db := models.GetDB()
 	session := sessions.Default(c)
 	flashes := session.Flashes()
-	session.Save()
+	_ = session.Save()
 
 	id := c.Param("id")
 	user := &models.User{}
@@ -81,7 +80,7 @@ func UserAdminUpdateGet(c *gin.Context) {
 	})
 }
 
-//UserAdminUpdatePost handles /admin/edit_user/:id post request
+// UserAdminUpdatePost handles /admin/edit_user/:id post request
 func UserAdminUpdatePost(c *gin.Context) {
 	db := models.GetDB()
 	session := sessions.Default(c)
@@ -89,23 +88,22 @@ func UserAdminUpdatePost(c *gin.Context) {
 	user := &models.User{}
 	id := c.Param("id")
 	if c.Bind(user) == nil {
-
 		if err := db.Save(user).Error; err != nil {
 			session.AddFlash(err.Error())
-			session.Save()
+			_ = session.Save()
 			c.Redirect(303, fmt.Sprintf("/admin/edit_user/%v", id))
 			return
 		}
 	} else {
 		session.AddFlash("Ошибка! Проверьте заполнение всех полей!")
-		session.Save()
+		_ = session.Save()
 		c.Redirect(303, fmt.Sprintf("/admin/edit_user/%v", id))
 		return
 	}
 	c.Redirect(303, "/admin/users")
 }
 
-//UserAdminDelete handles /admin/delete_user route
+// UserAdminDelete handles /admin/delete_user route
 func UserAdminDelete(c *gin.Context) {
 	db := models.GetDB()
 

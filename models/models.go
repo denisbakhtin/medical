@@ -7,30 +7,30 @@ import (
 
 	"github.com/fiam/gounidecode/unidecode"
 	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/postgres" //gorm postgres driver
+	_ "github.com/jinzhu/gorm/dialects/postgres" // gorm postgres driver
 )
 
 var db *gorm.DB
 
-//InitDB establishes connection to database and saves its handler into db *sqlx.DB
+// InitDB establishes connection to database and saves its handler into db *sqlx.DB
 func InitDB(connection string) {
 	var err error
 	db, err = gorm.Open("postgres", connection)
 	if err != nil {
 		log.Fatal(err)
 	}
-	//automigrate
+	// automigrate
 	db.AutoMigrate(&Article{}, &Comment{}, &Page{}, &Review{}, &User{}, &Info{}, &Exercise{})
 }
 
-//GetDB returns database handler
+// GetDB returns database handler
 func GetDB() *gorm.DB {
 	return db
 }
 
-//utility functions
+// utility functions
 
-//truncate truncates string to n runes
+// truncate truncates string to n runes
 func truncate(s string, n int) string {
 	runes := []rune(s)
 	if len(runes) > n {
@@ -42,10 +42,10 @@ func truncate(s string, n int) string {
 	return s
 }
 
-//createSlug makes url slug out of string
+// createSlug makes url slug out of string
 func createSlug(s string) string {
-	s = strings.ToLower(unidecode.Unidecode(s))                     //transliterate if it is not in english
-	s = regexp.MustCompile("[^a-z0-9\\s]+").ReplaceAllString(s, "") //spaces
-	s = regexp.MustCompile("\\s+").ReplaceAllString(s, "-")         //spaces
+	s = strings.ToLower(unidecode.Unidecode(s))                     // transliterate if it is not in english
+	s = regexp.MustCompile(`[^a-z0-9\\s]+`).ReplaceAllString(s, "") // spaces
+	s = regexp.MustCompile(`\\s+`).ReplaceAllString(s, "-")         // spaces
 	return s
 }
