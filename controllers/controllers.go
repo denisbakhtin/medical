@@ -14,12 +14,18 @@ import (
 // SetupRouter establishes web routes
 func SetupRouter() (router *gin.Engine) {
 	router = gin.Default()
+
 	store := cookie.NewStore([]byte(config.GetConfig().SessionSecret))
 	router.Use(sessions.Sessions("gin-session", store))
+
 	router.SetHTMLTemplate(views.GetTemplates())
-	router.NoRoute(Error404)
-	router.StaticFS("/public", http.Dir("public"))
+
+	// Static files
+	router.StaticFS("/public", http.Dir(config.GetConfig().Public))
 	router.StaticFile("/robots.txt", path.Join(config.GetConfig().Public, "robots.txt"))
+
+	// Routes
+	router.NoRoute(Error404)
 	router.GET("/", Home)
 	router.GET("/signin", SignInGet)
 	router.POST("/signin", SignInPost)

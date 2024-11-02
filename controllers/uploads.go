@@ -40,7 +40,7 @@ func CkUpload(c *gin.Context) {
 // saveFile saves file to disc and returns its relative uri
 func saveFile(fh *multipart.FileHeader, f multipart.File) (string, error) {
 	fileExt := strings.ToLower(filepath.Ext(fh.Filename))
-	if !regexp.MustCompile(`^\\.(jpe?g|bmp|gif|png|mp4)$`).MatchString(fileExt) {
+	if !regexp.MustCompile(`^\.(jpe?g|bmp|gif|png|mp4)$`).MatchString(fileExt) {
 		return "", fmt.Errorf("File is not an image or .mp4 video")
 	}
 	newName := fmt.Sprint(time.Now().Unix()) + fileExt // unique file name ;D

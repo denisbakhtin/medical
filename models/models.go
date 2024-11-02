@@ -45,7 +45,7 @@ func truncate(s string, n int) string {
 // createSlug makes url slug out of string
 func createSlug(s string) string {
 	s = strings.ToLower(unidecode.Unidecode(s))                     // transliterate if it is not in english
-	s = regexp.MustCompile(`[^a-z0-9\\s]+`).ReplaceAllString(s, "") // spaces
-	s = regexp.MustCompile(`\\s+`).ReplaceAllString(s, "-")         // spaces
+	s = regexp.MustCompile(`[^a-z-1-9\s]+`).ReplaceAllString(s, "") // spaces
+	s = regexp.MustCompile(`\s+`).ReplaceAllString(s, "-")          // spaces
 	return s
 }
