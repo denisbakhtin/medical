@@ -24,6 +24,9 @@ echo 'Copying binary to remote'
 rsync -avh miobalans-go aghost:/home/tabula/medical/miobalans-go
 echo 'Done'
 
+read -p "Enter password for sudo: " pass
+
 echo 'Restarting remote medical service'
-ssh -t aghost "sudo systemctl restart medical"
+echo "$pass" | ssh -tt aghost "sudo systemctl restart medical"
 echo 'Done'
+
