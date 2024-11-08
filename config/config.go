@@ -66,20 +66,14 @@ func LoadConfig(mode string) *Config {
 		panic(err)
 	}
 	switch mode {
-	case DebugMode:
-		config = &configs.Debug
 	case ReleaseMode:
 		config = &configs.Release
 	case TestMode:
 		config = &configs.Test
+	default:
+		config = &configs.Debug
 	}
-	if !path.IsAbs(config.Public) {
-		workingDir, err := os.Getwd()
-		if err != nil {
-			panic(err)
-		}
-		config.Public = path.Join(workingDir, config.Public)
-	}
+	config.Public = getPublicDir(mode)
 	config.Uploads = path.Join(config.Public, "uploads")
 	return config
 }
@@ -87,4 +81,42 @@ func LoadConfig(mode string) *Config {
 // GetConfig returns actual config
 func GetConfig() *Config {
 	return config
+}
+
+// getPublicDir returns absulute public dir path.
+// the trick is in debug mode, I can't reliably use os.Getwd() there, because
+// different IDEs use different wd, so is air watcher. Some use projectdir,
+// some projectdir/cmd, so I have to figure it out below
+// panics are ok here becaus this all is run at startup
+func getPublicDir(mode string) string {
+	if path.IsAbs(config.Public) {
+		//already ok
+		return config.Public
+	}
+	if mode == ReleaseMode && !path.IsAbs(config.Public) {
+		panic("Release mode must use only absolute path for /public directory")
+	}
+	workingDir, err := os.Getwd()
+	if err != nil {
+		panic(err)
+	}
+	testPath := path.Join(workingDir, config.Public)
+	if dirExists(testPath) {
+		return testPath
+	}
+	testPath = path.Join(workingDir, "..", config.Public)
+	if dirExists(testPath) {
+		return testPath
+	}
+	panic("Public dir not found")
+}
+
+func dirExists(dir string) bool {
+	_, err := os.Stat(dir)
+	if err == nil {
+		return true
+	} else if err == os.ErrNotExist {
+		return false
+	}
+	panic(err)
 }

@@ -60,23 +60,16 @@ $(document).ready(function () {
   }
 
   //initialize ckeditor
+  //using cdn ckeditor5, see views/dashboard/ckeditor partial
   //need to change filebrowserUploadUrl to '/admin/ckupload' in ckeditor.js
-  if ($('#ckeditor').length > 0) {
-    CKEDITOR.replace('ckeditor', {
-      extraPlugins: 'imageuploader',
-      language: 'ru',
-      allowedContent: true,
-      height: 500
-    });
-  }
-
-  if ($('#ckeditor2').length > 0) {
-    CKEDITOR.replace('ckeditor2', {
-      language: 'ru',
-      allowedContent: true,
-      height: 300
-    });
-  }
+  // if ($('#ckeditor').length > 0) {
+  //   CKEDITOR.replace('ckeditor', {
+  //     extraPlugins: 'imageuploader',
+  //     language: 'ru',
+  //     allowedContent: true,
+  //     height: 500
+  //   });
+  // }
 
   //captcha-slider - optin form
   if ($('#captcha-slider').length > 0) {

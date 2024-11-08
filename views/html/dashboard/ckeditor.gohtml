@@ -1,0 +1,52 @@
+{{define "dashboard/ckeditor"}}
+<script type="importmap">
+    {
+        "imports": {
+            "ckeditor5": "https://cdn.ckeditor.com/ckeditor5/43.0.0/ckeditor5.js",
+            "ckeditor5/": "https://cdn.ckeditor.com/ckeditor5/43.0.0/"
+        }
+    }
+</script>
+<link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/43.0.0/ckeditor5.css" />
+
+<script type="module">
+    import {
+        ClassicEditor,
+        Essentials,	
+        Image,
+        ImageUpload,
+        CKFinder,
+        CKFinderUploadAdapter,		
+        Heading,
+        Bold,
+        Italic,
+        BlockQuote,
+        Indent,
+        Link,
+        List
+    } from 'ckeditor5';
+    import coreTranslations from 'ckeditor5/translations/ru.js';
+
+    ClassicEditor
+        .create( document.querySelector( '#ckeditor' ), {
+            plugins: [
+                Essentials, Image, ImageUpload, CKFinder, CKFinderUploadAdapter,
+                Heading, Bold, Italic, BlockQuote, Indent,
+                Link, List
+            ],
+            ckfinder: {
+                uploadUrl: "/admin/ckupload"					
+            },
+            toolbar: [
+                '|', 'heading', '|', 'undo', 'redo', '|', 'uploadImage', '|', 'bold', 'italic', '|',
+                'blockQuote', 'indent', 'link', '|', 'bulletedList', 'numberedList'
+            ],
+            translations: [
+                coreTranslations,
+            ],
+        } )
+        .catch( error => {
+            console.error( error );
+        } );
+</script>
+{{end}}

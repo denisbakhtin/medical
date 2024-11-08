@@ -1,7 +1,7 @@
-@import "bootstrap";
-@import "nouislider";
-/* @import "animate"; */
-@import "lightbox";
+@use "sass:color";
+@use "bootstrap";
+@use "nouislider";
+@use "lightbox";
 
 $primary: #3379C7;
 $primarylight: #5490D3;
@@ -1302,7 +1302,7 @@ label {
       cursor: pointer;
 
       &:hover {
-        color: darken($secondary, 10%);
+        color: color.adjust($secondary, $lightness: -10%);
       }
     }
 
@@ -1318,16 +1318,16 @@ label {
 
 .btn-success {
   background: $secondarydark;
-  border-color: darken($secondarydark, 5%);
+  border-color: color.adjust($secondarydark, $lightness: -5%);
 
   &:hover {
-    background: darken($secondarydark, 5%);
-    border-color: darken($secondarydark, 10%);
+    background: color.adjust($secondarydark, $lightness: -5%);
+    border-color: color.adjust($secondarydark, $lightness: -10%);
   }
 
   &.btn-outline:hover {
-    background: darken($secondarydark, 5%);
-    border-color: darken($secondarydark, 10%);
+    background: color.adjust($secondarydark, $lightness: -5%);
+    border-color: color.adjust($secondarydark, $lightness: -10%);
     color: #fff;
   }
 }
@@ -1485,7 +1485,7 @@ label {
       cursor: pointer;
 
       &:hover {
-        color: darken($secondary, 10%);
+        color: color.adjust($secondary, $lightness: -10%);
       }
     }
 

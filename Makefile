@@ -2,7 +2,7 @@
 
 default: build build_assets
 
-deploy: build
+deploy: build build_assets
 	./deploy.sh
 
 build: clean vet lint

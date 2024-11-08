@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"mime/multipart"
+	"net/http"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -18,23 +19,22 @@ import (
 func CkUpload(c *gin.Context) {
 	err := c.Request.ParseMultipartForm(32 << 20)
 	if err != nil {
-		c.String(500, err.Error())
+		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
 	mpartFile, mpartHeader, err := c.Request.FormFile("upload")
 	if err != nil {
-		c.String(400, err.Error())
+		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
 	defer mpartFile.Close()
 	uri, err := saveFile(mpartHeader, mpartFile)
 	if err != nil {
-		c.String(400, err.Error())
+		c.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	CKEdFunc := c.Request.FormValue("CKEditorFuncNum")
-	fmt.Fprintln(c.Writer, "<script>window.parent.CKEDITOR.tools.callFunction("+CKEdFunc+", \""+uri+"\");</script>")
+	c.JSON(http.StatusOK, gin.H{"uploaded": true, "url": uri})
 }
 
 // saveFile saves file to disc and returns its relative uri
