@@ -93,9 +93,6 @@ func getPublicDir(mode string) string {
 		//already ok
 		return config.Public
 	}
-	if mode == ReleaseMode && !path.IsAbs(config.Public) {
-		panic("Release mode must use only absolute path for /public directory")
-	}
 	workingDir, err := os.Getwd()
 	if err != nil {
 		panic(err)
