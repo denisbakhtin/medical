@@ -6,10 +6,10 @@ echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]] || [[ -z $REPLY ]]
 then
     # YES
-    read -p "Enter commit name: " -r
+    read -p "Enter commit name: " note
     echo
     
-    git add -A && git commit -m "$REPLY" ; git push origin master
+    git add -A && git commit -m "$note" ; git push origin master
 fi
 
 echo 'Copying css files to remote'

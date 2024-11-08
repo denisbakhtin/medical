@@ -8,6 +8,7 @@ public/fonts/*
 public/images/*
 public/sitemap/*
 tmp/*
+logs/*
 node_modules
 git_save
 go-miobalans
