@@ -38,7 +38,7 @@ function js() {
     "src/js/jquery-2.1.4.min.js",
     "src/js/jquery.actual.min.js",
     "src/js/parsley.min.js",
-    //"src/js/bootstrap.min.js",
+    "src/js/bootstrap.min.js",
     "src/js/jquery.slimscroll.min.js",
     "src/js/jquery.maskedinput.min.js",
     "src/js/nouislider.min.js",

@@ -1671,7 +1671,12 @@ label {
   }
 }
 
-#info .content .img-responsive {
+#info .content .img-responsive,
+#info .content img,
+#info .content figure {
   margin-top: 20px;
   margin-bottom: 20px;
+  display: block;
+  max-width: 100%;
+  height: auto;
 }
