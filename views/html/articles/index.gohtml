@@ -4,6 +4,7 @@
 <div id="main-column" role="main">
   <h1>{{.Title}}</h1>
   <div class="article-previews">
+    {{if lt .CurrentPage 2}}
     {{range $i, $a := .List}}
       <div class="article-preview">
         <a href="{{.URL}}">
@@ -13,6 +14,7 @@
         </a>
       </div>
       <hr />
+    {{end}}
     {{end}}
 
     <div class="article-preview infos">
@@ -29,6 +31,8 @@
         </div>
       {{end}}
     </div>
+
+    {{template "pagination" .}}
 
   </div>
 </div>

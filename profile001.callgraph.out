@@ -1,0 +1,97 @@
+positions: instr line
+events: inuse_space(kB)
+
+ob=(1) /home/me/GoProjects/medical/tmp/main
+fl=(1) /home/me/go/pkg/mod/github.com/fiam/gounidecode@v0.0.0-20150629112515-8deddbd03fec/unidecode/table.go
+fn=(1) github.com/fiam/gounidecode/unidecode.map.init.0
+0x995f44 3 1581
+
+ob=(1)
+fl=(2) /usr/lib/go/src/regexp/backtrack.go
+fn=(2) regexp.(*bitState).reset
+0x556bac 84 514
+
+ob=(1)
+fl=(3) /usr/lib/go/src/runtime/proc.go
+fn=(3) runtime.doInit
+0x43f6e4 7257 0
+cfl=(3)
+cfn=(4) runtime.doInit1
+calls=0 0x44de47 7290
+* * 2095
+
+ob=(1)
+fl=(3)
+fn=(5) runtime.main
+* 254 0
+cfl=(3)
+cfn=(3)
+calls=0 * 7257
+* * 2095
+
+ob=(1)
+fl=(3)
+fn=(4)
++59235 7290 0
+cfl=(1)
+cfn=(6) github.com/fiam/gounidecode/unidecode.init
+calls=0 0x995f0e 3
+* * 1581
+cfl=(4) /home/me/go/pkg/mod/github.com/gorilla/css@v1.0.1/scanner/scanner.go
+cfn=(7) github.com/gorilla/css/scanner.init.0
+calls=0 0xa0dfad 182
+* * 514
+
+ob=(1)
+fl=(2)
+fn=(8) regexp.(*Regexp).backtrack
+0x557b9e 317 0
+cfl=(2)
+cfn=(2)
+calls=0 0x556bac 84
+* * 514
+
+ob=(1)
+fl=(5) /usr/lib/go/src/regexp/exec.go
+fn=(9) regexp.(*Regexp).doExecute
++8819 535 0
+cfl=(2)
+cfn=(8)
+calls=0 * 317
+* * 514
+
+ob=(1)
+fl=(1)
+fn=(6)
+0x995f0e 3 0
+cfl=(1)
+cfn=(1)
+calls=0 0x995f44 3
+* * 1581
+
+ob=(1)
+fl=(4)
+fn=(7)
++491679 182 0
+cfl=(6) /usr/lib/go/src/regexp/regexp.go
+cfn=(10) regexp.(*Regexp).MatchString
+calls=0 +491679 527
+* * 514
+
+ob=(1)
+fl=(6)
+fn=(10)
+* 527 0
+cfl=(5)
+cfn=(11) regexp.(*Regexp).doMatch
+calls=0 * 514
+* * 514
+
+ob=(1)
+fl=(5)
+fn=(11)
+* 514 0
+cfl=(5)
+cfn=(9)
+calls=0 0x559e11 535
+* * 514

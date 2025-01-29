@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"math"
 	"strings"
 
 	"github.com/denisbakhtin/medical/helpers"
@@ -74,8 +75,13 @@ func ArticlesIndex(c *gin.Context) {
 		return
 	}
 
+	totalInfos := 0
+	infosPerPage := 8
+	db.Model(models.Info{}).Where("published = ?", true).Count(&totalInfos)
+	totalPages := int(math.Ceil(float64(totalInfos) / float64(infosPerPage)))
+	currentPage := helpers.CurrentPage(c)
 	var infos []models.Info
-	if err := db.Where("published = ?", true).Order("id desc").Find(&infos).Error; err != nil {
+	if err := db.Where("published = ?", true).Order("id desc").Limit(infosPerPage).Offset((currentPage - 1) * infosPerPage).Find(&infos).Error; err != nil {
 		c.HTML(500, "errors/500", helpers.ErrorData(err))
 		return
 	}
@@ -87,6 +93,8 @@ func ArticlesIndex(c *gin.Context) {
 		"MetaDescription": "Статьи о кинезиологической практике лечения заболеваний опорно-двигательного аппарата...",
 		"MetaKeywords":    "кинезиология, статьи, лечение болей, прикладная кинезиология",
 		"Authenticated":   (session.Get("user_id") != nil),
+		"Pagination":      helpers.Paginator(currentPage, totalPages, c.Request.URL),
+		"CurrentPage":     currentPage,
 	})
 }
 
