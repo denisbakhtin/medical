@@ -18,3 +18,4 @@ medical
 debug
 *.sql
 *.org
+*.out
