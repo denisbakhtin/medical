@@ -64,7 +64,7 @@ func UserAdminUpdateGet(c *gin.Context) {
 	flashes := session.Flashes()
 	_ = session.Save()
 
-	id := c.Param("id")
+	id := helpers.Atouint(c.Param("id"))
 	user := &models.User{}
 	db.First(user, id)
 	if user.ID == 0 {
@@ -86,7 +86,7 @@ func UserAdminUpdatePost(c *gin.Context) {
 	session := sessions.Default(c)
 
 	user := &models.User{}
-	id := c.Param("id")
+	id := helpers.Atouint(c.Param("id"))
 	if c.Bind(user) == nil {
 		if err := db.Save(user).Error; err != nil {
 			session.AddFlash(err.Error())
@@ -107,8 +107,9 @@ func UserAdminUpdatePost(c *gin.Context) {
 func UserAdminDelete(c *gin.Context) {
 	db := models.GetDB()
 
+	id := helpers.Atouint(c.Request.PostFormValue("id"))
 	user := &models.User{}
-	db.First(user, c.Request.PostFormValue("id"))
+	db.First(user, id)
 	if user.ID == 0 {
 		c.HTML(404, "errors/404", nil)
 	}

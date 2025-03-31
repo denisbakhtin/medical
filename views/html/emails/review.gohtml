@@ -7,13 +7,13 @@
     <p>Здравствуйте, Евгений Владимирович!</p>
 
     <p>
-    На сайте www.miobalans.ru пользователь <strong>{{.Review.AuthorName}}</strong> оставил(а) отзыв:<br/>
+    На сайте {{domain}} пользователь <strong>{{.Review.AuthorName}}</strong> оставил(а) отзыв:<br/>
       <i>{{.Review.Content}}</i>
     </p>
 
     <p>
       Чтобы его опубликовать, перейдите по ссылке: <br/>
-      <strong><a href="http://www.miobalans.ru/edit_review?token={{.Token}}">Опубликовать/редактировать отзыв</a></strong>
+      <strong><a href="{{fullDomain}}/edit_review?token={{.Token}}">Опубликовать/редактировать отзыв</a></strong>
     </p>
 
     <p>Данное письмо было отправлено автоматически, отвечать на него не нужно.</p>

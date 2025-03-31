@@ -70,7 +70,7 @@ func CommentAdminUpdateGet(c *gin.Context) {
 	_ = session.Save()
 	db := models.GetDB()
 
-	id := c.Param("id")
+	id := helpers.Atouint(c.Param("id"))
 	comment := &models.Comment{}
 	db.First(comment, id)
 	if comment.ID == 0 {
@@ -174,8 +174,9 @@ func CommentPublicUpdate(w http.ResponseWriter, r *http.Request) {
 func CommentAdminDelete(c *gin.Context) {
 	db := models.GetDB()
 
+	id := helpers.Atouint(c.Request.PostFormValue("id"))
 	comment := &models.Comment{}
-	db.First(comment, c.Request.PostFormValue("id"))
+	db.First(comment, id)
 	if comment.ID == 0 {
 		c.HTML(404, "errors/404", nil)
 	}
@@ -211,7 +212,7 @@ func notifyAdminOfComment(comment *models.Comment) {
 		if len(smtp.Cc) > 0 {
 			msg.SetHeader("Cc", smtp.Cc)
 		}
-		msg.SetHeader("Subject", fmt.Sprintf("Новый вопрос на сайте www.miobalans.ru: %s", comment.AuthorName))
+		msg.SetHeader("Subject", fmt.Sprintf("Новый вопрос на сайте %s: %s", config.GetConfig().Domain, comment.AuthorName))
 		msg.SetBody(
 			"text/html",
 			b.String(),
@@ -251,7 +252,7 @@ func notifyAdminOfComment(comment *models.Comment) {
 // 		msg := gomail.NewMessage()
 // 		msg.SetHeader("From", smtp.From)
 // 		msg.SetHeader("To", comment.AuthorEmail)
-// 		msg.SetHeader("Subject", "Врач ответил на ваш вопрос на сайте www.miobalans.ru")
+// 		msg.SetHeader("Subject", fmt.Sprintf("Врач ответил на ваш вопрос на сайте %s", config.GetConfig().DomainName))
 // 		msg.SetBody(
 // 			"text/html",
 // 			b.String(),
@@ -274,7 +275,7 @@ func notifyAdminOfComment(comment *models.Comment) {
 // CommentsIndex handles GET /comments/:id route, where :id is the article id
 func CommentsIndex(c *gin.Context) {
 	db := models.GetDB()
-	id := c.Param("id")
+	id := helpers.Atouint(c.Param("id"))
 
 	article := models.Article{}
 	db.First(&article, id)

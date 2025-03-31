@@ -21,7 +21,7 @@ rsync -avh public/js/ aghost:/home/tabula/medical/public/js/
 echo 'Done'
 
 echo 'Copying binary to remote'
-rsync -avh miobalans-go aghost:/home/tabula/medical/miobalans-go
+rsync -avh medical-go aghost:/home/tabula/medical/medical-go
 echo 'Done'
 
 # read -p "Enter password for sudo: " pass

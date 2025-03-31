@@ -2,6 +2,7 @@
   "debug": {
     "public": "public",
     "domain": "my-domain.ru",
+    "full_domain": "https://www.my-domain.ru",
     "session_secret": "some-secret-phrase",
     "csrf_secret": "some-csrf-secret-phrase",
     "ssl": false,
@@ -26,6 +27,7 @@
   "release": {
     "public": "public",
     "domain": "my-domain.ru",
+    "full_domain": "https://www.my-domain.ru",
     "session_secret": "some-secret-phrase",
     "csrf_secret": "some-csrf-secret-phrase",
     "ssl": false,
@@ -50,6 +52,7 @@
   "test": {
     "public": "path_to_public_dir",
     "domain": "my-domain.ru",
+    "full_domain": "https://www.my-domain.ru",
     "session_secret": "some-secret-phrase",
     "csrf_secret": "some-csrf-secret-phrase",
     "ssl": false,

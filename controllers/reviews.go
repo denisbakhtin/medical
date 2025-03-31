@@ -3,6 +3,7 @@ package controllers
 import (
 	"bytes"
 	"encoding/base64"
+	"errors"
 	"fmt"
 	"log"
 	"strconv"
@@ -196,7 +197,7 @@ func ReviewAdminUpdateGet(c *gin.Context) {
 	_ = session.Save()
 	db := models.GetDB()
 
-	id := c.Param("id")
+	id := helpers.Atouint(c.Param("id"))
 	review := &models.Review{}
 	db.First(review, id)
 	if review.ID == 0 {
@@ -261,7 +262,7 @@ func ReviewUpdateGet(c *gin.Context) {
 	review := &models.Review{}
 	db.First(review, id)
 	if review.ID == 0 || review.Published {
-		err := fmt.Errorf("Отзыв не найден или уже был опубликован и не подлежит редактированию")
+		err := errors.New("отзыв не найден или уже был опубликован и не подлежит редактированию")
 		c.HTML(404, "errors/404", helpers.ErrorData(err))
 		return
 	}
@@ -319,8 +320,9 @@ func ReviewUpdatePost(c *gin.Context) {
 func ReviewAdminDelete(c *gin.Context) {
 	db := models.GetDB()
 
+	id := helpers.Atouint(c.Request.PostFormValue("id"))
 	review := &models.Review{}
-	db.First(review, c.Request.PostFormValue("id"))
+	db.First(review, id)
 	if review.ID == 0 {
 		c.HTML(404, "errors/404", nil)
 	}
@@ -352,7 +354,7 @@ func notifyAdminOfReview(review *models.Review) {
 		if len(smtp.Cc) > 0 {
 			msg.SetHeader("Cc", smtp.Cc)
 		}
-		msg.SetHeader("Subject", fmt.Sprintf("Новый отзыв на сайте www.miobalans.ru: %s", review.AuthorName))
+		msg.SetHeader("Subject", fmt.Sprintf("Новый отзыв на сайте %s: %s", config.GetConfig().Domain, review.AuthorName))
 		msg.SetBody(
 			"text/html",
 			b.String(),

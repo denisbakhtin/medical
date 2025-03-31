@@ -155,7 +155,7 @@ func ArticleAdminUpdateGet(c *gin.Context) {
 	_ = session.Save()
 	db := models.GetDB()
 
-	id := c.Param("id")
+	id := helpers.Atouint(c.Param("id"))
 	article := &models.Article{}
 	db.First(article, id)
 	if article.ID == 0 {
@@ -196,8 +196,9 @@ func ArticleAdminUpdatePost(c *gin.Context) {
 func ArticleAdminDelete(c *gin.Context) {
 	db := models.GetDB()
 
+	id := helpers.Atouint(c.Request.PostFormValue("id"))
 	article := &models.Article{}
-	db.First(article, c.Request.PostFormValue("id"))
+	db.First(article, id)
 	if article.ID == 0 {
 		c.HTML(404, "errors/404", nil)
 		return

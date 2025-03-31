@@ -96,7 +96,7 @@ func PageAdminUpdateGet(c *gin.Context) {
 	_ = session.Save()
 	db := models.GetDB()
 
-	id := c.Param("id")
+	id := helpers.Atouint(c.Param("id"))
 	page := &models.Page{}
 	db.First(page, id)
 	if page.ID == 0 {
@@ -138,8 +138,9 @@ func PageAdminUpdatePost(c *gin.Context) {
 func PageAdminDelete(c *gin.Context) {
 	db := models.GetDB()
 
+	id := helpers.Atouint(c.Request.PostFormValue("id"))
 	page := &models.Page{}
-	db.First(page, c.Request.PostFormValue("id"))
+	db.First(page, id)
 	if page.ID == 0 {
 		c.HTML(404, "errors/404", nil)
 	}

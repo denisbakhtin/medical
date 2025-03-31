@@ -5,9 +5,9 @@ default: build build_assets
 deploy: build build_assets
 	./deploy.sh
 
-build: clean vet lint
+build: clean vet
 	@echo "Building application"
-	CGO_ENABLED=0 go build -o miobalans-go cmd/main.go
+	CGO_ENABLED=0 go build -o medical-go cmd/main.go
 
 build_assets:
 	@echo "Building assets"
@@ -27,4 +27,4 @@ lint:
 
 clean:
 	@echo "Cleaning binary"
-	@rm -f ./miobalans-go
+	@rm -f ./medical-go

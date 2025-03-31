@@ -102,7 +102,7 @@ func InfoAdminUpdateGet(c *gin.Context) {
 	_ = session.Save()
 	db := models.GetDB()
 
-	id := c.Param("id")
+	id := helpers.Atouint(c.Param("id"))
 	info := &models.Info{}
 	db.First(info, id)
 	if info.ID == 0 {
@@ -143,8 +143,9 @@ func InfoAdminUpdatePost(c *gin.Context) {
 func InfoAdminDelete(c *gin.Context) {
 	db := models.GetDB()
 
+	id := helpers.Atouint(c.Request.PostFormValue("id"))
 	info := &models.Info{}
-	db.First(info, c.Request.PostFormValue("id"))
+	db.First(info, id)
 	if info.ID == 0 {
 		c.HTML(404, "errors/404", nil)
 		return

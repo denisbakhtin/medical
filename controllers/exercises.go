@@ -159,7 +159,7 @@ func ExerciseAdminUpdateGet(c *gin.Context) {
 	_ = session.Save()
 	db := models.GetDB()
 
-	id := c.Param("id")
+	id := helpers.Atouint(c.Param("id"))
 	exercise := &models.Exercise{}
 	db.First(exercise, id)
 	if exercise.ID == 0 {
@@ -236,8 +236,9 @@ func ExerciseAdminUpdatePost(c *gin.Context) {
 func ExerciseAdminDelete(c *gin.Context) {
 	db := models.GetDB()
 
+	id := helpers.Atouint(c.Request.PostFormValue("id"))
 	exercise := &models.Exercise{}
-	db.First(exercise, c.Request.PostFormValue("id"))
+	db.First(exercise, id)
 	if exercise.ID == 0 {
 		c.HTML(404, "errors/404", nil)
 		return

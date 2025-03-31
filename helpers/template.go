@@ -10,9 +10,14 @@ import (
 	"strings"
 	"time"
 
+	"github.com/denisbakhtin/medical/config"
 	"github.com/denisbakhtin/medical/models"
 	"github.com/gin-gonic/gin"
 )
+
+const aboutPageId = 4
+const contactsPageId = 7
+const sessionPageId = 10
 
 // MenuItem represents main menu item
 type MenuItem struct {
@@ -92,11 +97,11 @@ func IsLast(index int, length int) bool {
 func MainMenu() []MenuItem {
 	db := models.GetDB()
 	about := &models.Page{}
-	db.First(about, 4)
+	db.First(about, aboutPageId)
 	contacts := &models.Page{}
-	db.First(contacts, 7)
+	db.First(contacts, contactsPageId)
 	seans := &models.Page{}
-	db.First(seans, 10)
+	db.First(seans, sessionPageId)
 	var articles []models.Article
 	db.Where("published = ?", true).Order("id desc").Find(&articles)
 	submenu := make([]MenuItem, 0, 10)
@@ -137,7 +142,7 @@ func MainMenu() []MenuItem {
 func ScrollMenu() []MenuItem {
 	db := models.GetDB()
 	about := &models.Page{}
-	db.First(about, 4)
+	db.First(about, aboutPageId)
 	menu := []MenuItem{
 		{
 			URL:   about.URL(),
@@ -403,4 +408,12 @@ func Paginator(currentPage, totalPages int, curURL *url.URL) []Pagination {
 		return pagination
 	}
 	return nil
+}
+
+func Domain() string {
+	return config.GetConfig().Domain
+}
+
+func FullDomain() template.HTML {
+	return template.HTML(config.GetConfig().FullDomain)
 }

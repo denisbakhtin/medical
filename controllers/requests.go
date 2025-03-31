@@ -63,7 +63,7 @@ func notifyAdminOfRequest(request *models.Request) {
 		if len(smtp.Cc) > 0 {
 			msg.SetHeader("Cc", smtp.Cc)
 		}
-		msg.SetHeader("Subject", fmt.Sprintf("Заявка на приём www.miobalans.ru: %s", request.Name))
+		msg.SetHeader("Subject", fmt.Sprintf("Заявка на приём %s: %s", config.GetConfig().Domain, request.Name))
 		msg.SetBody(
 			"text/html",
 			b.String(),

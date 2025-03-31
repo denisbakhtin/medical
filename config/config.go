@@ -26,6 +26,7 @@ type Config struct {
 	Public        string `json:"public"`
 	Uploads       string `json:"-"`
 	Domain        string `json:"domain"`
+	FullDomain    string `json:"full_domain"`
 	SessionSecret string `json:"session_secret"`
 	CsrfSecret    string `json:"csrf_secret"`
 	Ssl           bool   `json:"ssl"`
@@ -110,10 +111,5 @@ func getPublicDir(mode string) string {
 
 func dirExists(dir string) bool {
 	_, err := os.Stat(dir)
-	if err == nil {
-		return true
-	} else if err == os.ErrNotExist {
-		return false
-	}
-	panic(err)
+	return err == nil
 }

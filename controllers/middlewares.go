@@ -13,7 +13,9 @@ func Authenticated() gin.HandlerFunc {
 		user := models.User{}
 		db := models.GetDB()
 		if session.Get("user_id") != nil {
-			db.First(&user, session.Get("user_id"))
+			if id, ok := session.Get("user_id").(uint); ok {
+				db.First(&user, id)
+			}
 		}
 		if user.ID == 0 {
 			c.AbortWithStatus(403)

@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"mime/multipart"
@@ -41,7 +42,7 @@ func CkUpload(c *gin.Context) {
 func saveFile(fh *multipart.FileHeader, f multipart.File) (string, error) {
 	fileExt := strings.ToLower(filepath.Ext(fh.Filename))
 	if !regexp.MustCompile(`^\.(jpe?g|bmp|gif|png|mp4)$`).MatchString(fileExt) {
-		return "", fmt.Errorf("File is not an image or .mp4 video")
+		return "", errors.New("file is not an image or .mp4 video")
 	}
 	newName := fmt.Sprint(time.Now().Unix()) + fileExt // unique file name ;D
 	uri := "/public/uploads/" + newName

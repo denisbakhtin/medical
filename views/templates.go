@@ -41,6 +41,8 @@ func Load() {
 		"cssVersion":        helpers.FileVersion(path.Join(config.GetConfig().Public, "css", "application.css")),
 		"jsVersion":         helpers.FileVersion(path.Join(config.GetConfig().Public, "js", "application.js")),
 		"articleIdComments": helpers.ArticleIDComments,
+		"domain":            helpers.Domain,
+		"fullDomain":        helpers.FullDomain,
 	})
 
 	var err error

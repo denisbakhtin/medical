@@ -6,7 +6,7 @@ After=postgresql.service
 [Service]
 User=tabula
 WorkingDirectory=/home/tabula/medical
-ExecStart=/home/tabula/medical/miobalans-go -mode=release
+ExecStart=/home/tabula/medical/medical-go -mode=release
 ExecReload=/bin/kill -HUP $MAINPID
 KillMode=process
 Restart=on-failure

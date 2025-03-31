@@ -6,11 +6,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+const homePageId = 1
+
 // Home handles GET / route
 func Home(c *gin.Context) {
 	db := models.GetDB()
 	page := &models.Page{}
-	db.First(page, 1)
+	db.First(page, homePageId)
 	session := sessions.Default(c)
 	flashes := session.Flashes()
 	_ = session.Save()
