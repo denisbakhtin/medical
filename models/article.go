@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-//Article type contains article info
+// Article type contains article info
 type Article struct {
 	ID              uint   `form:"id"`
 	Name            string `form:"name"`
@@ -25,24 +25,17 @@ type Article struct {
 	Comments []Comment
 }
 
-//HTMLContent returns parsed html content
+// HTMLContent returns parsed html content
 func (article *Article) HTMLContent() template.HTML {
 	return template.HTML(article.Content)
 }
 
-//HTMLSellingBlock returns parsed html selling block
+// HTMLSellingBlock returns parsed html selling block
 func (article *Article) HTMLSellingBlock() template.HTML {
 	return template.HTML(article.SellingBlock)
 }
 
-//GetCommentCount returns comment count
-func (article *Article) GetCommentCount() int {
-	count := 0
-	db.Where("article_id = ? AND answer <> ?", article.ID, "").Model(&Comment{}).Count(&count)
-	return count
-}
-
-//GetImage returns extracts first image url from article content
+// GetImage returns extracts first image url from article content
 func (article *Article) GetImage() string {
 	re := regexp.MustCompile(`<img[^<>]+src="([^"]+)"[^<>]*>`)
 	res := re.FindStringSubmatch(article.Content)
@@ -52,12 +45,12 @@ func (article *Article) GetImage() string {
 	return ""
 }
 
-//URL returns article url
+// URL returns article url
 func (article *Article) URL() string {
 	return fmt.Sprintf("/articles/%d-%s", article.ID, article.Slug)
 }
 
-//BeforeCreate gorm hook
+// BeforeCreate gorm hook
 func (article *Article) BeforeCreate() (err error) {
 	if strings.TrimSpace(article.Slug) == "" {
 		article.Slug = createSlug(article.Name)
@@ -65,7 +58,7 @@ func (article *Article) BeforeCreate() (err error) {
 	return
 }
 
-//BeforeSave gorm hook
+// BeforeSave gorm hook
 func (article *Article) BeforeSave() (err error) {
 	if strings.TrimSpace(article.Slug) == "" {
 		article.Slug = createSlug(article.Name)

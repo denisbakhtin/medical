@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/denisbakhtin/medical/helpers"
@@ -11,16 +10,14 @@ import (
 )
 
 // PageShow handles /pages/:id route
-func PageShow(c *gin.Context) {
-	db := models.GetDB()
+func (app *Application) PageShow(c *gin.Context) {
 	session := sessions.Default(c)
 
 	idslug := c.Param("idslug")
 	id := helpers.Atouint(strings.Split(idslug, "-")[0])
-	page := &models.Page{}
-	db.First(page, id)
-	if page.ID == 0 || !page.Published {
-		c.HTML(404, "errors/404", nil)
+	page, err := app.PagesRepo.GetPublished(id)
+	if err != nil {
+		app.Error(c, err)
 		return
 	}
 	// redirect to canonical url
@@ -35,19 +32,21 @@ func PageShow(c *gin.Context) {
 		"MetaDescription": page.MetaDescription,
 		"MetaKeywords":    page.MetaKeywords,
 		"Ogtitle":         page.Name,
-		"Ogurl":           fmt.Sprintf("http://%s%s", c.Request.Host, page.URL()),
+		"Ogurl":           app.fullURL(page.URL()),
 		"Ogtype":          "article",
 		"Ogdescription":   page.MetaDescription,
-		"Authenticated":   (session.Get("user_id") != nil),
+		"Authenticated":   app.authenticated(session),
 	})
 }
 
 // PagesAdminIndex handles GET /admin/pages route
-func PagesAdminIndex(c *gin.Context) {
-	db := models.GetDB()
+func (app *Application) PagesAdminIndex(c *gin.Context) {
+	list, err := app.PagesRepo.GetAll()
+	if err != nil {
+		app.Error(c, err)
+		return
+	}
 
-	var list []models.Page
-	db.Order("published desc, id desc").Find(&list)
 	c.HTML(200, "pages/admin/index", gin.H{
 		"Title":  "Страницы",
 		"Active": "pages",
@@ -56,7 +55,7 @@ func PagesAdminIndex(c *gin.Context) {
 }
 
 // PageAdminCreateGet handles /admin/new_page get request
-func PageAdminCreateGet(c *gin.Context) {
+func (app *Application) PageAdminCreateGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
 	_ = session.Save()
@@ -69,13 +68,12 @@ func PageAdminCreateGet(c *gin.Context) {
 }
 
 // PageAdminCreatePost handles /admin/new_page post request
-func PageAdminCreatePost(c *gin.Context) {
+func (app *Application) PageAdminCreatePost(c *gin.Context) {
 	session := sessions.Default(c)
-	db := models.GetDB()
 
 	page := &models.Page{}
 	if c.Bind(page) == nil {
-		if err := db.Create(page).Error; err != nil {
+		if err := app.PagesRepo.Create(page); err != nil {
 			session.AddFlash(err.Error())
 			_ = session.Save()
 			c.Redirect(303, "/admin/new_page")
@@ -90,17 +88,15 @@ func PageAdminCreatePost(c *gin.Context) {
 }
 
 // PageAdminUpdateGet handles /admin/edit_page/:id get request
-func PageAdminUpdateGet(c *gin.Context) {
+func (app *Application) PageAdminUpdateGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
 	_ = session.Save()
-	db := models.GetDB()
 
 	id := helpers.Atouint(c.Param("id"))
-	page := &models.Page{}
-	db.First(page, id)
-	if page.ID == 0 {
-		c.HTML(404, "errors/400", nil)
+	page, err := app.PagesRepo.Get(id)
+	if err != nil {
+		app.Error(c, err)
 		return
 	}
 
@@ -113,14 +109,12 @@ func PageAdminUpdateGet(c *gin.Context) {
 }
 
 // PageAdminUpdatePost handles /admin/edit_page/:id post request
-func PageAdminUpdatePost(c *gin.Context) {
+func (app *Application) PageAdminUpdatePost(c *gin.Context) {
 	session := sessions.Default(c)
-	db := models.GetDB()
 
 	page := &models.Page{}
 	if c.Bind(page) == nil {
-
-		if err := db.Save(page).Error; err != nil {
+		if err := app.PagesRepo.Update(page); err != nil {
 			session.AddFlash(err.Error())
 			_ = session.Save()
 			c.Redirect(303, c.Request.RequestURI)
@@ -135,18 +129,10 @@ func PageAdminUpdatePost(c *gin.Context) {
 }
 
 // PageAdminDelete handles /admin/delete_page route
-func PageAdminDelete(c *gin.Context) {
-	db := models.GetDB()
-
+func (app *Application) PageAdminDelete(c *gin.Context) {
 	id := helpers.Atouint(c.Request.PostFormValue("id"))
-	page := &models.Page{}
-	db.First(page, id)
-	if page.ID == 0 {
-		c.HTML(404, "errors/404", nil)
-	}
-
-	if err := db.Delete(page).Error; err != nil {
-		c.HTML(500, "errors/500", helpers.ErrorData(err))
+	if err := app.PagesRepo.Delete(id); err != nil {
+		app.Error(c, err)
 		return
 	}
 	c.Redirect(303, "/admin/pages")

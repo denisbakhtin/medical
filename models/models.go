@@ -1,7 +1,6 @@
 package models
 
 import (
-	"log"
 	"regexp"
 	"strings"
 
@@ -10,21 +9,15 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/postgres" // gorm postgres driver
 )
 
-var db *gorm.DB
-
 // InitDB establishes connection to database and saves its handler into db *sqlx.DB
-func InitDB(connection string) {
-	var err error
-	db, err = gorm.Open("postgres", connection)
+func InitDB(connection string) *gorm.DB {
+
+	db, err := gorm.Open("postgres", connection)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 	// automigrate
 	db.AutoMigrate(&Article{}, &Comment{}, &Page{}, &Review{}, &User{}, &Info{}, &Exercise{})
-}
-
-// GetDB returns database handler
-func GetDB() *gorm.DB {
 	return db
 }
 

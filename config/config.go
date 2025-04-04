@@ -58,11 +58,10 @@ type SMTPConfig struct {
 //go:embed config.json
 var cfg []byte
 
-var config *Config
-
 // LoadConfig unmarshals config for current application mode
 func LoadConfig(mode string) *Config {
 	configs := &Configs{}
+	config := &Config{}
 	if err := json.Unmarshal(cfg, configs); err != nil {
 		panic(err)
 	}
@@ -74,13 +73,8 @@ func LoadConfig(mode string) *Config {
 	default:
 		config = &configs.Debug
 	}
-	config.Public = getPublicDir(mode)
+	config.Public = getPublicDir(config)
 	config.Uploads = path.Join(config.Public, "uploads")
-	return config
-}
-
-// GetConfig returns actual config
-func GetConfig() *Config {
 	return config
 }
 
@@ -89,7 +83,7 @@ func GetConfig() *Config {
 // different IDEs use different wd, so is air watcher. Some use projectdir,
 // some projectdir/cmd, so I have to figure it out below
 // panics are ok here becaus this all is run at startup
-func getPublicDir(mode string) string {
+func getPublicDir(config *Config) string {
 	if path.IsAbs(config.Public) {
 		//already ok
 		return config.Public

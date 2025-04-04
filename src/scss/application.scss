@@ -54,14 +54,15 @@ div[role=main] {
 
   .footer-menu {
 
-    text-align: right;
+    text-align: center;
+    background-color: $primarydark;
 
     a {
       color: #fff;
       text-transform: uppercase;
       padding: 10px 15px;
       display: inline-block;
-      background-color: $primarydark;
+      //background-color: $primarydark;
 
       &:hover {
         color: #fff;
@@ -175,6 +176,7 @@ textarea#textarea-comment {
 #sidebar-dashboard+#main-column {
   margin-left: 215px;
   overflow: hidden;
+  padding-bottom: 25px;
 }
 
 #sidebar-dashboard h5 {
@@ -250,27 +252,27 @@ textarea#textarea-comment {
 
   h1,
   .h1 {
-    font-size: 26px !important;
+    font-size: 22px !important;
   }
 
   h2,
   .h2 {
-    font-size: 24px !important;
+    font-size: 19px !important;
   }
 
   h3,
   .h3 {
-    font-size: 22px !important;
+    font-size: 18px !important;
   }
 
   h4,
   .h4 {
-    font-size: 18px !important;
+    font-size: 16px !important;
   }
 
   h5,
   .h5 {
-    font-size: 16px !important;
+    font-size: 15px !important;
   }
 
   .thumbnail-article {
@@ -290,6 +292,33 @@ textarea#textarea-comment {
   #home-intro .col-sm-6:first-child {
     padding-left: 0;
     padding-right: 0;
+  }
+
+  #testimonials {
+    .thumbnail {
+      .img {
+        display: none; 
+      } 
+      .text-wrapper {
+        padding-left: 10px;
+      }
+    }
+  }
+
+  #home-prices {
+    margin-bottom: 25px!important;
+  }
+  .home_scheme_wrapper {
+    margin-top: 10px!important;
+    padding-top: 15px!important;
+  }
+
+  #rostphoto {
+    margin-left: 0!important;
+  }
+
+  .gi-4x {
+    font-size: 2em!important;
   }
 }
 
@@ -651,6 +680,9 @@ h1,
   text-transform: uppercase;
   font-weight: 300;
   color: $secondarydarker;
+  .btn {
+    margin-bottom: 0.4em;
+  }
 }
 
 h2,
@@ -661,6 +693,9 @@ h4 {
   text-transform: uppercase;
   font-weight: 300;
   color: $secondarydarker;
+  .btn {
+    margin-bottom: 0.4em;
+  }
 }
 
 .review-title {
@@ -996,13 +1031,13 @@ strong {
   }
 
   p {
-    margin: 0 0 5px 0;
+    margin: 0 0 10px 0;
     padding: 0;
     font-size: 95%;
     line-height: 1.2em;
 
     &.strong {
-      font-size: 110%;
+      font-size: 100%;
     }
   }
 }
@@ -1073,7 +1108,7 @@ strong {
 }
 
 #testimonials {
-  padding: 20px 30px;
+  padding: 20px 15px;
   margin-left: -30px;
   margin-right: -30px;
   background: #f8fafa;
@@ -1307,11 +1342,11 @@ label {
     }
 
     .withoutpain-prev {
-      left: -25px;
+      left: -30px;
     }
 
     .withoutpain-next {
-      right: -25px;
+      right: -30px;
     }
   }
 }
@@ -1425,50 +1460,71 @@ label {
       &:hover {
         text-decoration: none;
       }
-    }
 
-    .img {
-      float: left;
-      margin: 0 15px 0 0;
-      height: 200px;
-      width: auto;
-    }
-
-    .blank-review-img {
-      width: 200px;
-      height: 200px;
-      line-height: 200px;
-      font-size: 140px;
-    }
-
-    h4 {
-      margin: 10px 0 !important;
-      overflow: hidden;
-      font-size: 20px;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      text-align: left;
-    }
-
-    p {
-      margin: 0;
-      color: #404040;
-
-      &.strong {
-        color: #999;
-        margin-bottom: 5px;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
+      .img {
+        float: left;
+        margin: 0 15px 0 0;
+        height: 200px;
+        width: auto;
       }
-
-      &.excerpt {
-        margin: 0;
-        text-overflow: ellipsis;
-        max-height: 120px;
-        overflow: hidden;
+  
+      .blank-review-img {
+        width: 200px;
+        height: 200px;
+        line-height: 200px;
+        font-size: 140px;
+        z-index: 200;
       }
+  
+      .text-wrapper {
+        height: 100%;
+        position: relative;        
+        &::after {
+          content: '';
+          display: inline-block;
+          height: 25px;
+          width: 100%;
+          background-image: linear-gradient(rgba(255,255,255,0), #fff);
+          z-index: 100;
+          position: absolute;
+          bottom: 10px;
+          left: 0;
+          right: 0;
+        }
+
+        h4 {
+          margin: 10px 0 !important;
+          overflow: hidden;
+          font-size: 20px;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          text-align: left;
+        }
+    
+        p {
+          margin: 0;
+          color: #404040;
+    
+          &.strong {
+            color: #999;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+          }
+    
+          &.excerpt {
+            margin: 0;
+            text-overflow: ellipsis;
+            max-height: 130px;
+            overflow: hidden;
+          }
+        }
+      }
+      
     }
+
+    
   }
 
   .siema-controls {
@@ -1490,11 +1546,11 @@ label {
     }
 
     .testimonials-prev {
-      left: -25px;
+      left: -20px;
     }
 
     .testimonials-next {
-      right: -25px;
+      right: -20px;
     }
   }
 }
@@ -1608,7 +1664,7 @@ label {
       text-align: center !important;
       display: block;
     }
-  }
+  }  
 }
 
 .reviews-btn-wrapper {
@@ -1680,4 +1736,8 @@ label {
   display: block;
   max-width: 100%;
   height: auto;
+}
+
+.col {
+  flex: 1 0 0%;
 }

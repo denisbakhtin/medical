@@ -10,11 +10,12 @@ import (
 )
 
 // UsersAdminIndex handles GET /admin/users route
-func UsersAdminIndex(c *gin.Context) {
-	db := models.GetDB()
-
-	var list []models.User
-	db.Find(&list)
+func (app *Application) UsersAdminIndex(c *gin.Context) {
+	list, err := app.UsersRepo.GetAll()
+	if err != nil {
+		app.Error(c, err)
+		return
+	}
 	c.HTML(200, "users/admin/index", gin.H{
 		"Title":  "Пользователи",
 		"Active": "users",
@@ -23,7 +24,7 @@ func UsersAdminIndex(c *gin.Context) {
 }
 
 // UserAdminCreateGet handles /admin/new_user get request
-func UserAdminCreateGet(c *gin.Context) {
+func (app *Application) UserAdminCreateGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
 	_ = session.Save()
@@ -36,13 +37,12 @@ func UserAdminCreateGet(c *gin.Context) {
 }
 
 // UserAdminCreatePost handles /admin/new_user post request
-func UserAdminCreatePost(c *gin.Context) {
-	db := models.GetDB()
+func (app *Application) UserAdminCreatePost(c *gin.Context) {
 	session := sessions.Default(c)
 
 	user := &models.User{}
 	if c.Bind(user) == nil {
-		if err := db.Create(user).Error; err != nil {
+		if err := app.UsersRepo.Create(user); err != nil {
 			session.AddFlash(err.Error())
 			_ = session.Save()
 			c.Redirect(303, "/admin/new_user")
@@ -58,17 +58,15 @@ func UserAdminCreatePost(c *gin.Context) {
 }
 
 // UserAdminUpdateGet handles /admin/edit_user/:id get request
-func UserAdminUpdateGet(c *gin.Context) {
-	db := models.GetDB()
+func (app *Application) UserAdminUpdateGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
 	_ = session.Save()
 
 	id := helpers.Atouint(c.Param("id"))
-	user := &models.User{}
-	db.First(user, id)
-	if user.ID == 0 {
-		c.HTML(404, "errors/404", nil)
+	user, err := app.UsersRepo.Get(id)
+	if err != nil {
+		app.Error(c, err)
 		return
 	}
 
@@ -81,14 +79,13 @@ func UserAdminUpdateGet(c *gin.Context) {
 }
 
 // UserAdminUpdatePost handles /admin/edit_user/:id post request
-func UserAdminUpdatePost(c *gin.Context) {
-	db := models.GetDB()
+func (app *Application) UserAdminUpdatePost(c *gin.Context) {
 	session := sessions.Default(c)
 
 	user := &models.User{}
 	id := helpers.Atouint(c.Param("id"))
 	if c.Bind(user) == nil {
-		if err := db.Save(user).Error; err != nil {
+		if err := app.UsersRepo.Update(user); err != nil {
 			session.AddFlash(err.Error())
 			_ = session.Save()
 			c.Redirect(303, fmt.Sprintf("/admin/edit_user/%v", id))
@@ -104,18 +101,11 @@ func UserAdminUpdatePost(c *gin.Context) {
 }
 
 // UserAdminDelete handles /admin/delete_user route
-func UserAdminDelete(c *gin.Context) {
-	db := models.GetDB()
-
+func (app *Application) UserAdminDelete(c *gin.Context) {
 	id := helpers.Atouint(c.Request.PostFormValue("id"))
-	user := &models.User{}
-	db.First(user, id)
-	if user.ID == 0 {
-		c.HTML(404, "errors/404", nil)
-	}
 
-	if err := db.Delete(user).Error; err != nil {
-		c.HTML(500, "errors/500", helpers.ErrorData(err))
+	if err := app.UsersRepo.Delete(id); err != nil {
+		app.Error(c, err)
 		return
 	}
 	c.Redirect(303, "/admin/users")

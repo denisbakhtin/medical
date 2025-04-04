@@ -10,7 +10,7 @@ import (
 )
 
 //Search handles POST /search route
-func Search(w http.ResponseWriter, r *http.Request) {
+func (app *Application) Search(w http.ResponseWriter, r *http.Request) {
 	tmpl := helpers.Template(r)
 	data := helpers.DefaultData(r)
 	T := helpers.T(r)
@@ -26,7 +26,7 @@ func Search(w http.ResponseWriter, r *http.Request) {
 
 	} else {
 		err := fmt.Errorf("Method %q not allowed", r.Method)
-		log.Printf("ERROR: %s\n", err)
+		app.Logger.Error(err)
 		w.WriteHeader(405)
 		tmpl.Lookup("errors/405").Execute(w, helpers.ErrorData(err))
 	}

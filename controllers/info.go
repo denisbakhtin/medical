@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/denisbakhtin/medical/helpers"
@@ -11,16 +10,14 @@ import (
 )
 
 // InfoShow handles GET /info/:id-slug route
-func InfoShow(c *gin.Context) {
-	db := models.GetDB()
+func (app *Application) InfoShow(c *gin.Context) {
 	session := sessions.Default(c)
 
 	idslug := c.Param("idslug")
 	id := helpers.Atouint(strings.Split(idslug, "-")[0])
-	info := &models.Info{}
-	db.First(info, id)
-	if info.ID == 0 || !info.Published {
-		c.HTML(404, "errors/404", nil)
+	info, err := app.InfosRepo.GetPublished(id)
+	if err != nil {
+		app.Error(c, err)
 		return
 	}
 	// redirect to canonical url
@@ -38,20 +35,18 @@ func InfoShow(c *gin.Context) {
 		"MetaKeywords":    info.MetaKeywords,
 		"Ogheadprefix":    "og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#",
 		"Ogtitle":         info.Name,
-		"Ogurl":           fmt.Sprintf("http://%s%s", c.Request.Host, info.URL()),
+		"Ogurl":           app.fullURL(info.URL()),
 		"Ogtype":          "article",
 		"Flash":           flashes,
-		"Authenticated":   (session.Get("user_id") != nil),
+		"Authenticated":   app.authenticated(session),
 	})
 }
 
 // InfoAdminIndex handles GET /admin/info route
-func InfoAdminIndex(c *gin.Context) {
-	db := models.GetDB()
-
-	var list []models.Info
-	if err := db.Order("published desc, id desc").Find(&list).Error; err != nil {
-		c.HTML(500, "errors/500", helpers.ErrorData(err))
+func (app *Application) InfoAdminIndex(c *gin.Context) {
+	list, err := app.InfosRepo.GetAll()
+	if err != nil {
+		app.Error(c, err)
 		return
 	}
 	c.HTML(200, "info/admin/index", gin.H{
@@ -62,7 +57,7 @@ func InfoAdminIndex(c *gin.Context) {
 }
 
 // InfoAdminCreateGet handles /admin/new_info get request
-func InfoAdminCreateGet(c *gin.Context) {
+func (app *Application) InfoAdminCreateGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
 	_ = session.Save()
@@ -75,13 +70,12 @@ func InfoAdminCreateGet(c *gin.Context) {
 }
 
 // InfoAdminCreatePost handles /admin/new_info post request
-func InfoAdminCreatePost(c *gin.Context) {
+func (app *Application) InfoAdminCreatePost(c *gin.Context) {
 	session := sessions.Default(c)
-	db := models.GetDB()
 
 	info := &models.Info{}
 	if c.Bind(info) == nil {
-		if err := db.Create(info).Error; err != nil {
+		if err := app.InfosRepo.Create(info); err != nil {
 			session.AddFlash(err.Error())
 			_ = session.Save()
 			c.Redirect(303, "/admin/new_info")
@@ -96,17 +90,15 @@ func InfoAdminCreatePost(c *gin.Context) {
 }
 
 // InfoAdminUpdateGet handles /admin/edit_info/:id get request
-func InfoAdminUpdateGet(c *gin.Context) {
+func (app *Application) InfoAdminUpdateGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
 	_ = session.Save()
-	db := models.GetDB()
 
 	id := helpers.Atouint(c.Param("id"))
-	info := &models.Info{}
-	db.First(info, id)
-	if info.ID == 0 {
-		c.HTML(404, "errors/404", nil)
+	info, err := app.InfosRepo.Get(id)
+	if err != nil {
+		app.Error(c, err)
 		return
 	}
 
@@ -119,13 +111,12 @@ func InfoAdminUpdateGet(c *gin.Context) {
 }
 
 // InfoAdminUpdatePost handles /admin/edit_info/:id post request
-func InfoAdminUpdatePost(c *gin.Context) {
+func (app *Application) InfoAdminUpdatePost(c *gin.Context) {
 	session := sessions.Default(c)
-	db := models.GetDB()
 
 	info := &models.Info{}
 	if c.Bind(info) == nil {
-		if err := db.Save(info).Error; err != nil {
+		if err := app.InfosRepo.Update(info); err != nil {
 			session.AddFlash(err.Error())
 			_ = session.Save()
 			c.Redirect(303, c.Request.RequestURI)
@@ -140,19 +131,11 @@ func InfoAdminUpdatePost(c *gin.Context) {
 }
 
 // InfoAdminDelete handles /admin/delete_info route
-func InfoAdminDelete(c *gin.Context) {
-	db := models.GetDB()
-
+func (app *Application) InfoAdminDelete(c *gin.Context) {
 	id := helpers.Atouint(c.Request.PostFormValue("id"))
-	info := &models.Info{}
-	db.First(info, id)
-	if info.ID == 0 {
-		c.HTML(404, "errors/404", nil)
-		return
-	}
 
-	if err := db.Delete(info).Error; err != nil {
-		c.HTML(500, "errors/500", helpers.ErrorData(err))
+	if err := app.InfosRepo.Delete(id); err != nil {
+		app.Error(c, err)
 		return
 	}
 	c.Redirect(303, "/admin/info")

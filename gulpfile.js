@@ -32,6 +32,12 @@ function images() {
     .pipe(dest("public/images"))
 }
 
+function ckeditor() {
+  del(["public/js/ckeditor/*"])
+  return src("src/js/ckeditor/*", { encoding: false })
+    .pipe(dest("public/js/ckeditor"))
+}
+
 function js() {
   //del(["public/js/**/*"])
   return src([
@@ -67,4 +73,4 @@ exports.watch = function() {
   watch(["src/images/**/*"], images);
 };
 
-exports.default = series(parallel(fonts, scss, images, js), parallel(gzipJs, gzipCss));
+exports.default = series(parallel(fonts, scss, images, js, ckeditor), parallel(gzipJs, gzipCss));

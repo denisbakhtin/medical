@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"github.com/denisbakhtin/medical/models"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
@@ -9,10 +8,12 @@ import (
 const homePageId = 1
 
 // Home handles GET / route
-func Home(c *gin.Context) {
-	db := models.GetDB()
-	page := &models.Page{}
-	db.First(page, homePageId)
+func (app *Application) Home(c *gin.Context) {
+	page, err := app.PagesRepo.Get(homePageId)
+	if err != nil {
+		app.Error(c, err)
+		return
+	}
 	session := sessions.Default(c)
 	flashes := session.Flashes()
 	_ = session.Save()
@@ -24,6 +25,6 @@ func Home(c *gin.Context) {
 		"Flash":           flashes,
 		"TitleSuffix":     "| Доктор Ростовцев Е.В.",
 		"MetaDescription": "Прикладная кинезиология МиоБаланс - восстановление баланса обмена веществ, опорно-двигательного аппарата и нервной системы...",
-		"Authenticated":   (session.Get("user_id") != nil),
+		"Authenticated":   app.authenticated(session),
 	})
 }

@@ -4,25 +4,21 @@ import (
 	"bytes"
 	"encoding/base64"
 	"fmt"
-	"log"
 	"math"
-	"strconv"
 
-	"github.com/denisbakhtin/medical/config"
 	"github.com/denisbakhtin/medical/helpers"
 	"github.com/denisbakhtin/medical/models"
-	"github.com/denisbakhtin/medical/views"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
-	"gopkg.in/gomail.v2"
 )
 
 // CommentsAdminIndex handles GET /admin/comments route
-func CommentsAdminIndex(c *gin.Context) {
-	db := models.GetDB()
-
-	var list []models.Comment
-	db.Order("id desc").Find(&list)
+func (app *Application) CommentsAdminIndex(c *gin.Context) {
+	list, err := app.CommentsRepo.GetAll()
+	if err != nil {
+		app.Error(c, err)
+		return
+	}
 	c.HTML(200, "comments/admin/index", gin.H{
 		"Title":  "Вопросы посетителей",
 		"Active": "comments",
@@ -31,28 +27,27 @@ func CommentsAdminIndex(c *gin.Context) {
 }
 
 // CommentCreatePost handles /new_comment route
-func CommentCreatePost(c *gin.Context) {
+func (app *Application) CommentCreatePost(c *gin.Context) {
 	session := sessions.Default(c)
-	db := models.GetDB()
 
 	comment := &models.Comment{}
 	if c.Bind(comment) == nil {
 		// simple captcha check
 		captcha, err := base64.StdEncoding.DecodeString(comment.Captcha)
 		if err != nil {
-			c.HTML(500, "errors/500", helpers.ErrorData(err))
+			app.Error(c, err)
 			return
 		}
 		if string(captcha) != "100.00" {
 			c.HTML(400, "errors/400", nil)
 			return
 		}
-		comment.Published = false // leave unpublished
-		if err := db.Create(comment).Error; err != nil {
-			c.HTML(400, "errors/400", helpers.ErrorData(err))
+		comment.Published = false // set unpublished
+		if err := app.CommentsRepo.Create(comment); err != nil {
+			app.Error(c, err)
 			return
 		}
-		notifyAdminOfComment(comment)
+		app.notifyAdminOfComment(comment)
 		session.AddFlash("Спасибо! Ваш вопрос будет опубликован после проверки.")
 		_ = session.Save()
 		c.Redirect(303, fmt.Sprintf("/articles/%d#comments", comment.ArticleID))
@@ -64,17 +59,15 @@ func CommentCreatePost(c *gin.Context) {
 }
 
 // CommentAdminUpdateGet handles /admin/edit_comment/:id get request
-func CommentAdminUpdateGet(c *gin.Context) {
+func (app *Application) CommentAdminUpdateGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
 	_ = session.Save()
-	db := models.GetDB()
 
 	id := helpers.Atouint(c.Param("id"))
-	comment := &models.Comment{}
-	db.First(comment, id)
-	if comment.ID == 0 {
-		c.HTML(404, "errors/404", nil)
+	comment, err := app.CommentsRepo.Get(id)
+	if err != nil {
+		app.Error(c, err)
 		return
 	}
 
@@ -87,13 +80,12 @@ func CommentAdminUpdateGet(c *gin.Context) {
 }
 
 // CommentAdminUpdatePost handles /admin/edit_comment/:id post request
-func CommentAdminUpdatePost(c *gin.Context) {
+func (app *Application) CommentAdminUpdatePost(c *gin.Context) {
 	session := sessions.Default(c)
-	db := models.GetDB()
 
 	comment := &models.Comment{}
 	if c.Bind(comment) == nil {
-		if err := db.Save(comment).Error; err != nil {
+		if err := app.CommentsRepo.Update(comment); err != nil {
 			session.AddFlash(err.Error())
 			_ = session.Save()
 			c.Redirect(303, c.Request.RequestURI)
@@ -163,7 +155,7 @@ func CommentPublicUpdate(w http.ResponseWriter, r *http.Request) {
 
 	} else {
 		err := fmt.Errorf("Method %q not allowed", r.Method)
-		log.Printf("ERROR: %s\n", err)
+		app.Logger.Error(err)
 		w.WriteHeader(405)
 		tmpl.Lookup("errors/405").Execute(w, helpers.ErrorData(err))
 	}
@@ -171,123 +163,54 @@ func CommentPublicUpdate(w http.ResponseWriter, r *http.Request) {
 */
 
 // CommentAdminDelete handles /admin/delete_comment route
-func CommentAdminDelete(c *gin.Context) {
-	db := models.GetDB()
-
+func (app *Application) CommentAdminDelete(c *gin.Context) {
 	id := helpers.Atouint(c.Request.PostFormValue("id"))
-	comment := &models.Comment{}
-	db.First(comment, id)
-	if comment.ID == 0 {
-		c.HTML(404, "errors/404", nil)
-	}
-
-	if err := db.Delete(comment).Error; err != nil {
-		c.HTML(500, "errors/500", helpers.ErrorData(err))
+	if err := app.CommentsRepo.Delete(id); err != nil {
+		app.Error(c, err)
 		return
 	}
 	c.Redirect(303, "/admin/comments")
 }
 
-func notifyAdminOfComment(comment *models.Comment) {
-	// closure is needed here, as r may be released by the time func finishes
-	tmpl := views.GetTemplates()
-	go func() {
-		data := map[string]interface{}{
-			"Comment": comment,
-			"Token":   createTokenFromID(comment.ID),
-		}
-		var b bytes.Buffer
-		if err := tmpl.Lookup("emails/question").Execute(&b, data); err != nil {
-			log.Printf("ERROR: %s\n", err)
-			return
-		}
+func (app *Application) notifyAdminOfComment(comment *models.Comment) {
+	data := map[string]interface{}{
+		"Comment": comment,
+		"Token":   app.createTokenFromID(comment.ID),
+	}
+	var b bytes.Buffer
+	if err := app.Template.Lookup("emails/question").Execute(&b, data); err != nil {
+		app.Logger.Error(err)
+		return
+	}
 
-		smtp := config.GetConfig().SMTP
-		msg := gomail.NewMessage()
-		msg.SetHeader("From", smtp.From)
-		msg.SetHeader("To", smtp.To)
-		if len(comment.AuthorEmail) > 0 {
-			msg.SetHeader("Reply-To", comment.AuthorEmail)
-		}
-		if len(smtp.Cc) > 0 {
-			msg.SetHeader("Cc", smtp.Cc)
-		}
-		msg.SetHeader("Subject", fmt.Sprintf("Новый вопрос на сайте %s: %s", config.GetConfig().Domain, comment.AuthorName))
-		msg.SetBody(
-			"text/html",
-			b.String(),
-		)
-
-		port, _ := strconv.Atoi(smtp.Port)
-		dialer := gomail.NewDialer(smtp.SMTP, port, smtp.User, smtp.Password)
-		sender, err := dialer.Dial()
-		if err != nil {
-			log.Printf("ERROR: %s\n", err)
-			return
-		}
-		if err := gomail.Send(sender, msg); err != nil {
-			log.Printf("ERROR: %s\n", err)
-			return
-		}
-	}()
+	subject := fmt.Sprintf("Новый вопрос на сайте %s: %s", app.Config.Domain, comment.AuthorName)
+	app.Emailer.NotifyAdmin(comment.AuthorEmail, subject, b.String())
 }
 
-// notifyClientOfComment sends notification email to comment(question) author
-// func notifyClientOfComment(comment *models.Comment) {
-// 	if len(comment.AuthorEmail) == 0 {
-// 		return
-// 	}
-// 	tmpl := views.GetTemplates()
-// 	go func() {
-// 		data := map[string]interface{}{
-// 			"Comment": comment,
-// 		}
-// 		var b bytes.Buffer
-// 		if err := tmpl.Lookup("emails/answer").Execute(&b, data); err != nil {
-// 			log.Printf("ERROR: %s\n", err)
-// 			return
-// 		}
-//
-// 		smtp := config.GetConfig().SMTP
-// 		msg := gomail.NewMessage()
-// 		msg.SetHeader("From", smtp.From)
-// 		msg.SetHeader("To", comment.AuthorEmail)
-// 		msg.SetHeader("Subject", fmt.Sprintf("Врач ответил на ваш вопрос на сайте %s", config.GetConfig().DomainName))
-// 		msg.SetBody(
-// 			"text/html",
-// 			b.String(),
-// 		)
-//
-// 		port, _ := strconv.Atoi(smtp.Port)
-// 		dialer := gomail.NewDialer(smtp.SMTP, port, smtp.User, smtp.Password)
-// 		sender, err := dialer.Dial()
-// 		if err != nil {
-// 			log.Printf("ERROR: %s\n", err)
-// 			return
-// 		}
-// 		if err := gomail.Send(sender, msg); err != nil {
-// 			log.Printf("ERROR: %s\n", err)
-// 			return
-// 		}
-// 	}()
-// }
-
 // CommentsIndex handles GET /comments/:id route, where :id is the article id
-func CommentsIndex(c *gin.Context) {
-	db := models.GetDB()
+func (app *Application) CommentsIndex(c *gin.Context) {
 	id := helpers.Atouint(c.Param("id"))
 
-	article := models.Article{}
-	db.First(&article, id)
+	article, err := app.ArticlesRepo.Get(id)
+	if err != nil {
+		app.Error(c, err)
+		return
+	}
 
-	totalCount := 0
+	totalCount, err := app.CommentsRepo.GetCountByArticle(id)
+	if err != nil {
+		app.Error(c, err)
+		return
+	}
 	perPage := 15
-	db.Model(models.Comment{}).Where("article_id = ?", id).Count(&totalCount)
 	totalPages := int(math.Ceil(float64(totalCount) / float64(perPage)))
 	currentPage := helpers.CurrentPage(c)
 
-	var list []models.Comment
-	db.Model(models.Comment{}).Where("article_id = ?", id).Limit(perPage).Offset((currentPage - 1) * perPage).Order("answer desc, id desc").Find(&list)
+	list, err := app.CommentsRepo.GetByArticlePage(id, currentPage, perPage)
+	if err != nil {
+		app.Error(c, err)
+		return
+	}
 
 	c.HTML(200, "comments/index", gin.H{
 		"Title":           "Вопросы посетителей",

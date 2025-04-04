@@ -12,16 +12,13 @@ import (
 )
 
 // ArticleShow handles GET /articles/:id-slug route
-func ArticleShow(c *gin.Context) {
-	db := models.GetDB()
+func (app *Application) ArticleShow(c *gin.Context) {
 	session := sessions.Default(c)
-
 	idslug := c.Param("idslug")
 	id := helpers.Atouint(strings.Split(idslug, "-")[0])
-	article := &models.Article{}
-	db.First(article, id)
-	if article.ID == 0 || !article.Published {
-		c.HTML(404, "errors/404", nil)
+	article, err := app.ArticlesRepo.GetPublished(id)
+	if err != nil {
+		app.Error(c, err)
 		return
 	}
 	// redirect to canonical url
@@ -29,62 +26,76 @@ func ArticleShow(c *gin.Context) {
 		c.Redirect(301, article.URL())
 		return
 	}
-	var testimonials []models.Review
-	db.Where("published = ? and article_id = ?", true, article.ID).Order("created_at desc").Find(&testimonials)
-	topComments := models.GetTopComments(article.ID)
-	// comments := models.GetComments(article.ID)
-	// article.Comments = append(topComments, comments...)
-	if len(topComments) > 0 {
-		article.Comments = topComments
+	reviews, err := app.ReviewsRepo.GetPublishedByArticle(article.ID)
+	if err != nil {
+		app.Error(c, err)
+		return
+	}
+	topcomments, err := app.CommentsRepo.GetTopByArticle(article.ID)
+	if err != nil {
+		app.Error(c, err)
+		return
+	}
+
+	if len(topcomments) > 0 {
+		article.Comments = topcomments
 	} else {
-		article.Comments = models.GetComments(article.ID)
+		article.Comments, err = app.CommentsRepo.GetUnpublishedByArticle(article.ID)
+		if err != nil {
+			app.Error(c, err)
+			return
+		}
 	}
 
 	imageurl := ""
 	if img := article.GetImage(); len(img) > 0 {
-		imageurl = fmt.Sprintf("http://%s%s", c.Request.Host, img)
+		imageurl = fmt.Sprintf("%s%s", app.Config.FullDomain, img)
 	}
 	flashes := session.Flashes()
 	_ = session.Save()
 	c.HTML(200, "articles/show", gin.H{
 		"Article":         article,
-		"Testimonials":    testimonials,
+		"Testimonials":    reviews,
 		"Title":           article.Name,
 		"Active":          "/articles",
 		"MetaDescription": article.MetaDescription,
 		"MetaKeywords":    article.MetaKeywords,
 		"Ogheadprefix":    "og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#",
 		"Ogtitle":         article.Name,
-		"Ogurl":           fmt.Sprintf("http://%s%s", c.Request.Host, article.URL()),
+		"Ogurl":           app.fullURL(article.URL()),
 		"Ogtype":          "article",
 		"Ogdescription":   article.Excerpt,
 		"Ogimage":         imageurl,
 		"Flash":           flashes,
-		"Authenticated":   (session.Get("user_id") != nil),
+		"Authenticated":   app.authenticated(session),
 	})
 }
 
 // ArticlesIndex handles GET /articles route
-func ArticlesIndex(c *gin.Context) {
-	db := models.GetDB()
+func (app *Application) ArticlesIndex(c *gin.Context) {
 	session := sessions.Default(c)
 
-	var list []models.Article
-	if err := db.Where("published = ?", true).Order("id desc").Find(&list).Error; err != nil {
-		c.HTML(500, "errors/500", helpers.ErrorData(err))
+	list, err := app.ArticlesRepo.GetAllPublished()
+	if err != nil {
+		app.Error(c, err)
 		return
 	}
 
-	totalInfos := 0
-	infosPerPage := 8
-	db.Model(models.Info{}).Where("published = ?", true).Count(&totalInfos)
-	totalPages := int(math.Ceil(float64(totalInfos) / float64(infosPerPage)))
-	currentPage := helpers.CurrentPage(c)
-	var infos []models.Info
-	if err := db.Where("published = ?", true).Order("id desc").Limit(infosPerPage).Offset((currentPage - 1) * infosPerPage).Find(&infos).Error; err != nil {
-		c.HTML(500, "errors/500", helpers.ErrorData(err))
+	totalInfos, err := app.InfosRepo.GetPublishedCount()
+	if err != nil {
+		app.Error(c, err)
 		return
 	}
+
+	infosPerPage := 8
+	totalPages := int(math.Ceil(float64(totalInfos) / float64(infosPerPage)))
+	currentPage := helpers.CurrentPage(c)
+	infos, err := app.InfosRepo.GetPublishedPage(currentPage, infosPerPage)
+	if err != nil {
+		app.Error(c, err)
+		return
+	}
+
 	c.HTML(200, "articles/index", gin.H{
 		"Title":           "Кинезиология во врачебной практике",
 		"Active":          c.Request.RequestURI,
@@ -92,19 +103,17 @@ func ArticlesIndex(c *gin.Context) {
 		"Infos":           infos,
 		"MetaDescription": "Статьи о кинезиологической практике лечения заболеваний опорно-двигательного аппарата...",
 		"MetaKeywords":    "кинезиология, статьи, лечение болей, прикладная кинезиология",
-		"Authenticated":   (session.Get("user_id") != nil),
+		"Authenticated":   app.authenticated(session),
 		"Pagination":      helpers.Paginator(currentPage, totalPages, c.Request.URL),
 		"CurrentPage":     currentPage,
 	})
 }
 
 // ArticlesAdminIndex handles GET /admin/articles route
-func ArticlesAdminIndex(c *gin.Context) {
-	db := models.GetDB()
-
-	var list []models.Article
-	if err := db.Order("published desc, id desc").Find(&list).Error; err != nil {
-		c.HTML(500, "errors/500", helpers.ErrorData(err))
+func (app *Application) ArticlesAdminIndex(c *gin.Context) {
+	list, err := app.ArticlesRepo.GetAll()
+	if err != nil {
+		app.Error(c, err)
 		return
 	}
 	c.HTML(200, "articles/admin/index", gin.H{
@@ -115,7 +124,7 @@ func ArticlesAdminIndex(c *gin.Context) {
 }
 
 // ArticleAdminCreateGet handles /admin/new_article route
-func ArticleAdminCreateGet(c *gin.Context) {
+func (app *Application) ArticleAdminCreateGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
 	_ = session.Save()
@@ -128,13 +137,12 @@ func ArticleAdminCreateGet(c *gin.Context) {
 }
 
 // ArticleAdminCreatePost handles /admin/new_article post request
-func ArticleAdminCreatePost(c *gin.Context) {
+func (app *Application) ArticleAdminCreatePost(c *gin.Context) {
 	session := sessions.Default(c)
-	db := models.GetDB()
 
 	article := &models.Article{}
 	if c.Bind(article) == nil {
-		if err := db.Create(article).Error; err != nil {
+		if err := app.ArticlesRepo.Create(article); err != nil {
 			session.AddFlash(err.Error())
 			_ = session.Save()
 			c.Redirect(303, "/admin/new_article")
@@ -149,17 +157,15 @@ func ArticleAdminCreatePost(c *gin.Context) {
 }
 
 // ArticleAdminUpdateGet handles /admin/edit_article/:id get request
-func ArticleAdminUpdateGet(c *gin.Context) {
+func (app *Application) ArticleAdminUpdateGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
 	_ = session.Save()
-	db := models.GetDB()
 
 	id := helpers.Atouint(c.Param("id"))
-	article := &models.Article{}
-	db.First(article, id)
-	if article.ID == 0 {
-		c.HTML(404, "errors/404", nil)
+	article, err := app.ArticlesRepo.Get(id)
+	if err != nil {
+		app.Error(c, err)
 		return
 	}
 
@@ -172,13 +178,12 @@ func ArticleAdminUpdateGet(c *gin.Context) {
 }
 
 // ArticleAdminUpdatePost handles /admin/edit_article/:id post request
-func ArticleAdminUpdatePost(c *gin.Context) {
+func (app *Application) ArticleAdminUpdatePost(c *gin.Context) {
 	session := sessions.Default(c)
-	db := models.GetDB()
 
 	article := &models.Article{}
 	if c.Bind(article) == nil {
-		if err := db.Save(article).Error; err != nil {
+		if err := app.ArticlesRepo.Update(article); err != nil {
 			session.AddFlash(err.Error())
 			_ = session.Save()
 			c.Redirect(303, c.Request.RequestURI)
@@ -193,19 +198,10 @@ func ArticleAdminUpdatePost(c *gin.Context) {
 }
 
 // ArticleAdminDelete handles /admin/delete_article route
-func ArticleAdminDelete(c *gin.Context) {
-	db := models.GetDB()
-
+func (app *Application) ArticleAdminDelete(c *gin.Context) {
 	id := helpers.Atouint(c.Request.PostFormValue("id"))
-	article := &models.Article{}
-	db.First(article, id)
-	if article.ID == 0 {
-		c.HTML(404, "errors/404", nil)
-		return
-	}
-
-	if err := db.Delete(article).Error; err != nil {
-		c.HTML(500, "errors/500", helpers.ErrorData(err))
+	if err := app.ArticlesRepo.Delete(id); err != nil {
+		app.Error(c, err)
 		return
 	}
 	c.Redirect(303, "/admin/articles")

@@ -1,15 +1,16 @@
 package controllers
 
 import (
-	"log"
+	"errors"
 
 	"github.com/denisbakhtin/medical/models"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/gorm"
 )
 
 // SignInGet handles /signin get request
-func SignInGet(c *gin.Context) {
+func (app *Application) SignInGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
 	_ = session.Save()
@@ -21,24 +22,26 @@ func SignInGet(c *gin.Context) {
 }
 
 // SignInPost handles /signin post request
-func SignInPost(c *gin.Context) {
-	db := models.GetDB()
+func (app *Application) SignInPost(c *gin.Context) {
 	session := sessions.Default(c)
 
 	login := &models.Login{}
 	if c.Bind(login) == nil {
-		user := &models.User{}
-		db.Where("lower(email) = lower(?)", login.Email).First(user)
-		if user.ID == 0 {
-			log.Printf("ERROR: Login failed, IP: %s, Email: %s\n", c.ClientIP(), login.Email)
+		user, err := app.UsersRepo.GetByEmail(login.Email)
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			app.Logger.Errorf("Login failed, IP: %s, Email: %s\n", c.ClientIP(), login.Email)
 			session.AddFlash("Эл. адрес или пароль указаны неверно")
 			_ = session.Save()
 			c.Redirect(303, "/signin")
 			return
 		}
-		// create user
+		if err != nil {
+			app.Error(c, err)
+			return
+		}
+
 		if err := user.ComparePassword(login.Password); err != nil {
-			log.Printf("ERROR: Login failed, IP: %s, Email: %s\n", c.ClientIP(), login.Email)
+			app.Logger.Errorf("Login failed, IP: %s, Email: %s\n", c.ClientIP(), login.Email)
 			session.AddFlash("Эл. адрес или пароль указаны неверно")
 			_ = session.Save()
 			c.Redirect(303, "/signin")
@@ -52,7 +55,7 @@ func SignInPost(c *gin.Context) {
 }
 
 // LogOut handles logout request
-func LogOut(c *gin.Context) {
+func (app *Application) LogOut(c *gin.Context) {
 	session := sessions.Default(c)
 	session.Delete("user_id")
 	_ = session.Save()
@@ -60,7 +63,7 @@ func LogOut(c *gin.Context) {
 }
 
 // SignUpGet handles /signup get request
-func SignUpGet(c *gin.Context) {
+func (app *Application) SignUpGet(c *gin.Context) {
 	session := sessions.Default(c)
 	flashes := session.Flashes()
 	_ = session.Save()
@@ -72,27 +75,34 @@ func SignUpGet(c *gin.Context) {
 }
 
 // SignUpPost handles /signup post request
-func SignUpPost(c *gin.Context) {
+func (app *Application) SignUpPost(c *gin.Context) {
 	session := sessions.Default(c)
-	db := models.GetDB()
 
 	register := &models.Register{}
 	if c.Bind(register) == nil {
-		user := &models.User{}
-		db.Where("lower(email) = lower(?)", register.Email).First(user)
-		if user.ID != 0 {
+		existing, err := app.UsersRepo.GetByEmail(register.Email)
+		//already exists
+		if existing.ID != 0 {
 			session.AddFlash("Пользователь с таким эл. адресом уже существует")
 			_ = session.Save()
 			c.Redirect(303, "/signup")
 			return
 		}
+		if err != nil && !gorm.IsRecordNotFoundError(err) {
+			app.Error(c, err)
+			return
+		}
+
 		// create user
-		user.Email = register.Email
-		user.Password = register.Password
-		if err := db.Create(user).Error; err != nil {
+		user := &models.User{
+			Email:    register.Email,
+			Password: register.Password,
+		}
+
+		if err := app.UsersRepo.Create(user); err != nil {
 			session.AddFlash("Ошибка регистрации пользователя")
 			_ = session.Save()
-			log.Printf("ERROR: ошибка регистрации пользователя: %v", err)
+			app.Logger.Errorf("Ошибка регистрации пользователя: %v", err)
 			c.Redirect(303, "/signup")
 			return
 		}

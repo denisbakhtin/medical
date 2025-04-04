@@ -3,7 +3,7 @@
 {{template "dashboard/navbar" .}}
 {{template "dashboard/sidebar" .}}
 <div id="main-column" class="container-fluid" role="main">
-  <h2>{{.Title}} <a class="btn btn-primary" href="/admin/new_review">Новый отзыв</a></h2>
+  <h2>{{.Title}}</h2>
   <table class="table">
     <thead>
       <tr>
@@ -43,9 +43,7 @@
       {{end}}
     </tbody>
   </table>
-  <div class="actions">
-    <a href="/admin/new_review" class="btn btn-primary">Новый отзыв</a>
-  </div>
+  
 </div>
 {{template "dashboard/footer" .}}
 {{end}}

@@ -2,7 +2,7 @@ package models
 
 import "time"
 
-//Comment type contains article comments
+// Comment type contains article comments
 type Comment struct {
 	ID          uint      `json:"id" form:"id"`
 	ArticleID   uint      `json:"article_id" form:"article_id"`
@@ -17,31 +17,12 @@ type Comment struct {
 	UpdatedAt   time.Time `json:"updated_at"`
 }
 
-//Title returns comment excerpt, 100 char long
+// Title returns comment excerpt, 100 char long
 func (comment *Comment) Title() string {
 	return truncate(comment.Content, 50) + "..."
 }
 
-//Excerpt returns comment excerpt, 100 char long
+// Excerpt returns comment excerpt, 100 char long
 func (comment *Comment) Excerpt() string {
 	return truncate(comment.Content, 20)
-}
-
-//GetComments returns a slice of published comments, associated with the given article
-func GetComments(articleID uint) (comments []Comment) {
-	var list []Comment
-	//published == false is required ;D
-	db.Where("published = ? AND answer <> ? AND article_id = ? AND author_city = ?",
-		false, "", articleID, "Москва").Order("id desc").Find(&comments)
-	db.Where("published = ? AND answer <> ? AND article_id = ? AND author_city <> ?",
-		false, "", articleID, "Москва").Order("id desc").Find(&list)
-	comments = append(comments, list...)
-	return
-}
-
-//GetTopComments returns a slice of top (latest, or rated) published comments, associated with the given article
-func GetTopComments(articleID uint) (comments []Comment) {
-	db.Where("published = ? AND article_id = ? AND author_city = ?",
-		true, articleID, "Москва").Order("id desc").Limit(10).Find(&comments)
-	return
 }

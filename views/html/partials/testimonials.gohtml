@@ -23,9 +23,11 @@
               {{else}}
                 <div class="img blank-review-img">{{truncate .AuthorName 1}}</div>
               {{end}}
-              <h4>{{.Complaint}}</h4>
-              <p class="strong">{{.AuthorName}}</p>
-              <p class="excerpt">{{.Excerpt}}</p>
+              <div class="text-wrapper">
+                <h4>{{.Complaint}}</h4>
+                <p class="strong">{{.AuthorName}}</p>
+                <p class="excerpt">{{.Excerpt}}</p>
+              </div>
             </a>
           </div>
         {{end}}

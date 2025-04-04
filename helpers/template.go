@@ -10,23 +10,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/denisbakhtin/medical/config"
+	"slices"
+
 	"github.com/denisbakhtin/medical/models"
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/gorm"
 )
-
-const aboutPageId = 4
-const contactsPageId = 7
-const sessionPageId = 10
-
-// MenuItem represents main menu item
-type MenuItem struct {
-	URL      string
-	Title    string
-	CSSClass string
-	IsActive bool
-	Children []MenuItem
-}
 
 // IsActive checks uri against currently active (uri, or nil) and returns "active" if they are equal
 func IsActive(active interface{}, uri string) string {
@@ -55,12 +44,7 @@ func YearNow() string {
 
 // StringInSlice returns true if value is in list slice
 func StringInSlice(value string, list []string) bool {
-	for i := range list {
-		if value == list[i] {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(list, value)
 }
 
 // OddEvenClass returns odd or even class depending on the index
@@ -91,73 +75,6 @@ func IsLastInTheRow(index int, inrow int, length int) bool {
 // IsLast checks if index element is the last in sequence
 func IsLast(index int, length int) bool {
 	return index == length-1
-}
-
-// MainMenu returns the list of main menu items
-func MainMenu() []MenuItem {
-	db := models.GetDB()
-	about := &models.Page{}
-	db.First(about, aboutPageId)
-	contacts := &models.Page{}
-	db.First(contacts, contactsPageId)
-	seans := &models.Page{}
-	db.First(seans, sessionPageId)
-	var articles []models.Article
-	db.Where("published = ?", true).Order("id desc").Find(&articles)
-	submenu := make([]MenuItem, 0, 10)
-	for i := range articles {
-		submenu = append(submenu, MenuItem{URL: articles[i].URL(), Title: articles[i].Name})
-	}
-	menu := []MenuItem{
-		{
-			URL:   seans.URL(),
-			Title: "Приём",
-		},
-		{
-			URL:      "/articles",
-			Title:    "Лечение",
-			Children: submenu,
-		},
-		{
-			URL:   about.URL(),
-			Title: "Врач кинезиолог",
-		},
-		{
-			URL:   "/reviews",
-			Title: "Отзывы",
-		},
-		{
-			URL:   contacts.URL(),
-			Title: "Контакты",
-		},
-		{
-			URL:   "/exercises",
-			Title: "Упражнения",
-		},
-	}
-	return menu
-}
-
-// ScrollMenu returns the list of scroll menu items
-func ScrollMenu() []MenuItem {
-	db := models.GetDB()
-	about := &models.Page{}
-	db.First(about, aboutPageId)
-	menu := []MenuItem{
-		{
-			URL:   about.URL(),
-			Title: "О враче",
-		},
-		{
-			URL:   "#withoutpain",
-			Title: "Этапы лечения",
-		},
-		{
-			URL:   "/reviews",
-			Title: "Отзывы",
-		},
-	}
-	return menu
 }
 
 // Truncate truncates string to n chars
@@ -250,9 +167,12 @@ func mon(m time.Month) string {
 }
 
 // AllReviews returns a slice of all published reviews
-func AllReviews() (reviews []models.Review) {
-	models.GetDB().Where("published = ?", true).Order("id desc").Limit(5).Find(&reviews)
-	return
+func AllReviews(db *gorm.DB) func() []models.Review {
+	return func() []models.Review {
+		var reviews []models.Review
+		db.Where("published = ?", true).Order("id desc").Limit(5).Find(&reviews)
+		return reviews
+	}
 }
 
 // FileVersion - a closure returning the file timestamp
@@ -408,12 +328,4 @@ func Paginator(currentPage, totalPages int, curURL *url.URL) []Pagination {
 		return pagination
 	}
 	return nil
-}
-
-func Domain() string {
-	return config.GetConfig().Domain
-}
-
-func FullDomain() template.HTML {
-	return template.HTML(config.GetConfig().FullDomain)
 }

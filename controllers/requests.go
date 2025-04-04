@@ -4,21 +4,16 @@ import (
 	"bytes"
 	"encoding/base64"
 	"fmt"
-	"log"
-	"strconv"
 	"strings"
 
-	"github.com/denisbakhtin/medical/config"
 	"github.com/denisbakhtin/medical/helpers"
 	"github.com/denisbakhtin/medical/models"
-	"github.com/denisbakhtin/medical/views"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
-	"gopkg.in/gomail.v2"
 )
 
 // RequestCreatePost handles /new_request route
-func RequestCreatePost(c *gin.Context) {
+func (ap *Application) RequestCreatePost(c *gin.Context) {
 	session := sessions.Default(c)
 
 	request := &models.Request{}
@@ -33,7 +28,7 @@ func RequestCreatePost(c *gin.Context) {
 			return
 		}
 		if !strings.Contains(strings.ToLower(request.Comment), "href") {
-			notifyAdminOfRequest(request)
+			ap.notifyAdminOfRequest(request)
 		}
 		session.AddFlash("Спасибо, что оставили заявку на приём. В ближайшее время наш специалист свяжется с Вами по указанному телефону и согласует детали")
 	} else {
@@ -43,42 +38,16 @@ func RequestCreatePost(c *gin.Context) {
 	c.Redirect(303, "/")
 }
 
-func notifyAdminOfRequest(request *models.Request) {
-	// closure is needed here, as r may be released by the time func finishes
-	tmpl := views.GetTemplates()
-	go func() {
-		data := map[string]interface{}{
-			"Request": request,
-		}
-		var b bytes.Buffer
-		if err := tmpl.Lookup("requests/request").Execute(&b, data); err != nil {
-			log.Printf("ERROR: %s\n", err)
-			return
-		}
+func (app *Application) notifyAdminOfRequest(request *models.Request) {
+	data := map[string]any{
+		"Request": request,
+	}
+	var b bytes.Buffer
+	if err := app.Template.Lookup("requests/request").Execute(&b, data); err != nil {
+		app.Logger.Error(err)
+		return
+	}
 
-		smtp := config.GetConfig().SMTP
-		msg := gomail.NewMessage()
-		msg.SetHeader("From", smtp.From)
-		msg.SetHeader("To", smtp.To)
-		if len(smtp.Cc) > 0 {
-			msg.SetHeader("Cc", smtp.Cc)
-		}
-		msg.SetHeader("Subject", fmt.Sprintf("Заявка на приём %s: %s", config.GetConfig().Domain, request.Name))
-		msg.SetBody(
-			"text/html",
-			b.String(),
-		)
-
-		port, _ := strconv.Atoi(smtp.Port)
-		dialer := gomail.NewDialer(smtp.SMTP, port, smtp.User, smtp.Password)
-		sender, err := dialer.Dial()
-		if err != nil {
-			log.Printf("ERROR: %s\n", err)
-			return
-		}
-		if err := gomail.Send(sender, msg); err != nil {
-			log.Printf("ERROR: %s\n", err)
-			return
-		}
-	}()
+	subject := fmt.Sprintf("Заявка на приём %s: %s", app.Config.Domain, request.Name)
+	app.Emailer.NotifyAdmin("", subject, b.String())
 }
