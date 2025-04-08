@@ -40,6 +40,8 @@ func NewApplication(mode string) *Application {
 
 	db := models.InitDB(dsn)
 	logger := services.NewStdLogger()
+	menus := repos.NewMenusRepo(db)
+	reviews := repos.NewReviewsRepo(db)
 
 	app := &Application{
 		Config:        conf,
@@ -50,12 +52,11 @@ func NewApplication(mode string) *Application {
 		ExercisesRepo: repos.NewExercisesRepo(db),
 		InfosRepo:     repos.NewInfosRepo(db),
 		PagesRepo:     repos.NewPagesRepo(db),
-		ReviewsRepo:   repos.NewReviewsRepo(db),
+		ReviewsRepo:   reviews,
 		UsersRepo:     repos.NewUsersRepo(db),
-		MenusRepo:     repos.NewMenusRepo(db),
+		MenusRepo:     menus,
+		Template:      loadTemplate(menus, reviews, conf),
 	}
-	//load html templates
-	app.Template = app.loadTemplate()
 
 	return app
 }
