@@ -21,7 +21,7 @@ type InfosRepo struct {
 	db *gorm.DB
 }
 
-func NewInfosRepo(db *gorm.DB) Infos {
+func NewInfosRepo(db *gorm.DB) *InfosRepo {
 	return &InfosRepo{db: db}
 }
 func (r *InfosRepo) GetPublished(id uint) (*models.Info, error) {

@@ -21,7 +21,7 @@ type CommentsRepo struct {
 	db *gorm.DB
 }
 
-func NewCommentsRepo(db *gorm.DB) Comments {
+func NewCommentsRepo(db *gorm.DB) *CommentsRepo {
 	return &CommentsRepo{db: db}
 }
 

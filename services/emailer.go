@@ -16,7 +16,7 @@ type gmailer struct {
 	logger Logger
 }
 
-func NewGmailer(config *config.Config, logger Logger) Emailer {
+func NewGmailer(config *config.Config, logger Logger) *gmailer {
 	return &gmailer{config: config, logger: logger}
 }
 

@@ -21,7 +21,7 @@ type stdLogger struct {
 	logger *log.Logger
 }
 
-func NewStdLogger() Logger {
+func NewStdLogger() *stdLogger {
 	return &stdLogger{logger: log.Default()}
 }
 

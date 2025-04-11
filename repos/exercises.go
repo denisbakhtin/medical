@@ -19,7 +19,7 @@ type ExercisesRepo struct {
 	db *gorm.DB
 }
 
-func NewExercisesRepo(db *gorm.DB) Exercises {
+func NewExercisesRepo(db *gorm.DB) *ExercisesRepo {
 	return &ExercisesRepo{db: db}
 }
 

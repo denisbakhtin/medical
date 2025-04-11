@@ -19,7 +19,7 @@ type PagesRepo struct {
 	db *gorm.DB
 }
 
-func NewPagesRepo(db *gorm.DB) Pages {
+func NewPagesRepo(db *gorm.DB) *PagesRepo {
 	return &PagesRepo{db: db}
 }
 

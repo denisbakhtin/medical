@@ -21,7 +21,7 @@ type ReviewsRepo struct {
 	db *gorm.DB
 }
 
-func NewReviewsRepo(db *gorm.DB) Reviews {
+func NewReviewsRepo(db *gorm.DB) *ReviewsRepo {
 	return &ReviewsRepo{db: db}
 }
 

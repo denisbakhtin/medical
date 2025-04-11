@@ -14,7 +14,7 @@ type MenusRepo struct {
 	db *gorm.DB
 }
 
-func NewMenusRepo(db *gorm.DB) Menus {
+func NewMenusRepo(db *gorm.DB) *MenusRepo {
 	return &MenusRepo{db: db}
 }
 
