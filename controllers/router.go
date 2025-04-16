@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// SetupRouter establishes web routes
+// SetupRouter setups web routes
 func (app *Application) SetupRouter() *gin.Engine {
 	router := gin.Default()
 

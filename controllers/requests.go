@@ -38,6 +38,7 @@ func (ap *Application) RequestCreatePost(c *gin.Context) {
 	c.Redirect(303, "/")
 }
 
+// notifyAdminOfRequest sends a notification email to admin
 func (app *Application) notifyAdminOfRequest(request *models.Request) {
 	data := map[string]any{
 		"Request": request,

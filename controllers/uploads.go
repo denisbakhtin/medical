@@ -15,7 +15,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// CkUpload handles POST /admin/ckupload route
+// CkUpload handles POST /admin/ckupload route - image upload by ckeditor 5
 func (app *Application) CkUpload(c *gin.Context) {
 	err := c.Request.ParseMultipartForm(32 << 20)
 	if err != nil {

@@ -7,19 +7,23 @@ import (
 	"gopkg.in/gomail.v2"
 )
 
+// Emailer is an interface for email service
 type Emailer interface {
 	NotifyAdmin(replyTo, subject, body string)
 }
 
+// gmailer implements an Emailer interface, uses gomail as an smtp library
 type gmailer struct {
 	config *config.Config
 	logger Logger
 }
 
+// NewGmailer returns a new instance of gmailer
 func NewGmailer(config *config.Config, logger Logger) *gmailer {
 	return &gmailer{config: config, logger: logger}
 }
 
+// NotifyAdmin sends a notification email to admin
 func (g *gmailer) NotifyAdmin(replyTo, subject, body string) {
 	go func() {
 		smtp := g.config.SMTP

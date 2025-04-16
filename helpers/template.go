@@ -18,7 +18,7 @@ import (
 )
 
 // IsActive checks uri against currently active (uri, or nil) and returns "active" if they are equal
-func IsActive(active interface{}, uri string) string {
+func IsActive(active any, uri string) string {
 	if s, ok := active.(string); ok {
 		if s == uri {
 			return "active"

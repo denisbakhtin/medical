@@ -16,6 +16,9 @@ func InitDB(connection string) *gorm.DB {
 	if err != nil {
 		panic(err)
 	}
+	if err := db.DB().Ping(); err != nil {
+		panic(err)
+	}
 	// automigrate
 	db.AutoMigrate(&Article{}, &Comment{}, &Page{}, &Review{}, &User{}, &Info{}, &Exercise{})
 	return db

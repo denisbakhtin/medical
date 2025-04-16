@@ -4,9 +4,9 @@ import (
 	"strconv"
 )
 
-// ErrorData returns template data for error
-func ErrorData(err error) map[string]interface{} {
-	return map[string]interface{}{
+// ErrorData returns template data for an error
+func ErrorData(err error) map[string]any {
+	return map[string]any{
 		"Title": err.Error(),
 		"Error": err.Error(),
 	}

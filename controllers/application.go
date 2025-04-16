@@ -11,6 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Application represents the core of medical web-site. All methods on this struct are used as or by http handlers.
 type Application struct {
 	Config        *config.Config
 	Template      *template.Template
@@ -26,6 +27,8 @@ type Application struct {
 	MenusRepo     repos.Menus
 }
 
+// NewApplication creates a pointer to new Application struct, respecting current app mode
+// It setups database handler, loads config, html templates and initializes db repositories
 func NewApplication(mode string) *Application {
 	conf := config.LoadConfig(mode)
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s sslmode=disable",

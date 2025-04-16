@@ -8,7 +8,7 @@ import (
 	"github.com/denisbakhtin/sitemap"
 )
 
-// StartPeriodicTasks initializes periodic tasks
+// StartPeriodicTasks initializes background periodic tasks
 func (app *Application) StartPeriodicTasks() {
 	gocron.Every(1).Day().Do(app.createXMLSitemap) // refresh daily
 	gocron.Start()
