@@ -14,7 +14,6 @@ import (
 
 	"github.com/denisbakhtin/medical/models"
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
 )
 
 // IsActive checks uri against currently active (uri, or nil) and returns "active" if they are equal
@@ -163,15 +162,6 @@ func mon(m time.Month) string {
 		return "декабря"
 	default:
 		return ""
-	}
-}
-
-// AllReviews returns a slice of all published reviews
-func AllReviews(db *gorm.DB) func() []models.Review {
-	return func() []models.Review {
-		var reviews []models.Review
-		db.Where("published = ?", true).Order("id desc").Limit(5).Find(&reviews)
-		return reviews
 	}
 }
 
