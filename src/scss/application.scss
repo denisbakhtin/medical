@@ -171,6 +171,7 @@ textarea#textarea-comment {
   top: 0;
   padding: 50px 0 70px;
   z-index: 2;
+  background-color: #f5f5f5;
 }
 
 #sidebar-dashboard+#main-column {
@@ -1698,6 +1699,9 @@ label {
     border-bottom-color: transparent;
     border-radius: 0;
     box-shadow: none;
+  }
+  .container-fluid {
+    max-width: 100%;
   }
 }
 
