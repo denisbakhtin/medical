@@ -48,7 +48,7 @@ func (app *Application) SignInPost(c *gin.Context) {
 			return
 		}
 
-		session.Set("user_id", user.ID)
+		session.Set(userIDkey, user.ID)
 		_ = session.Save()
 		c.Redirect(303, "/")
 	}
@@ -57,7 +57,7 @@ func (app *Application) SignInPost(c *gin.Context) {
 // LogOut handles logout request
 func (app *Application) LogOut(c *gin.Context) {
 	session := sessions.Default(c)
-	session.Delete("user_id")
+	session.Delete(userIDkey)
 	_ = session.Save()
 	c.Redirect(303, "/")
 }
@@ -106,7 +106,7 @@ func (app *Application) SignUpPost(c *gin.Context) {
 			c.Redirect(303, "/signup")
 			return
 		}
-		session.Set("user_id", user.ID)
+		session.Set(userIDkey, user.ID)
 		_ = session.Save()
 		c.Redirect(303, "/")
 	}

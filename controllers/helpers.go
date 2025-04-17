@@ -34,7 +34,7 @@ func (app *Application) getIDFromToken(token string) string {
 
 // authenticated checks if user is authenticated
 func (app *Application) authenticated(session sessions.Session) bool {
-	return session.Get("user_id") != nil
+	return session.Get(userIDkey) != nil
 }
 
 // fullURL transforms relative url into full with schema and domain name
