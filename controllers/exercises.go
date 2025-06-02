@@ -109,7 +109,12 @@ func (app *Application) ExerciseAdminCreatePost(c *gin.Context) {
 
 	vmpartFile, vmpartHeader, err := c.Request.FormFile("videofile")
 	if err == nil {
-		defer vmpartFile.Close()
+		defer func() {
+			err := vmpartFile.Close()
+			if err != nil {
+				app.Logger.Errorf("Error closing videofile multi-part %v", err)
+			}
+		}()
 
 		vuri, err = app.saveFile(vmpartHeader, vmpartFile)
 		if err != nil {
@@ -120,7 +125,12 @@ func (app *Application) ExerciseAdminCreatePost(c *gin.Context) {
 
 	impartFile, impartHeader, err := c.Request.FormFile("imagefile")
 	if err == nil {
-		defer impartFile.Close()
+		defer func() {
+			err := impartFile.Close()
+			if err != nil {
+				app.Logger.Errorf("Error closing imagefile multi-part %v", err)
+			}
+		}()
 
 		iuri, err = app.saveFile(impartHeader, impartFile)
 		if err != nil {
@@ -184,7 +194,12 @@ func (app *Application) ExerciseAdminUpdatePost(c *gin.Context) {
 
 	vmpartFile, vmpartHeader, err := c.Request.FormFile("videofile")
 	if err == nil {
-		defer vmpartFile.Close()
+		defer func() {
+			err := vmpartFile.Close()
+			if err != nil {
+				app.Logger.Errorf("Error closing videofile multi-part %v", err)
+			}
+		}()
 
 		vuri, err = app.saveFile(vmpartHeader, vmpartFile)
 		if err != nil {
@@ -195,7 +210,12 @@ func (app *Application) ExerciseAdminUpdatePost(c *gin.Context) {
 
 	impartFile, impartHeader, err := c.Request.FormFile("imagefile")
 	if err == nil {
-		defer impartFile.Close()
+		defer func() {
+			err := impartFile.Close()
+			if err != nil {
+				app.Logger.Errorf("Error closing imagefile multi-part %v", err)
+			}
+		}()
 
 		iuri, err = app.saveFile(impartHeader, impartFile)
 		if err != nil {

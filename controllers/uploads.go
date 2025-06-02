@@ -27,7 +27,12 @@ func (app *Application) CkUpload(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
-	defer mpartFile.Close()
+	defer func() {
+		err := mpartFile.Close()
+		if err != nil {
+			app.Logger.Errorf("Error closing upload multi-part %v", err)
+		}
+	}()
 	uri, err := app.saveFile(mpartHeader, mpartFile)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
@@ -51,7 +56,12 @@ func (app *Application) saveFile(fh *multipart.FileHeader, f multipart.File) (st
 	if err != nil {
 		return "", err
 	}
-	defer file.Close()
+	defer func() {
+		err := file.Close()
+		if err != nil {
+			app.Logger.Errorf("Error closing uploaded file %v", err)
+		}
+	}()
 	_, err = io.Copy(file, f)
 	if err != nil {
 		return "", err

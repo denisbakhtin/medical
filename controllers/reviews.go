@@ -116,7 +116,12 @@ func (app *Application) ReviewCreatePost(c *gin.Context) {
 		review.Published = false
 
 		if mpartFile, mpartHeader, err := c.Request.FormFile("image"); err == nil {
-			defer mpartFile.Close()
+			defer func() {
+				err := mpartFile.Close()
+				if err != nil {
+					app.Logger.Errorf("Error closing image multi-part %v", err)
+				}
+			}()
 			review.Image, err = app.saveFile(mpartHeader, mpartFile)
 			if err != nil {
 				app.Error(c, err)
@@ -168,7 +173,12 @@ func (app *Application) ReviewAdminCreatePost(c *gin.Context) {
 	if c.Bind(review) == nil {
 		review.ArticleID = helpers.Atouintr(c.Request.FormValue("article_id"))
 		if mpartFile, mpartHeader, err := c.Request.FormFile("image"); err == nil {
-			defer mpartFile.Close()
+			defer func() {
+				err := mpartFile.Close()
+				if err != nil {
+					app.Logger.Errorf("Error closing image multi-part %v", err)
+				}
+			}()
 			review.Image, err = app.saveFile(mpartHeader, mpartFile)
 			if err != nil {
 				app.Error(c, err)
@@ -228,7 +238,12 @@ func (app *Application) ReviewAdminUpdatePost(c *gin.Context) {
 	if c.Bind(review) == nil {
 		review.ArticleID = helpers.Atouintr(c.Request.FormValue("article_id"))
 		if mpartFile, mpartHeader, err := c.Request.FormFile("image"); err == nil {
-			defer mpartFile.Close()
+			defer func() {
+				err := mpartFile.Close()
+				if err != nil {
+					app.Logger.Errorf("Error closing image multi-part %v", err)
+				}
+			}()
 			review.Image, err = app.saveFile(mpartHeader, mpartFile)
 			if err != nil {
 				app.Error(c, err)
@@ -293,7 +308,12 @@ func (app *Application) ReviewUpdatePost(c *gin.Context) {
 	review := &models.Review{}
 	if err := c.Bind(review); err == nil {
 		if mpartFile, mpartHeader, err := c.Request.FormFile("image"); err == nil {
-			defer mpartFile.Close()
+			defer func() {
+				err := mpartFile.Close()
+				if err != nil {
+					app.Logger.Errorf("Error closing image multi-part %v", err)
+				}
+			}()
 			review.Image, err = app.saveFile(mpartHeader, mpartFile)
 			if err != nil {
 				app.Error(c, err)
