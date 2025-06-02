@@ -1,3 +1,4 @@
+// Package services contains emailer, logging (etc..) services
 package services
 
 import (
@@ -12,19 +13,19 @@ type Emailer interface {
 	NotifyAdmin(replyTo, subject, body string)
 }
 
-// gmailer implements an Emailer interface, uses gomail as an smtp library
-type gmailer struct {
+// Gmailer implements an Emailer interface, uses gomail as an smtp library
+type Gmailer struct {
 	config *config.Config
 	logger Logger
 }
 
 // NewGmailer returns a new instance of gmailer
-func NewGmailer(config *config.Config, logger Logger) *gmailer {
-	return &gmailer{config: config, logger: logger}
+func NewGmailer(config *config.Config, logger Logger) *Gmailer {
+	return &Gmailer{config: config, logger: logger}
 }
 
 // NotifyAdmin sends a notification email to admin
-func (g *gmailer) NotifyAdmin(replyTo, subject, body string) {
+func (g *Gmailer) NotifyAdmin(replyTo, subject, body string) {
 	go func() {
 		smtp := g.config.SMTP
 		msg := gomail.NewMessage()

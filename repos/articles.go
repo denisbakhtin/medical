@@ -1,3 +1,4 @@
+// Package repos contains data structures for articles repository
 package repos
 
 import (

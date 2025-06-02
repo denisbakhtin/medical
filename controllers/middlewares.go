@@ -8,7 +8,7 @@ import (
 const userIDkey = "user_id"
 const userKey = "user"
 
-// Authenticated is authentication middleware, enabled by router for protected routes
+// FilterAuthenticated is authentication middleware, that blocks unauthenticated requests to protected urls
 func (app *Application) FilterAuthenticated() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		session := sessions.Default(c)

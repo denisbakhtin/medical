@@ -13,7 +13,7 @@ import (
 )
 
 // RequestCreatePost handles /new_request route
-func (ap *Application) RequestCreatePost(c *gin.Context) {
+func (app *Application) RequestCreatePost(c *gin.Context) {
 	session := sessions.Default(c)
 
 	request := &models.Request{}
@@ -28,7 +28,7 @@ func (ap *Application) RequestCreatePost(c *gin.Context) {
 			return
 		}
 		if !strings.Contains(strings.ToLower(request.Comment), "href") {
-			ap.notifyAdminOfRequest(request)
+			app.notifyAdminOfRequest(request)
 		}
 		session.AddFlash("Спасибо, что оставили заявку на приём. В ближайшее время наш специалист свяжется с Вами по указанному телефону и согласует детали")
 	} else {

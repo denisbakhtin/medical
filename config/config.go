@@ -1,3 +1,4 @@
+// Package config contains data structures for reading web service config.json file
 package config
 
 import (

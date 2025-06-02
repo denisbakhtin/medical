@@ -1,3 +1,4 @@
+// Package models contains data structures for working with db models
 package models
 
 import (

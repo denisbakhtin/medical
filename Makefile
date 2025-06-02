@@ -20,7 +20,7 @@ watch_assets:
 	@gulp watch
 
 vet:
-	@go vet ./...
+	@revive ./...
 
 lint:
 	@golangci-lint run

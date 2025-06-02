@@ -1,3 +1,4 @@
+// Package main is used for building main http server executable
 package main
 
 import (

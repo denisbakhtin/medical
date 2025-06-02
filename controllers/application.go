@@ -1,3 +1,4 @@
+// Package controllers contains data structures and methods for http handlers
 package controllers
 
 import (

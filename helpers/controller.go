@@ -1,3 +1,4 @@
+// Package helpers contains helper utility functions, that are common to several other packages (controllers, views, models)
 package helpers
 
 import (

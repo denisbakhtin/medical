@@ -5,11 +5,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const homePageId = 1
+const homePageID = 1
 
 // Home handles GET / route
 func (app *Application) Home(c *gin.Context) {
-	page, err := app.PagesRepo.Get(homePageId)
+	page, err := app.PagesRepo.Get(homePageID)
 	if err != nil {
 		app.Error(c, err)
 		return

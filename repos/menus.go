@@ -5,7 +5,7 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-// Infos is an interface for menu items repository
+// Menus is an interface for menu items repository
 type Menus interface {
 	Main() []models.MenuItem
 	Scrolled() []models.MenuItem
@@ -24,11 +24,11 @@ func NewMenusRepo(db *gorm.DB) *MenusRepo {
 // Main returns the list of main menu items
 func (r *MenusRepo) Main() []models.MenuItem {
 	about := &models.Page{}
-	r.db.First(about, models.AboutPageId)
+	r.db.First(about, models.AboutPageID)
 	contacts := &models.Page{}
-	r.db.First(contacts, models.ContactsPageId)
+	r.db.First(contacts, models.ContactsPageID)
 	seans := &models.Page{}
-	r.db.First(seans, models.SessionPageId)
+	r.db.First(seans, models.SessionPageID)
 	var articles []models.Article
 	r.db.Where("published = ?", true).Order("id desc").Find(&articles)
 	submenu := make([]models.MenuItem, 0, 10)
@@ -68,7 +68,7 @@ func (r *MenusRepo) Main() []models.MenuItem {
 // Scrolled returns the list of visible menu items when a web-page is scrolled down
 func (r *MenusRepo) Scrolled() []models.MenuItem {
 	about := &models.Page{}
-	r.db.First(about, models.AboutPageId)
+	r.db.First(about, models.AboutPageID)
 	menu := []models.MenuItem{
 		{
 			URL:   about.URL(),
