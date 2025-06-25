@@ -6,6 +6,11 @@
   <h2>{{.Title}}
     <a class="btn btn-primary" href="/admin/new_info">Новый материал</a>
   </h2>
+  <ul id="filters" class="nav nav-pills">
+    <li id="filter-all"><a href="#" onclick="filterInfos()">Все ({{.AllCount}})</a></li>
+    <li id="filter-published"><a href="#" onclick="filterInfos(true)">Опубликовано ({{.PublishedCount}})</a></li>
+    <li id="filter-unpublished"><a href="#" onclick="filterInfos(false)">Не опубликовано ({{.UnpublishedCount}})</a></li>
+  </ul>
   <table class="table">
     <thead>
       <tr>
@@ -17,7 +22,7 @@
     </thead>
     <tbody>
       {{$csrfField := .csrfField}} {{range .List}}
-      <tr>
+      <tr data-published="{{.Published}}">
         <td class="id">{{.ID}}</td>
         <td class="name">{{.Name}}</td>
         <td class="published">
@@ -52,4 +57,32 @@
 </div>
 
 {{template "dashboard/footer" .}} 
+<script>
+  function filterInfos(published) {
+    published = String(published);
+    $('#filters li').removeClass('active');
+    $('.table tbody tr.hidden').removeClass('hidden');
+    document.setCookie("infoFilter", published, 365);
+    
+    if (published == "true") {
+      $('#filter-published').addClass('active');
+      //show published      
+      $('.table tbody tr[data-published=false]').addClass('hidden');
+      return
+    }
+    if (published == "false") {
+      //show unpublished
+      $('#filter-unpublished').addClass('active');    
+      $('.table tbody tr[data-published=true]').addClass('hidden');
+      return
+    }
+    $('#filter-all').addClass('active');
+    
+  }
+  $(document).ready(function () {
+    var filter = document.getCookie("infoFilter");
+    filterInfos(document.getCookie("infoFilter"));
+  });
+</script>
+
 {{end}}

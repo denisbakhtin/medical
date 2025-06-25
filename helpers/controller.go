@@ -49,3 +49,14 @@ func Atob(s string) bool {
 	b, _ := strconv.ParseBool(s)
 	return b
 }
+
+// CountFunc counts the number of elements in slice, that satisfy filter func
+func CountFunc[E any](s []E, filter func(E) bool) int {
+	count := 0
+	for i := range s {
+		if filter(s[i]) {
+			count++
+		}
+	}
+	return count
+}

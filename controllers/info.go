@@ -49,10 +49,18 @@ func (app *Application) InfoAdminIndex(c *gin.Context) {
 		app.Error(c, err)
 		return
 	}
+
 	c.HTML(200, "info/admin/index", gin.H{
-		"Title":  "Информационные материалы",
-		"Active": "info",
-		"List":   list,
+		"Title":    "Информационные материалы",
+		"Active":   "info",
+		"List":     list,
+		"AllCount": len(list),
+		"PublishedCount": helpers.CountFunc(list, func(e models.Info) bool {
+			return e.Published
+		}),
+		"UnpublishedCount": helpers.CountFunc(list, func(e models.Info) bool {
+			return !e.Published
+		}),
 	})
 }
 

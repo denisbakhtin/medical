@@ -25,6 +25,9 @@ vet:
 lint:
 	@golangci-lint run
 
+vuln:
+	@govulncheck ./...
+
 clean:
 	@echo "Cleaning binary"
 	@rm -f ./medical-go
