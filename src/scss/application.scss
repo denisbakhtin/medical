@@ -553,6 +553,12 @@ h2.article-title {
     background-position: top center;
     background-size: cover;
   }
+
+  img {
+    margin: .5em 0 1em 1em;
+    border: none;
+    float: right !important;    
+  }
 }
 
 #cta-top {
