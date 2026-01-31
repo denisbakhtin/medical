@@ -315,7 +315,8 @@ textarea#textarea-comment {
   }
 
   #rostphoto {
-    margin-left: 0!important;
+      margin-left: 10px!important;
+      max-width: 8em;
   }
 
   .gi-4x {
@@ -1764,4 +1765,8 @@ label {
 
 .hidden {
   display: none;
+}
+
+.btn-lg {
+    font-size: 15px;
 }
