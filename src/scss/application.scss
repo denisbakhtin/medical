@@ -98,15 +98,15 @@ div[role=main] {
       }
     }
 
-
+    a {
+        color: #fff;
+        &:hover {
+            color: #fff;
+            text-decoration: underline;
+        }
+    }
     .phone {
       font-size: 150%;
-      color: #fff;
-
-      &:hover {
-        color: #fff;
-        text-decoration: underline;
-      }
     }
   }
 
@@ -320,6 +320,11 @@ textarea#textarea-comment {
 
   .gi-4x {
     font-size: 2em!important;
+  }
+  #withoutpain {
+      .or-call {
+          display: block;
+      }
   }
 }
 
@@ -943,6 +948,10 @@ strong {
       line-height: 15px;
       font-size: 14px;
       color: #777;
+      a {
+          padding-left: 5px;
+          text-decoration: underline;
+      }
     }
   }
 }

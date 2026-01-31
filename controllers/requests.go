@@ -2,9 +2,7 @@ package controllers
 
 import (
 	"bytes"
-	"encoding/base64"
 	"fmt"
-	"strings"
 
 	"github.com/denisbakhtin/medical/helpers"
 	"github.com/denisbakhtin/medical/models"
@@ -18,18 +16,11 @@ func (app *Application) RequestCreatePost(c *gin.Context) {
 
 	request := &models.Request{}
 	if c.Bind(request) == nil {
-		captcha, err := base64.StdEncoding.DecodeString(request.Captcha)
-		if err != nil {
-			c.HTML(500, "errors/500", helpers.ErrorData(err))
+		if err := request.Valid(); err != nil {
+			c.HTML(400, "errors/500", helpers.ErrorData(err))
 			return
 		}
-		if string(captcha) != "100.00" {
-			c.HTML(400, "errors/400", nil)
-			return
-		}
-		if !strings.Contains(strings.ToLower(request.Comment), "href") {
-			app.notifyAdminOfRequest(request)
-		}
+		app.notifyAdminOfRequest(request)
 		session.AddFlash("Спасибо, что оставили заявку на приём. В ближайшее время наш специалист свяжется с Вами по указанному телефону и согласует детали")
 	} else {
 		session.AddFlash("Ошибка! Проверьте внимательно заполнение всех полей!")
