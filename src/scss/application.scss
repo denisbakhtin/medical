@@ -1034,8 +1034,8 @@ strong {
   .glyphicon {
     display: block;
     float: left;
-    font-size: 30px;
-    margin: 0 15px 10px 0;
+    font-size: 20px;
+    margin: 15px 15px 10px 0;
     padding: 15px;
     border: 3px solid;
     border-radius: 50px;
@@ -1043,7 +1043,7 @@ strong {
     color: $secondarydark;
 
     &.glyphicon-plus {
-      padding: 13px 12px 17px 18px;
+      padding: 14px 13px 16px 17px;
     }
   }
 
