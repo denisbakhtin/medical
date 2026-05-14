@@ -638,13 +638,9 @@ h2.article-title {
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
 }
 
-#map-canvas {
+#google-map {
   margin: 0 -30px 0 -30px;
   padding: 0;
-}
-
-#google-map {
-  padding-bottom: 0;
 }
 
 #google-map .well {
@@ -812,9 +808,10 @@ h4 {
   h1 {
     margin: 0.5em 0 0.2em 0;
   }
-  h3 {
+  h2 {
     margin: 0.5em 0 1em 0 !important;
     color: #777;
+    font-size: 24px;
   }
   #home-intro {
     border-top: 1px solid $info;
@@ -1525,6 +1522,7 @@ label {
     
           &.strong {
             color: #999;
+            margin-top: 10px;
             margin-bottom: 5px;
             white-space: nowrap;
             text-overflow: ellipsis;

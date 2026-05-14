@@ -1,6 +1,6 @@
 {{define "testimonials"}}
 
-  {{if .Testimonials}}
+  {{- if .Testimonials -}}
     {{template "reviews" .Testimonials}}
   {{else}}
     {{template "reviews" allReviews}}
@@ -18,13 +18,15 @@
         {{range $i, $v := .}}
           <div class="item">
             <a class="thumbnail" href="{{.URL}}">
-              {{if .Image}}
-                <img class="img img-responsive" src="{{.Image}}" alt="{{.Complaint}}"/>
+              {{- if .Image}}
+                <img class="img img-responsive" src="{{.Image}}" alt="{{.Complaint}}">
               {{else}}
                 <div class="img blank-review-img">{{truncate .AuthorName 1}}</div>
               {{end}}
               <div class="text-wrapper">
-                <h4>{{.Complaint}}</h4>
+                {{- if .Complaint}}
+                  <h4>{{.Complaint}}</h4>
+                {{end}}
                 <p class="strong">{{.AuthorName}}</p>
                 <p class="excerpt">{{.Excerpt}}</p>
               </div>

@@ -3,12 +3,12 @@
 {{template "navbar" .}}
 <div id="review">
   <!--<h1>
-    {{if .Review.Video}}
+    {{- if .Review.Video -}}
       Видео отзыв о работе кинезиолога: {{.Review.AuthorName}}
     {{else}}
       Отзыв о работе кинезиолога: {{.Review.AuthorName}}
     {{end}}
-    {{if .ActiveUser}}
+    {{- if .ActiveUser -}}
     <a class="btn btn-primary" href="/admin/edit_review/{{.Review.ID}}">
       Редактировать отзыв
     </a>
@@ -16,13 +16,13 @@
   </h1> -->
   <h1>
     {{.Review.Complaint}}
-    {{if .ActiveUser}}
+    {{- if .ActiveUser -}}
     <a class="btn btn-primary" href="/admin/edit_review/{{.Review.ID}}">
       Редактировать
     </a>
     {{end}}
   </h1>
-  {{if .Review.Video}}
+  {{- if .Review.Video -}}
     <div id="review-content">
       <div id="video-wrapper">
         <iframe src="{{.Review.Video}}?rel=0&autoplay=1" frameborder="0" allowfullscreen></iframe>
@@ -31,9 +31,9 @@
       {{.Review.HTMLContent}}
     </div>
   {{else}}
-    {{if .Review.Image}}
+    {{- if .Review.Image -}}
     <div class="review-image">
-      <img class="thumbnail pull-left" src="{{.Review.Image}}" />
+      <img class="thumbnail pull-left" src="{{.Review.Image}}">
     </div>
     {{end}}
     <h4 class="text-left">{{.Review.AuthorName}}, отзыв о лечении у врача-кинезиолога Ростовцева Е.В.</h4>

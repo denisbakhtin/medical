@@ -6,7 +6,7 @@
   <div class="content">
     <h1>
       {{.Info.Name}} 
-      {{if .Authenticated}}
+      {{- if .Authenticated -}}
         <a class="btn btn-primary" href="/admin/edit_info/{{.Info.ID}}">Редактировать материал</a>
       {{end}}
     </h1>

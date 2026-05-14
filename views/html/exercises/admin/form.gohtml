@@ -26,7 +26,7 @@
         <input type="hidden" name="image" value="{{.Exercise.Image}}" >
         <div class="form-group">
           <label class="control-label" for="image">Изображение</label>
-          <input id="image" class="form-control" type="file" name="imagefile" value="{{.Exercise.Image}}" />
+          <input id="image" class="form-control" type="file" name="imagefile" value="{{.Exercise.Image}}">
           {{if len .Exercise.Image | lt 0}}
             <p class="text-muted">{{.Exercise.Image}}</p>
           {{end}}
@@ -35,7 +35,7 @@
         <input type="hidden" name="video" value="{{.Exercise.Video}}" >
         <div class="form-group">
           <label class="control-label" for="video">Видео</label>
-          <input id="video" class="form-control" type="file" name="videofile" value="{{.Exercise.Video}}" />
+          <input id="video" class="form-control" type="file" name="videofile" value="{{.Exercise.Video}}">
           {{if len .Exercise.Video | lt 0}}
             <p class="text-muted">{{.Exercise.Video}}</p>
           {{end}}
@@ -60,12 +60,12 @@
 
         <div class="form-group">
           <label class="control-label" for="meta_keywords">Мета ключевики</label>
-          <input class="form-control" name="meta_keywords" value="{{.Exercise.MetaKeywords}}"/>
+          <input class="form-control" name="meta_keywords" value="{{.Exercise.MetaKeywords}}">
         </div>
 
         <div class="form-group">
           <label class="control-label" for="meta_description">Мета описание</label>
-          <input class="form-control" name="meta_description" value="{{.Exercise.MetaDescription}}" />
+          <input class="form-control" name="meta_description" value="{{.Exercise.MetaDescription}}">
         </div>
 
         <div class="form-group">

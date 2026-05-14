@@ -5,25 +5,25 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="alternate" type="application/rss+xml" title="Blog rss" href="/rss" />
+    <link rel="alternate" type="application/rss+xml" title="Blog rss" href="/rss">
     <link href="/public/favicon.ico" rel="icon" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500&amp;subset=cyrillic" rel="stylesheet"> 
     <title>
       {{.Title}}
-      {{if not .TitleSuffix}}
+      {{- if not .TitleSuffix -}}
         | Кинезиология Миобаланс г. Москва
       {{else}}
         {{.TitleSuffix}}
       {{end}}
     </title>
-    {{if .MetaDescription}}
-    <meta name="description" content="{{.MetaDescription}}" />
+    {{- if .MetaDescription -}}
+    <meta name="description" content="{{.MetaDescription}}">
     {{end}}
-    {{if .MetaKeywords}}
-    <meta name="keywords" content="{{.MetaKeywords}}" />
+    {{- if .MetaKeywords -}}
+    <meta name="keywords" content="{{.MetaKeywords}}">
     {{end}}
-    <meta name="author" content="Ростовцев Евгений Владимирович" />
-    <meta name="google-site-verification" content="2malEbuGX9O_sSoqma7Ew3eSuD2Htdu25NJU_IZl-Cs" />
+    <meta name="author" content="Ростовцев Евгений Владимирович">
+    <meta name="google-site-verification" content="2malEbuGX9O_sSoqma7Ew3eSuD2Htdu25NJU_IZl-Cs">
 
     <link href="/public/css/application.css?v={{cssVersion}}" rel="stylesheet">
 
@@ -35,22 +35,22 @@
     <![endif]-->
 
     <!-- open graph meta tags -->
-    {{if .Ogtitle}}
-      <meta property="og:title" content="{{.Ogtitle}}" />
+    {{- if .Ogtitle -}}
+      <meta property="og:title" content="{{.Ogtitle}}">
     {{end}}
-    {{if .Ogurl}}
-      <meta property="og:url" content="{{.Ogurl}}" />
+    {{- if .Ogurl -}}
+      <meta property="og:url" content="{{.Ogurl}}">
     {{end}}
-    {{if .Ogtype}}
-      <meta property="og:type" content="{{.Ogtype}}" />
+    {{- if .Ogtype -}}
+      <meta property="og:type" content="{{.Ogtype}}">
     {{end}}
-    {{if .Ogdescription}}
-      <meta property="og:description" content="{{.Ogdescription}}" />
+    {{- if .Ogdescription -}}
+      <meta property="og:description" content="{{.Ogdescription}}">
     {{end}}
-    {{if .Ogimage}}
-      <meta property="og:image" content="{{.Ogimage}}" />
+    {{- if .Ogimage -}}
+      <meta property="og:image" content="{{.Ogimage}}">
     {{else}}
-      <meta property="og:image" content="{{fullDomain}}/public/images/logo.png" />
+      <meta property="og:image" content="{{fullDomain}}/public/images/logo.png">
     {{end}}
     <script src="/public/js/application.js?v={{jsVersion}}"></script>
   </head>

@@ -20,3 +20,4 @@ debug
 *.sql
 *.org
 *.out
+plans/*

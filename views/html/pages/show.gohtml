@@ -5,7 +5,7 @@
   <div class="content">
     <h1>
       {{.Page.Name}}
-      {{if .Authenticated}}
+      {{- if .Authenticated -}}
         <a class="btn btn-primary" href="/admin/edit_page/{{.Page.ID}}">
           Редактировать страницу
         </a>

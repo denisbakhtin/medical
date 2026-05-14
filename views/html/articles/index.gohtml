@@ -4,27 +4,27 @@
 <div id="main-column" role="main">
   <h1>{{.Title}}</h1>
   <div class="article-previews">
-    {{if lt .CurrentPage 2}}
+    {{- if lt .CurrentPage 2 -}}
     {{range $i, $a := .List}}
       <div class="article-preview">
         <a href="{{.URL}}">
-          <img class="img-responsive" alt="{{.Name}}" src="{{.GetImage}}" />
+          <img class="img-responsive" alt="{{.Name}}" src="{{.GetImage}}">
           <h4 class="article-title text-left">{{.Name}}</h4>
           <div class="excerpt">{{.Excerpt}}</div>
         </a>
       </div>
-      <hr />
+      <hr>
     {{end}}
     {{end}}
 
     <div class="article-preview infos">
       {{$length2 := len $.Infos}}
-      {{if gt $length2 0}}
+      {{- if gt $length2 0 -}}
         <h2>Дополнительные материалы</h2>
         <div class="row">
             {{range $ii, $aa := $.Infos}}
               <a class="col-md-6" href="{{.URL}}">
-                  <img src="{{.GetImage}}" alt="{{.Name}}" />
+                  <img src="{{.GetImage}}" alt="{{.Name}}">
                   <span class="title">{{.Name}}</span>
               </a>
             {{end}}

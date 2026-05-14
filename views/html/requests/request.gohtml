@@ -7,10 +7,10 @@
     <p>Здравствуйте, Евгений Владимирович!</p>
 
     <p>
-    На сайте {{domain}} пользователь <strong>{{.Request.Name}}</strong> оставил(а) заявку на приём.<br/>
-    Контактный телефон: <strong style="color: blue;">{{.Request.Tel}}</strong>.<br/>
-    {{if .Request.Comment}}
-    Комментарий посетителя:<br/>
+    На сайте {{domain}} пользователь <strong>{{.Request.Name}}</strong> оставил(а) заявку на приём.<br>
+    Контактный телефон: <strong style="color: blue;">{{.Request.Tel}}</strong>.<br>
+    {{- if .Request.Comment -}}
+    Комментарий посетителя:<br>
       <i>{{.Request.Comment}}</i>
     {{end}}
     </p>

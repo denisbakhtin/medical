@@ -5,9 +5,9 @@
         <p class="author">{{.AuthorName}}</p>
         {{.Content}}
       </div>
-      {{if .Answer}}
+      {{- if .Answer -}}
       <div class="answer">
-        <img alt="Ростовцев Е.В." src="/public/images/rostovtsev.jpg" />
+        <img alt="Ростовцев Е.В." src="/public/images/rostovtsev.jpg">
         <p class="author">Ростовцев Евгений Владимирович, кинезиолог, врач мануальный терапевт</p>
         {{.Answer}}
       </div>
