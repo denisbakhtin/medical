@@ -18,14 +18,14 @@
   </div>
 </div>
 
+<!-- Hidden checkbox to track state -->
+<input type="checkbox" id="navbar-toggle" class="d-none">
 <div id="navbar-main" class="full-width navbar navbar-default" role="navigation">
   <div class="navbar-header">
-    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-      <span class="sr-only">Toggle navigation</span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-    </button>
+    <label for="navbar-toggle" class="navbar-toggler">
+      <span class="sr-only">Переключить меню</span>
+      {{template "menu_svg" .}}
+    </label>
     <div class="header-cta visible-xs">
       <a class="btn btn-primary" href="#optin-form"><i class="glyphicon glyphicon-ok"></i>Бесплатная консультация</a>
     </div>
@@ -61,7 +61,7 @@
   </div><!--/.nav-collapse -->
 </div>
 
-<div id="header-bottom" class="row full-width">
+<section id="header-bottom" class="row full-width">
   <div class="col-sm-4 col-xs-12">
     <i class="glyphicon glyphicon-plus"></i>
     <p class="strong">Высокая эффективность</p>
@@ -77,5 +77,5 @@
     <p class="strong">Акция!</p>
     <p>Первичная консультация <span class="strike-through">1000</span> 0&nbsp;руб. Первый сеанс <s>8000</s> 7000 руб.</p>
   </div>
-</div>
+</section>
 {{end}}

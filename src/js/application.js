@@ -1,10 +1,11 @@
-$(document).ready(function () {
+document.addEventListener("DOMContentLoaded", function () {
   //siema slider
-  if ($('#withoutpain-slider').length > 0) {
+  const withoutpain = document.getElementById("withoutpain-slider");
+  if (withoutpain) {
     const withoutPainSiema = new Siema({
-      selector: '#withoutpain-slider',
+      selector: "#withoutpain-slider",
       duration: 200,
-      easing: 'ease-out',
+      easing: "ease-out",
       perPage: {
         100: 1,
         576: 2,
@@ -19,16 +20,21 @@ $(document).ready(function () {
       onInit: () => {},
       onChange: () => {},
     });
-    document.querySelector('.withoutpain-prev').addEventListener('click', () => withoutPainSiema.prev());
-    document.querySelector('.withoutpain-next').addEventListener('click', () => withoutPainSiema.next());
+    document
+      .querySelector(".withoutpain-prev")
+      .addEventListener("click", () => withoutPainSiema.prev());
+    document
+      .querySelector(".withoutpain-next")
+      .addEventListener("click", () => withoutPainSiema.next());
     //setInterval(() => withoutPainSiema.next(), 4000);
   }
 
-  if ($('#testimonials-slider').length > 0) {
+  const testimonials = document.getElementById("testimonials-slider");
+  if (testimonials) {
     const testimonialsSiema = new Siema({
-      selector: '#testimonials-slider',
+      selector: "#testimonials-slider",
       duration: 200,
-      easing: 'ease-out',
+      easing: "ease-out",
       perPage: {
         100: 1,
         850: 2,
@@ -40,133 +46,180 @@ $(document).ready(function () {
       loop: true,
       rtl: false,
       onInit: () => {},
-      onChange: () => {},
+      onChange: () => {
+        console.log("on change siema");
+      },
     });
-    document.querySelector('.testimonials-prev').addEventListener('click', () => testimonialsSiema.prev());
-    document.querySelector('.testimonials-next').addEventListener('click', () => testimonialsSiema.next());
+    document
+      .querySelector(".testimonials-prev")
+      .addEventListener("click", () => testimonialsSiema.prev());
+    document
+      .querySelector(".testimonials-next")
+      .addEventListener("click", () => testimonialsSiema.next());
     //setInterval(() => withoutPainSiema.next(), 4000);
   }
 
-  //wow animation init
-  if (typeof WOW != 'undefined') {
-    new WOW().init();
-  }
-
-  //initialize dashboard sidebar slim scroll
-  if ($('#sidebar-dashboard .slimscroll').length > 0) {
-    $('#sidebar-dashboard .slimscroll').slimScroll({
-      height: '100%',
-    });
-  }
-
-  //initialize ckeditor
-  //using cdn ckeditor5, see views/dashboard/ckeditor partial
-  //need to change filebrowserUploadUrl to '/admin/ckupload' in ckeditor.js
-  // if ($('#ckeditor').length > 0) {
-  //   CKEDITOR.replace('ckeditor', {
-  //     extraPlugins: 'imageuploader',
-  //     language: 'ru',
-  //     allowedContent: true,
-  //     height: 500
-  //   });
-  // }
-
   //captcha-slider - optin form
-  if ($('#captcha-slider').length > 0) {
-    var slider = document.getElementById('captcha-slider');
-    noUiSlider.create(slider, {
-      start: 0,
-      range: {
-        'min': 0,
-        'max': 100
-      }
-    });
-    slider.noUiSlider.on('update', function () {
-      var value = slider.noUiSlider.get();
-      if (value == 100) {
-        $('#captcha-slider .noUi-handle').addClass('ok');
-        $('#captcha-wrapper #ok-sign').addClass('visible');
-        $('#captcha').val(btoa(value));
-        $('#submit-with-captcha-btn').attr('disabled', null);
+  const slider = document.getElementById("range-captcha");
+  if (slider) {
+    const captcha = document.getElementById("captcha");
+    const icon = document.getElementById("ok-sign");
+    const btn = document.getElementById("submit-with-captcha-btn");
+
+    slider.oninput = function () {
+      if (this.value == 100) {
+        captcha.value = btoa(this.value);
+        icon.classList.add("visible");
+        btn.disabled = false;
       } else {
-        $('#captcha-slider .noUi-handle').removeClass('ok');
-        $('#captcha-wrapper #ok-sign').removeClass('visible');
-        $('#captcha').val(btoa(value));
-        $('#submit-with-captcha-btn').attr('disabled', 'disabled');
+        icon.classList.remove("visible");
+        btn.disabled = true;
       }
+    };
+  }
+
+  //comment captcha slider
+  const cslider = document.getElementById("range-comment-captcha");
+  if (cslider) {
+    const captcha = document.getElementById("captcha-comment");
+    const icon = document.getElementById("ok-comment-sign");
+    const btn = document.getElementById("submit-with-captcha-comment-btn");
+
+    cslider.oninput = function () {
+      if (this.value == 100) {
+        captcha.value = btoa(this.value);
+        icon.classList.add("visible");
+        btn.disabled = false;
+      } else {
+        icon.classList.remove("visible");
+        btn.disabled = true;
+      }
+    };
+  }
+
+  const areaComment = document.getElementById("textarea-comment");
+  if (areaComment) {
+    areaComment.addEventListener("keyup", (event) => {
+      document.getElementById("comment-hidden").style.display = "block";
     });
   }
 
-  //captcha-slider - comments form
-  if ($('#captcha-comments-slider').length > 0) {
-    var sliderComments = document.getElementById('captcha-comments-slider');
-    noUiSlider.create(sliderComments, {
-      start: 0,
-      range: {
-        'min': 0,
-        'max': 100
-      }
-    });
-    sliderComments.noUiSlider.on('update', function () {
-      var value = sliderComments.noUiSlider.get();
-      if (value == 100) {
-        $('#captcha-comments-slider .noUi-handle').addClass('ok');
-        $('#captcha-comments-wrapper .ok-sign').addClass('visible');
-        $('#captcha-comments').val(btoa(value));
-        $('#submit-with-captcha-comments-btn').attr('disabled', null);
-      } else {
-        $('#captcha-comments-slider .noUi-handle').removeClass('ok');
-        $('#captcha-comments-wrapper .ok-sign').removeClass('visible');
-        $('#captcha-comments').val(btoa(value));
-        $('#submit-with-captcha-comments-btn').attr('disabled', 'disabled');
-      }
-    });
-  }
+  // $("#comments-more-btn").on("click", function () {
+  //   $(".comment.extra.hide").first().removeClass("hide");
+  //   $(".comment.extra.hide").first().removeClass("hide");
+  //   $("#comments-less-btn").removeClass("hide");
+  // });
+  // $("#comments-less-btn").on("click", function () {
+  //   $(".comment.extra").addClass("hide");
+  //   $("#comments-less-btn").addClass("hide");
+  // });
 
-
-  $('#textarea-comment').one("keyup", function () {
-    $('#comment-hidden').show('fast');
-  });
-  $('#comments-more-btn').on('click', function () {
-    $('.comment.extra.hide').first().removeClass('hide');
-    $('.comment.extra.hide').first().removeClass('hide');
-    $('#comments-less-btn').removeClass('hide');
-  });
-  $('#comments-less-btn').on('click', function () {
-    $('.comment.extra').addClass('hide');
-    $('#comments-less-btn').addClass('hide');
-  });
-
-  $(window).on("scroll", function () {
-    if ($('#navbar-main').length > 0) {
-      var iCurScrollPos = $(this).scrollTop();
-      var navbarBottom = $('#navbar-main').position().top + $('#navbar-main').outerHeight(true)
-      if (iCurScrollPos > navbarBottom) {
-        //show cta-popup
-        $('#navbar-scroll').css('display', 'block');
-      } else {
-        //hide cta-popup
-        $('#navbar-scroll').css('display', 'none');
-      }
+  window.addEventListener("scroll", (event) => {
+    const iCurScrollPos = document.documentElement.scrollTop;
+    const navbar = document.getElementById("navbar-main");
+    const navbarTop = navbar.getBoundingClientRect().top;
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    const navbarBottom = scrollTop + navbarTop + navbar.offsetHeight;
+    const navbarScroll = document.getElementById("navbar-scroll");
+    if (iCurScrollPos > navbarBottom) {
+      navbarScroll.style.display = "block";
+    } else {
+      navbarScroll.style.display = "none";
     }
   });
 
-  $('#phone-input').mask("9 (999) 999-9999");
+  // $("#phone-input").mask("9 (999) 999-9999");
+  // >>>> vanilla masked phone input: +7 (999) 999-99-99
+  const phoneInput = document.getElementById("phone-input");
+  if (phoneInput) {
+    phoneInput.addEventListener("input", function (e) {
+      let value = this.value;
+
+      // Удаляем все нецифровые символы
+      let digits = value.replace(/\D/g, "");
+
+      // Если первая цифра 8, заменяем на 7 для формата +7
+      if (digits.startsWith("8") && digits.length > 1) {
+        digits = "7" + digits.substring(1);
+      }
+
+      let formattedValue = "";
+
+      if (digits) {
+        formattedValue = "+";
+
+        // Добавляем первую цифру (7)
+        if (digits.length >= 1) {
+          formattedValue += digits[0];
+        }
+
+        // Добавляем скобку и следующие 3 цифры
+        if (digits.length >= 2) {
+          formattedValue += " (";
+          formattedValue += digits.substring(1, 4);
+        }
+
+        // Закрываем скобку и добавляем следующие 3 цифры с дефисом
+        if (digits.length >= 5) {
+          formattedValue += ") ";
+          formattedValue += digits.substring(4, 7);
+        }
+
+        // Добавляем дефис и следующие 2 цифры
+        if (digits.length >= 8) {
+          formattedValue += "-";
+          formattedValue += digits.substring(7, 9);
+        }
+
+        // Добавляем последний дефис и 2 цифры
+        if (digits.length >= 10) {
+          formattedValue += "-";
+          formattedValue += digits.substring(9, 11);
+        }
+      }
+
+      this.value = formattedValue;
+    });
+
+    // Блокировка ввода букв и спецсимволов
+    phoneInput.addEventListener("keydown", function (e) {
+      const allowedKeys = [
+        "Backspace",
+        "Delete",
+        "ArrowLeft",
+        "ArrowRight",
+        "Tab",
+        "Enter",
+        "Escape",
+      ];
+
+      // Разрешаем служебные клавиши
+      if (allowedKeys.includes(e.key)) {
+        return;
+      }
+
+      // Блокируем всё, что не является цифрой
+      if (!/\d/.test(e.key) && e.key !== "8") {
+        e.preventDefault();
+      }
+    });
+  }
+  // <<< masked phone input
 
   //working with cookies
   document.setCookie = function (cname, cvalue, exdays) {
     const d = new Date();
-    d.setTime(d.getTime() + (exdays*24*60*60*1000));
-    let expires = "expires="+ d.toUTCString();
+    d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
+    let expires = "expires=" + d.toUTCString();
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-  }
-  document.getCookie = function(cname) {
+  };
+  document.getCookie = function (cname) {
     let name = cname + "=";
     let decodedCookie = decodeURIComponent(document.cookie);
-    let ca = decodedCookie.split(';');
-    for(let i = 0; i <ca.length; i++) {
+    let ca = decodedCookie.split(";");
+    for (let i = 0; i < ca.length; i++) {
       let c = ca[i];
-      while (c.charAt(0) == ' ') {
+      while (c.charAt(0) == " ") {
         c = c.substring(1);
       }
       if (c.indexOf(name) == 0) {
@@ -174,5 +227,5 @@ $(document).ready(function () {
       }
     }
     return "";
-  }
+  };
 });

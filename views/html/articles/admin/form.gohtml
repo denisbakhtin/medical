@@ -5,7 +5,7 @@
 <div id="main-column" class="container-fluid" role="main">
   <div class="panel panel-default">
     <div class="panel-body">
-      <form method="post" data-parsley-validate>
+      <form method="post">
       <fieldset>
         <legend>{{.Title}}</legend>
         {{range .Flash}}
@@ -15,7 +15,7 @@
         <input type="hidden" name="id" value="{{.Article.ID}}" >
         <div class="form-group">
           <label class="control-label" for="name">Название</label>
-          <input id="name" name="name" value="{{.Article.Name}}" placeholder="Введите название статьи" class="form-control input-md" required="" data-parsley-required-message="Название является обязательным">
+          <input id="name" name="name" value="{{.Article.Name}}" placeholder="Введите название статьи" class="form-control input-md" required="">
         </div>
 
         <div class="form-group">

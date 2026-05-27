@@ -1,5 +1,5 @@
 {{define "footer"}}
-      <div id="footer" class="full-width">
+      <footer id="footer" class="full-width">
         <div class="footer-menu">
           
           {{range mainMenu}}<a href="{{.URL}}">{{.Title}}</a>{{end}}
@@ -25,7 +25,7 @@
         <div class="footer-bottom">
           &copy; {{yearNow}} Прикладная кинезиология Миобаланс
         </div>
-      </div>
+      </footer>
       {{template "gocounter" .}}
     </div> <!-- #main-container -->
     

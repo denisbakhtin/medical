@@ -3,7 +3,7 @@
 {{template "navbar" .}}
 <div id="main-column" class="container-fluid" role="main">
   <section id="review-form-wrapper">
-    <form method="post" enctype="multipart/form-data" data-parsley-validate>
+    <form method="post" enctype="multipart/form-data">
     <fieldset>
       <legend>{{.Title}}</legend>
       {{range .Flash}}
@@ -13,7 +13,7 @@
       <input type="hidden" name="id" value="{{.Review.ID}}" >
       <div class="form-group">
         <label class="control-label" for="author_name">Представьтесь</label>
-        <input id="author_name" name="author_name" placeholder="Укажите Ваше имя" value="{{.Review.AuthorName}}" required="" class="form-control input-md" data-parsley-required-message="Ваше имя обязательно">
+        <input id="author_name" name="author_name" placeholder="Укажите Ваше имя" value="{{.Review.AuthorName}}" required="" class="form-control input-md">
       </div>
 
       <div class="form-group">
@@ -36,7 +36,7 @@
 
       <div class="form-group">
         <label class="control-label" for="content">Текст отзыва</label>
-        <textarea class="form-control" name="content" id="content" required="" data-parsley-required-message="Текст отзыва обязателен">{{.Review.Content}}</textarea>
+        <textarea class="form-control" name="content" id="content" required="">{{.Review.Content}}</textarea>
       </div>
 
       <div class="form-group">
