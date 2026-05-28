@@ -17,7 +17,8 @@ function scss() {
     .pipe(
       sass({
         outputStyle: "compressed",
-        includePaths: ["src/scss"],
+        includePaths: ["src/scss", "node_modules"],
+        quietDeps: true, //to stop bootstrap color deprecated warnings
       }).on(
         "error",
         notify.onError(function (error) {
@@ -45,14 +46,7 @@ function ckeditor() {
 
 function js() {
   //del(["public/js/**/*"])
-  return src([
-    // "src/js/jquery-2.1.4.min.js",
-    // "src/js/jquery.actual.min.js",
-    // "src/js/bootstrap.min.js",
-    // "src/js/jquery.maskedinput.min.js",
-    "src/js/siema.min.js",
-    "src/js/application.js",
-  ])
+  return src(["src/js/siema.min.js", "src/js/application.js"])
     .pipe(concat("application.js"))
     .pipe(dest("public/js"));
 }

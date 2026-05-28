@@ -1,5 +1,6 @@
 @use "sass:color";
 @use "bootstrap";
+// @use "bootstrap/scss/bootstrap";
 
 $primary: #3379c7;
 $primarylight: #5490d3;
@@ -1182,6 +1183,13 @@ strong {
   }
 }
 
+.btn-primary {
+  svg {
+    stroke: #fff;
+    fill: #fff;
+  }
+}
+
 #video-wrapper {
   position: relative;
   padding-bottom: 56.25%;
@@ -1742,4 +1750,24 @@ label {
     cursor: pointer;
     float: left;
   }
+}
+
+.svg {
+  display: inline-block;
+}
+
+.lh-1 {
+  line-height: 1em;
+}
+
+.d-inline-flex {
+  display: inline-flex;
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+.me-2 {
+  margin-right: 0.5rem;
 }
