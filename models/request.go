@@ -21,7 +21,7 @@ func (r *Request) Valid() error {
 	if err != nil {
 		return err
 	}
-	if string(captcha) != "100.00" {
+	if string(captcha) != "100" {
 		return errors.New("Неверная captcha")
 	}
 	// simple spam protection
@@ -39,7 +39,7 @@ func (r *Request) Tel() string {
 		return -1 //remove
 	}
 	phone := strings.Map(digits, r.Phone)
-	if len(phone) > 0 && phone[0] == '8' {
+	if len(phone) > 0 && (phone[0] == '8' || phone[0] == '7') {
 		phone = "+7" + phone[1:]
 	}
 	// emails block <a href="tel:..."></a> links or encrypt them, so use plain text

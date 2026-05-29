@@ -8,42 +8,20 @@
     <link rel="alternate" type="application/rss+xml" title="Blog rss" href="/rss">
     <link href="/public/favicon.ico" rel="icon" type="image/x-icon">
     <title>
-      {{.Title}}
-      {{- if not .TitleSuffix -}}
-        | Кинезиология Миобаланс г. Москва
-      {{else}}
-        {{.TitleSuffix}}
-      {{end}}
+      {{.Title}}{{if not .TitleSuffix}} | Кинезиология Миобаланс г. Москва{{else}}{{.TitleSuffix}}{{end}}
     </title>
-    {{- if .MetaDescription -}}
-    <meta name="description" content="{{.MetaDescription}}">
-    {{end}}
-    {{- if .MetaKeywords -}}
-    <meta name="keywords" content="{{.MetaKeywords}}">
-    {{end}}
+    {{if .MetaDescription}}<meta name="description" content="{{.MetaDescription}}">{{end}}
+    {{if .MetaKeywords}}<meta name="keywords" content="{{.MetaKeywords}}">{{end}}
     <meta name="author" content="Ростовцев Евгений Владимирович">
     <meta name="google-site-verification" content="2malEbuGX9O_sSoqma7Ew3eSuD2Htdu25NJU_IZl-Cs">
-
     <link href="/public/css/application.css?v={{cssVersion}}" rel="stylesheet">
 
     <!-- open graph meta tags -->
-    {{- if .Ogtitle -}}
-      <meta property="og:title" content="{{.Ogtitle}}">
-    {{end}}
-    {{- if .Ogurl -}}
-      <meta property="og:url" content="{{.Ogurl}}">
-    {{end}}
-    {{- if .Ogtype -}}
-      <meta property="og:type" content="{{.Ogtype}}">
-    {{end}}
-    {{- if .Ogdescription -}}
-      <meta property="og:description" content="{{.Ogdescription}}">
-    {{end}}
-    {{- if .Ogimage -}}
-      <meta property="og:image" content="{{.Ogimage}}">
-    {{else}}
-      <meta property="og:image" content="{{fullDomain}}/public/images/logo.png">
-    {{end}}
+    {{- if .Ogtitle -}}<meta property="og:title" content="{{.Ogtitle}}">{{end}}
+    {{- if .Ogurl -}}<meta property="og:url" content="{{.Ogurl}}">{{end}}
+    {{- if .Ogtype -}}<meta property="og:type" content="{{.Ogtype}}">{{end}}
+    {{- if .Ogdescription -}}<meta property="og:description" content="{{.Ogdescription}}">{{end}}
+    {{- if .Ogimage -}}<meta property="og:image" content="{{.Ogimage}}">{{else}}<meta property="og:image" content="{{fullDomain}}/public/images/logo.png">{{end}}
     <script src="/public/js/application.js?v={{jsVersion}}"></script>
   </head>
   <body id="public-body" lang="ru">

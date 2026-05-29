@@ -35,8 +35,12 @@
         {{end}}
       </div>
       <div class="siema-controls">
-        <span class="testimonials-prev"><i class="glyphicon glyphicon-chevron-left"></i></span>
-        <span class="testimonials-next"><i class="glyphicon glyphicon-chevron-right"></i></span>
+        <span class="testimonials-prev">
+          <span class="svg svg-secondary lh-1">{{template "chevron_left_svg" .}}</span>
+        </span>
+        <span class="testimonials-next">
+          <span class="svg svg-secondary lh-1">{{template "chevron_right_svg" .}}</span>
+        </span>
       </div>
     </div>
   </section>

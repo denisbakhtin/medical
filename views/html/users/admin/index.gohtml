@@ -21,11 +21,11 @@
           <td class="name">{{.Name}}</td>
           <td class="email">{{.Email}}</td>
           <td class="actions">
-            <a href="/admin/edit_user/{{.ID}}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-pencil"></span></a>
+            <a href="/admin/edit_user/{{.ID}}" class="btn btn-sm btn-primary">{{template "pen_svg"}}</a>
             <form class="inline-block" action="/admin/delete_user" method="post">
               {{$csrfField}}
               <input type="hidden" name="id" value="{{.ID}}">
-              <button type="button" class="btn btn-sm btn-danger" onclick="((confirm('Вы уверены?')) ? this.form.submit() : null);"><span class="glyphicon glyphicon-remove"></span></button>
+              <button type="button" class="btn btn-sm btn-danger" onclick="((confirm('Вы уверены?')) ? this.form.submit() : null);">{{template "cross_svg"}}</button>
             </form>
           </td>
         </tr>

@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "bootstrap": "^5.3.8",
     "del": "^6.1.1",
     "gulp": "^5.0.1",
     "gulp-autoprefixer": "^8.0.0",
@@ -18,7 +19,6 @@
     "gulp-notify": "^5.0.0",
     "gulp-sass": "^5.1.0",
     "sass": "^1.80.3",
-    "wiredep": "^4.0.0",
-    "bootstrap": "^5.3.8"
+    "wiredep": "^4.0.0"
   }
 }

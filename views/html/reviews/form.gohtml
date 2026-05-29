@@ -61,14 +61,13 @@
         <div class="form-group">
           <label class="control-label">Докажите, что Вы не робот: передвиньте ползунок вправо до упора</label>
           <div id="captcha-wrapper">
-            <div id="captcha-slider"></div>
-            <i id="ok-sign" class="glyphicon glyphicon-ok-circle"></i>
+            <input type="range" min="0" max="100" value="30" class="slider" id="range-captcha">
             <input type="hidden" id="captcha" name="captcha">
           </div>
         </div>
 
         <div class="form-group">
-          <input id="submit-with-captcha-btn" type="submit" class="btn btn-primary" value="Отправить" >
+          <input id="submit-with-captcha-btn" type="submit" class="btn btn-primary" value="Отправить" disabled>
           <input type="button" class="btn btn-default" formnovalidate onclick="window.history.back();" value="Отмена">
         </div>
       </div>

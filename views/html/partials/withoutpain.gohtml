@@ -2,8 +2,8 @@
 <section id="withoutpain">
   <h2 class="text-center">Начните жить без боли</h2>
   <p class="text-center">
-    <a href="#optin-form" class="btn btn-primary">
-      <span class="glyphicon glyphicon-ok"></span> Заполните онлайн заявку на приём
+    <a href="#optin-form" class="btn btn-primary d-inline-flex align-items-center lh-1">
+      <span class="svg svg-white lh-1 me-2">{{template "check_svg" .}}</span>Заполните онлайн заявку на приём
     </a>
   </p>
   <p class="text-center">
@@ -19,9 +19,9 @@
           <img class="img-responsive" alt="Консультация по телефону" loading="lazy" src="/public/images/phone_doctor.jpg?ver=20260527">
           <h3 class="text-left">Консультация по телефону</h3>
           <p class="text-success">
-            <span class="glyphicon glyphicon-time"></span> 5-10 минут
+            <span class="svg svg-secondary svg-15 lh-1 me-2">{{template "clock_svg" .}}</span> 5-10 минут
             <br>
-            <span class="glyphicon glyphicon-ruble"></span> Бесплатно
+            <span class="svg svg-secondary svg-15 lh-1 me-2">{{template "ruble_svg" .}}</span> Бесплатно
           </p>
           <ul>
             <li>Врач расспросит вас о симптомах.</li>
@@ -35,9 +35,9 @@
           <img class="img-responsive" alt="Кинезиологическая консультация" loading="lazy" src="/public/images/visit_doctor.jpg?ver=20260527">
           <h3 class="text-left">Консультация</h3>
           <p class="text-success">
-            <span class="glyphicon glyphicon-time"></span> 10-15 минут
+            <span class="svg svg-secondary svg-15 lh-1 me-2">{{template "clock_svg" .}}</span> 10-15 минут
             <br>
-            <span class="glyphicon glyphicon-ruble"></span>
+            <span class="svg svg-secondary svg-15 lh-1 me-2">{{template "ruble_svg" .}}</span>
             <span class="strike-through">1000 р.</span> 0 р. ({{promoTill}})
           </p>
           <ul>
@@ -52,7 +52,7 @@
           <img class="img-responsive" alt="Кинезиологическое лечение" loading="lazy" src="/public/images/kinezio_treatment.jpg?ver=20260527">
           <h3 class="text-left">Курс лечения</h3>
           <p class="text-success">
-            <span class="glyphicon glyphicon-hourglass"></span> 2-4 сеанса
+            <span class="svg svg-secondary svg-15 lh-1 me-2">{{template "clock_repeat_svg" .}}</span> 2-4 сеанса
             <br> &nbsp;
           </p>
           <ul>
@@ -64,11 +64,11 @@
       <div class="item">
         <div class="thumbnail">
           <img class="img-responsive" alt="Самостоятельные упражнения" loading="lazy" src="/public/images/home_exercises.jpg?ver=20260527">
-          <h3 class="text-left">Самостоятельные упражнения</h3>
+          <h3 class="text-left">Упражнения</h3>
           <p class="text-success">
-            <span class="glyphicon glyphicon-time"></span> 10-15 минут
+            <span class="svg svg-secondary svg-15 lh-1 me-2">{{template "clock_svg" .}}</span> 10-15 минут
             <br>
-            <span class="glyphicon glyphicon-ruble"></span> Бесплатно
+            <span class="svg svg-secondary svg-15 lh-1 me-2">{{template "ruble_svg" .}}</span> Бесплатно
           </p>
           <ul>
             <li>Закрепите достигнутый результат.</li>
@@ -78,8 +78,12 @@
       </div>
     </div>
     <div class="siema-controls">
-      <span class="withoutpain-prev"><i class="glyphicon glyphicon-chevron-left"></i></span>
-      <span class="withoutpain-next"><i class="glyphicon glyphicon-chevron-right"></i></span>
+      <span class="withoutpain-prev">
+        <span class="svg svg-secondary lh-1">{{template "chevron_left_svg" .}}</span>
+      </span>
+      <span class="withoutpain-next">
+        <span class="svg svg-secondary lh-1">{{template "chevron_right_svg" .}}</span>
+      </span>
     </div>
   </div><!-- siema-wrapper -->
 </section>

@@ -38,8 +38,8 @@ func (app *Application) CommentCreatePost(c *gin.Context) {
 			app.Error(c, err)
 			return
 		}
-		if string(captcha) != "100.00" {
-			c.HTML(400, "errors/400", nil)
+		if string(captcha) != "100" {
+			c.HTML(400, "errors/400", gin.H{"Title": "Ошибка 400"})
 			return
 		}
 		comment.Published = false // set unpublished

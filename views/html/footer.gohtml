@@ -1,9 +1,7 @@
 {{define "footer"}}
       <footer id="footer" class="full-width">
         <div class="footer-menu">
-          
           {{range mainMenu}}<a href="{{.URL}}">{{.Title}}</a>{{end}}
-
         </div>
 
         <div class="footer-content row">
@@ -11,11 +9,15 @@
             <p class="logo-wrapper"><img alt="Кинезиология миобаланс" src="/public/images/logo_white.png"> <span class="strong white">Миобаланс</span><br>Безоперационное лечение болей в позвоночнике и суставах</p>
           </div>
           <div class="col-sm-4">
-            <p><span class="glyphicon glyphicon-map-marker"></span> г. Москва, м. Кузнецкий Мост,<br>Петровка 15/13 стр 5,<br>центр дерматологии "Петровка 15"</p>
+            <p>
+              <span class="svg svg-white lh-1 me-3 mb-4 pull-left">{{template "map_svg" .}}</span> 
+              <a href="/pages/7-kontakty-shema-proezda#google-map">г. Москва, м. Кузнецкий Мост,<br>Петровка 15/13 стр 5,<br>центр дерматологии "Петровка 15"</a>
+            </p>
           </div>
           <div class="col-sm-4">
             <p>
-                <span class="glyphicon glyphicon-phone"></span> <a class="phone" href="tel:+79036892057">8 (903) 689-20-57</a>
+                <span class="svg svg-white lh-1 me-3 mb-4 pull-left">{{template "phone_svg" .}}</span>
+                <a class="phone" href="tel:+79036892057">8 (903) 689-20-57</a>
                 <br>пн-сб с 10:00 до 21:00
                 <br><a class="tm-link" href="https://t.me/evgenyrost">t.me/evgenyrost</a>
             </p>
@@ -28,7 +30,6 @@
       </footer>
       {{template "gocounter" .}}
     </div> <!-- #main-container -->
-    
   </body>
 </html>
 {{end}}

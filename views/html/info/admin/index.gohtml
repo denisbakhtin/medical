@@ -26,24 +26,16 @@
         <td class="id">{{.ID}}</td>
         <td class="name">{{.Name}}</td>
         <td class="published">
-          {{if .Published}}
-          <span class="glyphicon glyphicon-ok"></span>
-          {{else}}
-          <span class="glyphicon glyphicon-remove"></span>
-          {{end}}
+          {{if .Published}}Да{{else}}Нет{{end}}
         </td>
         <td class="actions">
-          <a href="{{.URL}}" class="btn btn-sm btn-default">
-            <span class="glyphicon glyphicon-eye-open"></span>
-          </a>
-          <a href="/admin/edit_info/{{.ID}}" class="btn btn-sm btn-primary">
-            <span class="glyphicon glyphicon-pencil"></span>
-          </a>
+          <a href="{{.URL}}" class="btn btn-sm btn-default">{{template "eye_svg"}}</a>
+          <a href="/admin/edit_info/{{.ID}}" class="btn btn-sm btn-primary">{{template "pen_svg"}}</a>
           <form class="inline-block" action="/admin/delete_info" method="post">
             {{$csrfField}}
             <input type="hidden" name="id" value="{{.ID}}">
             <button type="button" class="btn btn-sm btn-danger" onclick="((confirm('Вы уверены?')) ? this.form.submit() : null);">
-              <span class="glyphicon glyphicon-remove"></span>
+              {{template "cross_svg"}}
             </button>
           </form>
         </td>
@@ -58,30 +50,9 @@
 
 {{template "dashboard/footer" .}} 
 <script>
-  function filterInfos(published) {
-    published = String(published);
-    $('#filters li').removeClass('active');
-    $('.table tbody tr.hidden').removeClass('hidden');
-    document.setCookie("infoFilter", published, 365);
-    
-    if (published == "true") {
-      $('#filter-published').addClass('active');
-      //show published      
-      $('.table tbody tr[data-published=false]').addClass('hidden');
-      return
-    }
-    if (published == "false") {
-      //show unpublished
-      $('#filter-unpublished').addClass('active');    
-      $('.table tbody tr[data-published=true]').addClass('hidden');
-      return
-    }
-    $('#filter-all').addClass('active');
-    
-  }
-  $(document).ready(function () {
-    var filter = document.getCookie("infoFilter");
-    filterInfos(document.getCookie("infoFilter"));
+  document.addEventListener("DOMContentLoaded", function () {
+    const filter = document.getCookie("infoFilter");
+    document.filterInfos(document.getCookie("infoFilter"));
   });
 </script>
 

@@ -6,11 +6,6 @@ const autoprefixer = require("gulp-autoprefixer");
 const concat = require("gulp-concat");
 const gzip = require("gulp-gzip");
 
-function fonts() {
-  del(["public/fonts/**/*"]);
-  return src("src/fonts/**.*", { encoding: false }).pipe(dest("public/fonts"));
-}
-
 function scss() {
   // return src("src/scss/**/*.scss")
   return src(["src/scss/application.scss"])
@@ -66,6 +61,6 @@ exports.watch = function () {
 };
 
 exports.default = series(
-  parallel(fonts, scss, images, js, ckeditor),
+  parallel(scss, images, js, ckeditor),
   parallel(gzipJs, gzipCss),
 );

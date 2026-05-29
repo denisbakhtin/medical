@@ -9,7 +9,7 @@
     </div>
   </a>
   <div class="header-cta hidden-xs">
-    <a class="btn btn-primary" href="#optin-form"><i class="glyphicon glyphicon-ok"></i>Записаться на бесплатную консультацию</a>
+    <a class="btn btn-primary d-inline-flex align-items-center" href="#optin-form"><span class="svg svg-white lh-1 me-2">{{template "check_svg" .}}</span>Записаться на бесплатную консультацию</a>
     <p class="text-warning lowercase">акция действует {{promoTill}}</p>
   </div>
   <div id="header-phone">
@@ -27,7 +27,7 @@
       {{template "menu_svg" .}}
     </label>
     <div class="header-cta visible-xs">
-      <a class="btn btn-primary d-inline-flex align-items-center" href="#optin-form"><span class="svg lh-1 me-2">{{template "check_svg" .}}</span>Бесплатная консультация</a>
+      <a class="btn btn-primary d-inline-flex align-items-center" href="#optin-form"><span class="svg svg-white lh-1 me-2">{{template "check_svg" .}}</span>Бесплатная консультация</a>
     </div>
   </div>
   <div class="navbar-collapse collapse">
@@ -51,10 +51,10 @@
       {{end}}
       {{- if .Authenticated -}}
       <li>
-        <a href="/admin/articles"><i class="glyphicon glyphicon-cog indent"></i>Админка</a>
+        <a href="/admin/articles" class="strong">Админка</a>
       </li>
       <li>
-        <a href="/logout"><i class="glyphicon glyphicon-log-out indent"></i>Выйти</a>
+        <a href="/logout" class="strong">Выйти</a>
       </li>
       {{end}}
     </ul>
@@ -63,17 +63,17 @@
 
 <section id="header-bottom" class="row full-width">
   <div class="col-sm-4 col-xs-12">
-    <i class="glyphicon glyphicon-plus"></i>
+    <span class="svg svg-secondary lh-1 me-2 mb-2 pull-left me-4">{{template "plus_svg" .}}</span>
     <p class="strong">Высокая эффективность</p>
     <p>Сотни вылеченных пациентов и положительных отзывов</p>
   </div>
   <div class="col-sm-4 col-xs-12">
-    <i class="glyphicon glyphicon-leaf"></i>
+    <span class="svg svg-secondary lh-1 me-2 mb-2 pull-left me-4">{{template "tender_svg" .}}</span>
     <p class="strong">Мягкое лечение</p>
     <p>Применяем передовые техники лечения и минимум медикаментов</p>
   </div>
   <div class="col-sm-4 col-xs-12">
-    <i class="glyphicon glyphicon-gift"></i>
+    <span class="svg svg-secondary lh-1 me-2 mb-2 pull-left me-4">{{template "promo_svg" .}}</span>
     <p class="strong">Акция!</p>
     <p>Первичная консультация <span class="strike-through">1000</span> 0&nbsp;руб. Первый сеанс <s>8000</s> 7000 руб.</p>
   </div>

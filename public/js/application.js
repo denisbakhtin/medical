@@ -64,16 +64,13 @@ document.addEventListener("DOMContentLoaded", function () {
   const slider = document.getElementById("range-captcha");
   if (slider) {
     const captcha = document.getElementById("captcha");
-    const icon = document.getElementById("ok-sign");
     const btn = document.getElementById("submit-with-captcha-btn");
 
     slider.oninput = function () {
       if (this.value == 100) {
         captcha.value = btoa(this.value);
-        icon.classList.add("visible");
         btn.disabled = false;
       } else {
-        icon.classList.remove("visible");
         btn.disabled = true;
       }
     };
@@ -83,16 +80,13 @@ document.addEventListener("DOMContentLoaded", function () {
   const cslider = document.getElementById("range-comment-captcha");
   if (cslider) {
     const captcha = document.getElementById("captcha-comment");
-    const icon = document.getElementById("ok-comment-sign");
     const btn = document.getElementById("submit-with-captcha-comment-btn");
 
     cslider.oninput = function () {
       if (this.value == 100) {
         captcha.value = btoa(this.value);
-        icon.classList.add("visible");
         btn.disabled = false;
       } else {
-        icon.classList.remove("visible");
         btn.disabled = true;
       }
     };
@@ -206,6 +200,41 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
   // <<< masked phone input
+
+  // filter infos
+  document.filterInfos = function (published) {
+    published = String(published);
+    const filters = document.querySelectorAll("#filters > li");
+    filters?.forEach((el) => {
+      el.classList.remove("active");
+    });
+    const hidden = document.querySelectorAll(".table > tbody > tr.hidden");
+    hidden?.forEach((el) => {
+      el.classList.remove("hidden");
+    });
+    document.setCookie("infoFilter", published, 365);
+    if (published == "true") {
+      const pub = document.getElementById("filter-published");
+      pub?.classList.add("active");
+      const unpubs = document.querySelectorAll(
+        ".table > tbody > tr[data-published=false]",
+      );
+      unpubs?.forEach((el) => {
+        el.classList.add("hidden");
+      });
+    } else if (published == "false") {
+      const unpub = document.getElementById("filter-unpublished");
+      unpub?.classList.add("active");
+      const pubs = document.querySelectorAll(
+        ".table > tbody > tr[data-published=true]",
+      );
+      pubs?.forEach((el) => {
+        el.classList.add("hidden");
+      });
+    } else {
+      document.getElementById("filter-all")?.classList.add("active");
+    }
+  };
 
   //working with cookies
   document.setCookie = function (cname, cvalue, exdays) {
